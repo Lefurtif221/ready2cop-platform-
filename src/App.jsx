@@ -26,7 +26,6 @@ function ScrollToTop() {
 }
 
 function FadeIn({ children }) {
-  const ref = useEffect;
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
