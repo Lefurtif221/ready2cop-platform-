@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useCart } from '../CartContext';
+import { getImageUrl } from '../utils';
 
 export default function Cart() {
   const { items, count, total, removeItem } = useCart();
@@ -55,7 +56,7 @@ export default function Cart() {
                 {items.map((item, i) => (
                   <div key={item.id} className="r2c-cart-item rv" style={{transitionDelay: `${i * 70}ms`}}>
                     <img
-                      src={item.image?.startsWith('http') ? item.image : `/uploads/${item.image}`}
+                      src={getImageUrl(item.image)}
                       alt={item.name}
                       className="r2c-cart-item__img"
                       onError={(e) => { e.target.src = '/Chaussures-22.jpeg'; }}

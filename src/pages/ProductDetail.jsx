@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useCart } from '../CartContext';
+import { getImageUrl } from '../utils';
 import API from '../api';
 
 const catMap = { sneakers: 'Sneakers', casual: 'Casual', sport: 'Sport' };
@@ -76,7 +77,7 @@ export default function ProductDetail() {
 
   if (!product) return null;
 
-  const imageUrl = product.image?.startsWith('http') ? product.image : `/uploads/${product.image}`;
+  const imageUrl = getImageUrl(product.image);
 
   return (
     <>
@@ -154,7 +155,7 @@ export default function ProductDetail() {
                 <article key={p.id} className="r2c-card rv" style={{transitionDelay: `${(i % 4) * 70}ms`}}>
                   <div className="r2c-card__ph">
                     <img
-                      src={p.image?.startsWith('http') ? p.image : `/uploads/${p.image}`}
+                      src={getImageUrl(p.image)}
                       alt={p.name}
                       loading="lazy"
                       onError={(e) => { e.target.onerror = null; e.target.src = '/Chaussures-22.jpeg'; }}

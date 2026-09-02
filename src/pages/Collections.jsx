@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../CartContext';
+import { getImageUrl } from '../utils';
 import API from '../api';
 
 const FALLBACK_PRODUCTS = [
@@ -110,7 +111,7 @@ export default function Collections() {
               <article key={product.id} className="r2c-card rv" style={{transitionDelay: `${(i % 4) * 70}ms`}}>
                 <div className="r2c-card__ph">
                   <img
-                    src={product.image?.startsWith('http') ? product.image : `/uploads/${product.image}`}
+                    src={getImageUrl(product.image)}
                     alt={product.name}
                     loading="lazy"
                     onError={(e) => { e.target.onerror = null; e.target.src = '/Chaussures-22.jpeg'; }}

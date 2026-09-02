@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useCart } from '../CartContext';
+import { getImageUrl } from '../utils';
 import API from '../api';
 
 export default function Checkout() {
@@ -114,7 +115,7 @@ export default function Checkout() {
                 {items.map(item => (
                   <div key={item.id} className="r2c-checkout__summary-item">
                     <img
-                      src={item.image?.startsWith('http') ? item.image : `/uploads/${item.image}`}
+                      src={getImageUrl(item.image)}
                       alt={item.name}
                       onError={(e) => { e.target.src = '/Chaussures-22.jpeg'; }}
                     />
