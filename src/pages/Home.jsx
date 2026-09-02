@@ -128,7 +128,7 @@ export default function Home() {
             <li><a href="#cats">Sport</a></li>
             <li><a href="#shop">Collection</a></li>
           </ul>
-          <Link to="/" className="r2c-nav__mk">READY2COP</Link>
+          <Link to="/" className="r2c-nav__mk"><img src="/logo-removebg-preview.png" alt="Ready2Cop" style={{height: 44, width: 'auto'}} /></Link>
           <div className="r2c-nav__util">
             <a href="https://wa.me/221771234567" target="_blank" rel="noopener"><i className="fab fa-whatsapp"></i> WhatsApp</a>
             <Link to="/panier">Panier (<b>{bagCount}</b>)</Link>

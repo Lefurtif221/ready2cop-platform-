@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useCart } from '../CartContext';
 import API from '../api';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import ProductCard from '../components/ProductCard';
-import Toast from '../components/Toast';
+
+const catMap = { sneakers: 'Sneakers', casual: 'Casual', sport: 'Sport' };
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -14,7 +12,7 @@ export default function ProductDetail() {
   const [product, setProduct] = useState(null);
   const [similar, setSimilar] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [toast, setToast] = useState({ show: false, message: '' });
+  const [added, setAdded] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -47,80 +45,98 @@ export default function ProductDetail() {
 
   const addToCart = () => {
     addItem(product);
-    setToast({ show: true, message: `${product.name} ajoute au panier` });
+    setAdded(true);
+    setTimeout(() => setAdded(false), 1300);
   };
+
+  // Reveal on scroll
+  useEffect(() => {
+    const RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (RM) { document.querySelectorAll('.rv').forEach(el => el.classList.add('in')); return; }
+    const els = document.querySelectorAll('.rv');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting || e.boundingClientRect.top < 0) {
+          e.target.classList.add('in');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    els.forEach((el, i) => { el.style.transitionDelay = `${i * 70}ms`; io.observe(el); });
+    return () => io.disconnect();
+  }, [similar]);
 
   if (loading) return (
     <>
-      <Header cartCount={count} />
-      <div className="product-detail__loading">
-        <div className="spinner"></div>
-      </div>
-      <Footer />
+      <div className="ann" aria-hidden="true"><div className="ann__row"><div className="ann__tk"><span>Livraison 24-48h a Dakar</span><i>/</i><span>100% authentique</span><i>/</i><span>Paiement a la livraison</span><i>/</i><span>Satisfait ou rembourse</span><i>/</i></div><div className="ann__tk"><span>Livraison 24-48h a Dakar</span><i>/</i><span>100% authentique</span><i>/</i><span>Paiement a la livraison</span><i>/</i><span>Satisfait ou rembourse</span><i>/</i></div></div></div>
+      <nav className="r2c-nav"><div className="r2c-nav__bar"><ul className="r2c-nav__links"><li><Link to="/">Accueil</Link></li><li><Link to="/collections">Collections</Link></li></ul><Link to="/" className="r2c-nav__mk"><img src="/logo-removebg-preview.png" alt="Ready2Cop" style={{height: 44, width: 'auto'}} /></Link><div className="r2c-nav__util"><Link to="/panier">Panier (<b>{count}</b>)</Link></div></div></nav>
+      <div className="product-detail__loading"><div className="spinner"></div></div>
     </>
   );
 
   if (!product) return null;
 
-  const imageUrl = product.image?.startsWith('http')
-    ? product.image
-    : `/uploads/${product.image}`;
+  const imageUrl = product.image?.startsWith('http') ? product.image : `/uploads/${product.image}`;
 
   return (
     <>
-      <Header cartCount={count} />
+      {/* Announcement Bar */}
+      <div className="ann" aria-hidden="true">
+        <div className="ann__row">
+          <div className="ann__tk"><span>Livraison 24-48h a Dakar</span><i>/</i><span>100% authentique</span><i>/</i><span>Paiement a la livraison</span><i>/</i><span>Satisfait ou rembourse</span><i>/</i></div>
+          <div className="ann__tk"><span>Livraison 24-48h a Dakar</span><i>/</i><span>100% authentique</span><i>/</i><span>Paiement a la livraison</span><i>/</i><span>Satisfait ou rembourse</span><i>/</i></div>
+        </div>
+      </div>
 
-      <section className="product-detail">
-        <div className="container">
-          <button className="product-detail__back" onClick={() => navigate(-1)}>
+      {/* Nav */}
+      <nav className="r2c-nav">
+        <div className="r2c-nav__bar">
+          <ul className="r2c-nav__links">
+            <li><Link to="/">Accueil</Link></li>
+            <li><Link to="/collections">Collections</Link></li>
+          </ul>
+          <Link to="/" className="r2c-nav__mk"><img src="/logo-removebg-preview.png" alt="Ready2Cop" style={{height: 44, width: 'auto'}} /></Link>
+          <div className="r2c-nav__util">
+            <Link to="/panier">Panier (<b>{count}</b>)</Link>
+          </div>
+        </div>
+      </nav>
+
+      {/* Product Detail */}
+      <section className="r2c-pdp">
+        <div className="r2c-pdp__wrap">
+          <button className="r2c-pdp__back" onClick={() => navigate(-1)}>
             <i className="fas fa-arrow-left"></i> Retour
           </button>
 
-          <div className="product-detail__grid">
-            <div className="product-detail__image">
+          <div className="r2c-pdp__grid">
+            <div className="r2c-pdp__img rv">
               <img
                 src={imageUrl}
                 alt={product.name}
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = '/Chaussures-22.jpeg';
-                }}
+                onError={(e) => { e.target.onerror = null; e.target.src = '/Chaussures-22.jpeg'; }}
               />
             </div>
 
-            <div className="product-detail__info">
-              <span className="product-detail__category">{product.category}</span>
-              <h1 className="product-detail__name">{product.name}</h1>
-              <p className="product-detail__price">{product.price.toLocaleString('fr-FR')} FCFA</p>
-              <p className="product-detail__desc">
+            <div className="r2c-pdp__info">
+              <span className="r2c-pdp__cat rv">{catMap[product.category] || product.category}</span>
+              <h1 className="r2c-pdp__name rv">{product.name}</h1>
+              <p className="r2c-pdp__price rv">{product.price.toLocaleString('fr-FR')} FCFA</p>
+              <p className="r2c-pdp__desc rv">
                 {product.description || 'Des sneakers authentiques, confortables et stylées pour toutes les occasions.'}
               </p>
 
-              <div className="product-detail__meta">
-                <div className="product-detail__meta-item">
-                  <i className="fas fa-truck-fast"></i>
-                  <span>Livraison 24-48h a Dakar</span>
-                </div>
-                <div className="product-detail__meta-item">
-                  <i className="fas fa-certificate"></i>
-                  <span>100% authentique</span>
-                </div>
-                <div className="product-detail__meta-item">
-                  <i className="fas fa-money-bill-wave"></i>
-                  <span>Paiement a la livraison</span>
-                </div>
+              <div className="r2c-pdp__meta rv">
+                <div className="r2c-pdp__meta-item"><i className="fas fa-truck-fast"></i><span>Livraison 24-48h a Dakar</span></div>
+                <div className="r2c-pdp__meta-item"><i className="fas fa-certificate"></i><span>100% authentique</span></div>
+                <div className="r2c-pdp__meta-item"><i className="fas fa-money-bill-wave"></i><span>Paiement a la livraison</span></div>
               </div>
 
-              <button className="btn btn--primary btn--lg btn--full" onClick={addToCart}>
-                <i className="fas fa-shopping-cart"></i> Ajouter au panier
+              <button className="r2c-btn rv" style={{width: '100%', textAlign: 'center', marginBottom: 12}} onClick={addToCart}>
+                <span><i className="fas fa-shopping-cart"></i> {added ? 'Ajoute !' : 'Ajouter au panier'}</span>
               </button>
 
-              <a
-                href="https://wa.me/221771234567"
-                className="btn btn--ghost btn--full"
-                target="_blank"
-                rel="noopener"
-              >
+              <a href="https://wa.me/221771234567" className="r2c-btn-line rv" target="_blank" rel="noopener" style={{display: 'block', textAlign: 'center', marginTop: 16}}>
                 <i className="fab fa-whatsapp"></i> Commander via WhatsApp
               </a>
             </div>
@@ -128,28 +144,53 @@ export default function ProductDetail() {
         </div>
       </section>
 
+      {/* Similar */}
       {similar.length > 0 && (
-        <section className="similar-products">
-          <div className="container">
-            <h2 className="similar-products__title">Tu pourrais aussi aimer</h2>
-            <div className="products__grid">
-              {similar.map(p => (
-                <ProductCard
-                  key={p.id}
-                  product={p}
-                  onAddToCart={(prod) => {
-                    addItem(prod);
-                    setToast({ show: true, message: `${prod.name} ajoute au panier` });
-                  }}
-                />
+        <section className="r2c-similar">
+          <div className="r2c-similar__wrap">
+            <h2 className="r2c-similar__title rv">Tu pourrais aussi aimer</h2>
+            <div className="r2c-shop__grid">
+              {similar.map((p, i) => (
+                <article key={p.id} className="r2c-card rv" style={{transitionDelay: `${(i % 4) * 70}ms`}}>
+                  <div className="r2c-card__ph">
+                    <img
+                      src={p.image?.startsWith('http') ? p.image : `/uploads/${p.image}`}
+                      alt={p.name}
+                      loading="lazy"
+                      onError={(e) => { e.target.onerror = null; e.target.src = '/Chaussures-22.jpeg'; }}
+                    />
+                    <button className="r2c-card__add" onClick={() => { addItem(p); }}>Ajouter au panier</button>
+                  </div>
+                  <div className="r2c-card__meta">
+                    <div>
+                      <Link to={`/produit/${p.id}`} className="r2c-card__nm">{p.name}</Link>
+                      <div className="r2c-card__ct">{catMap[p.category] || p.category}</div>
+                    </div>
+                    <div className="r2c-card__pr">{p.price.toLocaleString('fr-FR')} FCFA</div>
+                  </div>
+                </article>
               ))}
             </div>
           </div>
         </section>
       )}
 
-      <Footer />
-      <Toast message={toast.message} show={toast.show} onClose={() => setToast({ show: false, message: '' })} />
+      {/* Footer */}
+      <footer className="r2c-footer">
+        <div className="r2c-footer__cols">
+          <div>
+            <div className="r2c-footer__mk">READY2COP</div>
+            <address>Dakar, Senegal<br/><br/><a href="https://wa.me/221771234567">WhatsApp: +221 77 123 45 67</a></address>
+          </div>
+          <div><h4>Boutique</h4><Link to="/collections">Sneakers</Link><Link to="/collections">Casual</Link><Link to="/collections">Sport</Link></div>
+          <div><h4>Aide</h4><a href="#">Livraison</a><a href="#">Retours</a><a href="#">FAQ</a></div>
+          <div><h4>Suivez-nous</h4><a href="#">Instagram</a><a href="#">TikTok</a></div>
+        </div>
+        <div className="r2c-footer__legal">
+          <span>&copy; 2026 Ready2Cop Dakar</span>
+          <span>Paiement a la livraison</span>
+        </div>
+      </footer>
     </>
   );
 }
