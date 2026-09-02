@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../CartContext';
 import { getImageUrl } from '../utils';
@@ -6,16 +6,11 @@ import API from '../api';
 
 const FALLBACK_PRODUCTS = [
   { id: 1, name: 'Air Max Revolution', price: 78500, category: 'sneakers', image: 'Chaussures-22.jpeg' },
-  { id: 2, name: 'Classic Comfort', price: 54500, category: 'casual', image: 'Chaussures-22.jpeg' },
-  { id: 3, name: 'Ultra Sport Pro', price: 96800, category: 'sport', image: 'Chaussures-22.jpeg' },
   { id: 4, name: 'Street Style Elite', price: 72600, category: 'sneakers', image: 'Chaussures-22.jpeg' },
 ];
 
-const catMap = { sneakers: 'Sneakers', casual: 'Casual', sport: 'Sport' };
-
 export default function Collections() {
   const [products, setProducts] = useState([]);
-  const [filter, setFilter] = useState('all');
   const [addedId, setAddedId] = useState(null);
   const { addItem, count } = useCart();
 
@@ -23,37 +18,17 @@ export default function Collections() {
     API.get('/products')
       .then(res => {
         const data = Array.isArray(res.data) ? res.data : [];
-        setProducts(data.length ? data : FALLBACK_PRODUCTS);
+        const sneakers = data.filter(p => p.category === 'sneakers');
+        setProducts(sneakers.length ? sneakers : FALLBACK_PRODUCTS);
       })
       .catch(() => setProducts(FALLBACK_PRODUCTS));
   }, []);
-
-  const filtered = filter === 'all'
-    ? products
-    : products.filter(p => p.category === filter);
 
   const addToCart = (product) => {
     addItem(product);
     setAddedId(product.id);
     setTimeout(() => setAddedId(null), 1300);
   };
-
-  // Reveal on scroll
-  useEffect(() => {
-    const RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (RM) { document.querySelectorAll('.rv').forEach(el => el.classList.add('in')); return; }
-    const els = document.querySelectorAll('.rv');
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting || e.boundingClientRect.top < 0) {
-          e.target.classList.add('in');
-          io.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
-    els.forEach((el, i) => { el.style.transitionDelay = `${(i % 4) * 70}ms`; io.observe(el); });
-    return () => io.disconnect();
-  }, [filtered]);
 
   return (
     <>
@@ -80,7 +55,7 @@ export default function Collections() {
         <div className="r2c-nav__bar">
           <ul className="r2c-nav__links">
             <li><Link to="/">Accueil</Link></li>
-            <li><a href="#shop">Collection</a></li>
+            <li><Link to="/collections">Collections</Link></li>
           </ul>
           <Link to="/" className="r2c-nav__mk"><img src="/logo-removebg-preview.png" alt="Ready2Cop" style={{height: 44, width: 'auto'}} /></Link>
           <div className="r2c-nav__util">
@@ -90,25 +65,17 @@ export default function Collections() {
         </div>
       </nav>
 
-      {/* Collections */}
+      {/* Collections - Sneakers only */}
       <section className="r2c-collections">
         <div className="r2c-collections__wrap">
-          <div className="r2c-collections__hd rv">
-            <h1>Nos Collections</h1>
-            <p>Toutes nos paires, verifiees et pretes a etre cop.</p>
-          </div>
-
-          <div className="r2c-shop__filters rv" style={{justifyContent: 'center', marginBottom: 40}}>
-            {['all', 'sneakers', 'casual', 'sport'].map(cat => (
-              <button key={cat} className={`r2c-filter ${filter === cat ? 'active' : ''}`} onClick={() => setFilter(cat)}>
-                {cat === 'all' ? 'Tous' : cat.charAt(0).toUpperCase() + cat.slice(1)}
-              </button>
-            ))}
+          <div className="r2c-collections__hd">
+            <h1>Nos Sneakers</h1>
+            <p>Toutes nos paires sneakers, verifiees et pretes a etre cop.</p>
           </div>
 
           <div className="r2c-shop__grid">
-            {filtered.map((product, i) => (
-              <article key={product.id} className="r2c-card rv" style={{transitionDelay: `${(i % 4) * 70}ms`}}>
+            {products.map((product, i) => (
+              <article key={product.id} className="r2c-card">
                 <div className="r2c-card__ph">
                   <img
                     src={getImageUrl(product.image)}
@@ -116,20 +83,29 @@ export default function Collections() {
                     loading="lazy"
                     onError={(e) => { e.target.onerror = null; e.target.src = '/Chaussures-22.jpeg'; }}
                   />
-                  <button className="r2c-card__add" onClick={() => addToCart(product)}>
-                    {addedId === product.id ? 'Ajoute !' : 'Ajouter au panier'}
-                  </button>
+                  <div className="r2c-card__btns">
+                    <Link to={`/produit/${product.id}`} className="r2c-card__view">Voir</Link>
+                    <button className="r2c-card__add" onClick={() => addToCart(product)}>
+                      {addedId === product.id ? 'Ajoute !' : 'Ajouter'}
+                    </button>
+                  </div>
                 </div>
                 <div className="r2c-card__meta">
                   <div>
                     <Link to={`/produit/${product.id}`} className="r2c-card__nm">{product.name}</Link>
-                    <div className="r2c-card__ct">{catMap[product.category] || product.category}</div>
+                    <div className="r2c-card__ct">Sneakers</div>
                   </div>
                   <div className="r2c-card__pr">{product.price.toLocaleString('fr-FR')} FCFA</div>
                 </div>
               </article>
             ))}
           </div>
+
+          {products.length === 0 && (
+            <div style={{textAlign: 'center', padding: '80px 20px'}}>
+              <p style={{color: 'var(--mid)'}}>Aucune sneaker disponible pour le moment.</p>
+            </div>
+          )}
         </div>
       </section>
 
@@ -140,7 +116,7 @@ export default function Collections() {
             <div className="r2c-footer__mk">READY2COP</div>
             <address>Dakar, Senegal<br/><br/><a href="https://wa.me/221771234567">WhatsApp: +221 77 123 45 67</a></address>
           </div>
-          <div><h4>Boutique</h4><Link to="/collections">Sneakers</Link><Link to="/collections">Casual</Link><Link to="/collections">Sport</Link></div>
+          <div><h4>Boutique</h4><Link to="/collections">Sneakers</Link></div>
           <div><h4>Aide</h4><a href="#">Livraison</a><a href="#">Retours</a><a href="#">FAQ</a></div>
           <div><h4>Suivez-nous</h4><a href="#">Instagram</a><a href="#">TikTok</a></div>
         </div>

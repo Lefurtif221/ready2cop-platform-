@@ -6,6 +6,18 @@ import API from '../api';
 
 const catMap = { sneakers: 'Sneakers', casual: 'Casual', sport: 'Sport' };
 
+const FALLBACK_PRODUCT = {
+  id: 1, name: 'Air Max Revolution', price: 78500,
+  category: 'sneakers', image: 'Chaussures-22.jpeg',
+  description: 'Des sneakers authentiques, confortables et styl\u00e9es pour toutes les occasions.'
+};
+
+const FALLBACK_SIMILAR = [
+  { id: 2, name: 'Classic Comfort', price: 54500, category: 'casual', image: 'Chaussures-22.jpeg' },
+  { id: 3, name: 'Ultra Sport Pro', price: 96800, category: 'sport', image: 'Chaussures-22.jpeg' },
+  { id: 4, name: 'Street Style Elite', price: 72600, category: 'sneakers', image: 'Chaussures-22.jpeg' },
+];
+
 export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -30,16 +42,8 @@ export default function ProductDetail() {
         setLoading(false);
       })
       .catch(() => {
-        setProduct({
-          id: 1, name: 'Air Max Revolution', price: 78500,
-          category: 'sneakers', image: 'Chaussures-22.jpeg',
-          description: 'Des sneakers authentiques, confortables et stylées pour toutes les occasions.'
-        });
-        setSimilar([
-          { id: 2, name: 'Classic Comfort', price: 54500, category: 'casual', image: 'Chaussures-22.jpeg' },
-          { id: 3, name: 'Ultra Sport Pro', price: 96800, category: 'sport', image: 'Chaussures-22.jpeg' },
-          { id: 4, name: 'Street Style Elite', price: 72600, category: 'sneakers', image: 'Chaussures-22.jpeg' },
-        ]);
+        setProduct(FALLBACK_PRODUCT);
+        setSimilar(FALLBACK_SIMILAR);
         setLoading(false);
       });
   }, [id]);
@@ -50,23 +54,6 @@ export default function ProductDetail() {
     setTimeout(() => setAdded(false), 1300);
   };
 
-  // Reveal on scroll
-  useEffect(() => {
-    const RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (RM) { document.querySelectorAll('.rv').forEach(el => el.classList.add('in')); return; }
-    const els = document.querySelectorAll('.rv');
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting || e.boundingClientRect.top < 0) {
-          e.target.classList.add('in');
-          io.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
-    els.forEach((el, i) => { el.style.transitionDelay = `${i * 70}ms`; io.observe(el); });
-    return () => io.disconnect();
-  }, [similar]);
-
   if (loading) return (
     <>
       <div className="ann" aria-hidden="true"><div className="ann__row"><div className="ann__tk"><span>Livraison 24-48h a Dakar</span><i>/</i><span>100% authentique</span><i>/</i><span>Paiement a la livraison</span><i>/</i><span>Satisfait ou rembourse</span><i>/</i></div><div className="ann__tk"><span>Livraison 24-48h a Dakar</span><i>/</i><span>100% authentique</span><i>/</i><span>Paiement a la livraison</span><i>/</i><span>Satisfait ou rembourse</span><i>/</i></div></div></div>
@@ -76,8 +63,6 @@ export default function ProductDetail() {
   );
 
   if (!product) return null;
-
-  const imageUrl = getImageUrl(product.image);
 
   return (
     <>
@@ -98,48 +83,62 @@ export default function ProductDetail() {
           </ul>
           <Link to="/" className="r2c-nav__mk"><img src="/logo-removebg-preview.png" alt="Ready2Cop" style={{height: 44, width: 'auto'}} /></Link>
           <div className="r2c-nav__util">
+            <a href="https://wa.me/221771234567" target="_blank" rel="noopener"><i className="fab fa-whatsapp"></i> WhatsApp</a>
             <Link to="/panier">Panier (<b>{count}</b>)</Link>
           </div>
         </div>
       </nav>
 
-      {/* Product Detail */}
+      {/* Product Detail - SABLE split layout */}
       <section className="r2c-pdp">
         <div className="r2c-pdp__wrap">
           <button className="r2c-pdp__back" onClick={() => navigate(-1)}>
             <i className="fas fa-arrow-left"></i> Retour
           </button>
 
-          <div className="r2c-pdp__grid">
-            <div className="r2c-pdp__img rv">
+          <div className="r2c-pdp__split">
+            {/* Image - like the season/about split in template */}
+            <div className="r2c-pdp__img-wrap">
               <img
-                src={imageUrl}
+                src={getImageUrl(product.image)}
                 alt={product.name}
                 onError={(e) => { e.target.onerror = null; e.target.src = '/Chaussures-22.jpeg'; }}
               />
             </div>
 
+            {/* Info - right side with specs */}
             <div className="r2c-pdp__info">
-              <span className="r2c-pdp__cat rv">{catMap[product.category] || product.category}</span>
-              <h1 className="r2c-pdp__name rv">{product.name}</h1>
-              <p className="r2c-pdp__price rv">{product.price.toLocaleString('fr-FR')} FCFA</p>
-              <p className="r2c-pdp__desc rv">
-                {product.description || 'Des sneakers authentiques, confortables et stylées pour toutes les occasions.'}
+              <span className="r2c-pdp__cat">{catMap[product.category] || product.category}</span>
+              <h1 className="r2c-pdp__name">{product.name}</h1>
+              <p className="r2c-pdp__price">{product.price.toLocaleString('fr-FR')} FCFA</p>
+              <p className="r2c-pdp__desc">
+                {product.description || 'Des sneakers authentiques, confortables et styl\u00e9es pour toutes les occasions.'}
               </p>
 
-              <div className="r2c-pdp__meta rv">
+              {/* Specs - like the dl in about section */}
+              <dl className="r2c-pdp__specs">
+                <div><dt>Categorie</dt><dd>{catMap[product.category] || product.category}</dd></div>
+                <div><dt>Reference</dt><dd>R2C-{String(product.id).padStart(4, '0')}</dd></div>
+                <div><dt>Disponibilite</dt><dd>{product.stock > 0 ? 'En stock' : 'Sur commande'}</dd></div>
+                <div><dt>Livraison</dt><dd>24-48h a Dakar</dd></div>
+              </dl>
+
+              {/* Service meta */}
+              <div className="r2c-pdp__meta">
                 <div className="r2c-pdp__meta-item"><i className="fas fa-truck-fast"></i><span>Livraison 24-48h a Dakar</span></div>
                 <div className="r2c-pdp__meta-item"><i className="fas fa-certificate"></i><span>100% authentique</span></div>
                 <div className="r2c-pdp__meta-item"><i className="fas fa-money-bill-wave"></i><span>Paiement a la livraison</span></div>
               </div>
 
-              <button className="r2c-btn rv" style={{width: '100%', textAlign: 'center', marginBottom: 12}} onClick={addToCart}>
-                <span><i className="fas fa-shopping-cart"></i> {added ? 'Ajoute !' : 'Ajouter au panier'}</span>
-              </button>
-
-              <a href="https://wa.me/221771234567" className="r2c-btn-line rv" target="_blank" rel="noopener" style={{display: 'block', textAlign: 'center', marginTop: 16}}>
-                <i className="fab fa-whatsapp"></i> Commander via WhatsApp
-              </a>
+              {/* Actions */}
+              <div className="r2c-pdp__actions">
+                <button className="r2c-btn" onClick={addToCart}>
+                  <span><i className="fas fa-shopping-cart"></i> {added ? 'Ajoute !' : 'Ajouter au panier'}</span>
+                </button>
+                <a href="https://wa.me/221771234567" className="r2c-btn-line" target="_blank" rel="noopener">
+                  <i className="fab fa-whatsapp"></i> Commander via WhatsApp
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -149,10 +148,10 @@ export default function ProductDetail() {
       {similar.length > 0 && (
         <section className="r2c-similar">
           <div className="r2c-similar__wrap">
-            <h2 className="r2c-similar__title rv">Tu pourrais aussi aimer</h2>
+            <h2 className="r2c-similar__title">Tu pourrais aussi aimer</h2>
             <div className="r2c-shop__grid">
-              {similar.map((p, i) => (
-                <article key={p.id} className="r2c-card rv" style={{transitionDelay: `${(i % 4) * 70}ms`}}>
+              {similar.map((p) => (
+                <article key={p.id} className="r2c-card">
                   <div className="r2c-card__ph">
                     <img
                       src={getImageUrl(p.image)}
@@ -160,7 +159,10 @@ export default function ProductDetail() {
                       loading="lazy"
                       onError={(e) => { e.target.onerror = null; e.target.src = '/Chaussures-22.jpeg'; }}
                     />
-                    <button className="r2c-card__add" onClick={() => { addItem(p); }}>Ajouter au panier</button>
+                    <div className="r2c-card__btns">
+                      <Link to={`/produit/${p.id}`} className="r2c-card__view">Voir</Link>
+                      <button className="r2c-card__add" onClick={() => addItem(p)}>Ajouter</button>
+                    </div>
                   </div>
                   <div className="r2c-card__meta">
                     <div>
@@ -183,7 +185,7 @@ export default function ProductDetail() {
             <div className="r2c-footer__mk">READY2COP</div>
             <address>Dakar, Senegal<br/><br/><a href="https://wa.me/221771234567">WhatsApp: +221 77 123 45 67</a></address>
           </div>
-          <div><h4>Boutique</h4><Link to="/collections">Sneakers</Link><Link to="/collections">Casual</Link><Link to="/collections">Sport</Link></div>
+          <div><h4>Boutique</h4><Link to="/collections">Sneakers</Link></div>
           <div><h4>Aide</h4><a href="#">Livraison</a><a href="#">Retours</a><a href="#">FAQ</a></div>
           <div><h4>Suivez-nous</h4><a href="#">Instagram</a><a href="#">TikTok</a></div>
         </div>

@@ -234,9 +234,12 @@ export default function Home() {
                     loading="lazy"
                     onError={(e) => { e.target.onerror = null; e.target.src = '/Chaussures-22.jpeg'; }}
                   />
-                  <button className="r2c-card__add" onClick={() => addToCart(product)}>
-                    {addedId === product.id ? 'Ajoute !' : 'Ajouter au panier'}
-                  </button>
+                  <div className="r2c-card__btns">
+                    <Link to={`/produit/${product.id}`} className="r2c-card__view">Voir</Link>
+                    <button className="r2c-card__add" onClick={() => addToCart(product)}>
+                      {addedId === product.id ? 'Ajoute !' : 'Ajouter'}
+                    </button>
+                  </div>
                 </div>
                 <div className="r2c-card__meta">
                   <div>
