@@ -13,12 +13,4 @@ API.interceptors.request.use((config) => {
   return config;
 });
 
-API.interceptors.response.use(
-  (res) => res,
-  (err) => {
-    console.warn('API error:', err.message);
-    return Promise.reject(err);
-  }
-);
-
 export default API;
