@@ -285,6 +285,18 @@ letter-spacing:.2em;text-transform:uppercase;transition:background .3s}
 .r2c-card__add:hover{background:var(--orange-dim)}
 .r2c-card__view:hover{background:#222}
 
+/* Card size pills */
+.r2c-card__sizes{position:absolute;left:10px;right:10px;bottom:10px;z-index:3;
+display:flex;flex-wrap:wrap;gap:4px;opacity:0;transform:translateY(8px);
+transition:opacity .4s cubic-bezier(.2,.8,.3,1),transform .4s cubic-bezier(.2,.8,.3,1)}
+.r2c-card:hover .r2c-card__sizes{opacity:1;transform:none}
+.r2c-card__sz{width:34px;height:30px;border-radius:5px;border:1.5px solid rgba(255,255,255,.3);
+background:rgba(255,255,255,.15);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+color:var(--bone);font:600 10px/1 var(--font-display);cursor:pointer;
+transition:all .2s;display:flex;align-items:center;justify-content:center}
+.r2c-card__sz:hover{background:var(--orange);border-color:var(--orange)}
+.r2c-card__sz--added{background:var(--green)!important;border-color:var(--green)!important;transform:scale(.9)}
+
 /* ========================================
    PRODUCT DETAIL PAGE (SABLE style - split)
    ======================================== */

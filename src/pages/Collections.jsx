@@ -5,13 +5,14 @@ import { getImageUrl } from '../utils';
 import API from '../api';
 
 const FALLBACK_PRODUCTS = [
-  { id: 1, name: 'Air Max Revolution', price: 78500, category: 'sneakers', image: 'Chaussures-22.jpeg' },
-  { id: 4, name: 'Street Style Elite', price: 72600, category: 'sneakers', image: 'Chaussures-22.jpeg' },
+  { id: 1, name: 'Air Max Revolution', price: 78500, category: 'sneakers', image: 'Chaussures-22.jpeg', sizes: [{size:40,stock:4},{size:41,stock:5},{size:42,stock:4},{size:43,stock:3}] },
+  { id: 4, name: 'Street Style Elite', price: 72600, category: 'sneakers', image: 'Chaussures-22.jpeg', sizes: [{size:39,stock:2},{size:40,stock:3},{size:41,stock:4},{size:42,stock:5}] },
 ];
 
 export default function Collections() {
   const [products, setProducts] = useState([]);
-  const { count } = useCart();
+  const [addedId, setAddedId] = useState(null);
+  const { addItem, count } = useCart();
 
   useEffect(() => {
     API.get('/products')
@@ -23,15 +24,14 @@ export default function Collections() {
       .catch(() => setProducts(FALLBACK_PRODUCTS));
   }, []);
 
-  const addToCart = (product) => {
-    addItem(product);
-    setAddedId(product.id);
+  const addToCart = (product, size) => {
+    addItem(product, size);
+    setAddedId(product.id + '-' + size);
     setTimeout(() => setAddedId(null), 1300);
   };
 
   return (
     <>
-      {/* Announcement Bar */}
       <div className="ann" aria-hidden="true">
         <div className="ann__row">
           <div className="ann__tk">
@@ -49,7 +49,6 @@ export default function Collections() {
         </div>
       </div>
 
-      {/* Nav */}
       <nav className="r2c-nav">
         <div className="r2c-nav__bar">
           <ul className="r2c-nav__links">
@@ -64,7 +63,6 @@ export default function Collections() {
         </div>
       </nav>
 
-      {/* Collections - Sneakers only */}
       <section className="r2c-collections">
         <div className="r2c-collections__wrap">
           <div className="r2c-collections__hd">
@@ -73,28 +71,44 @@ export default function Collections() {
           </div>
 
           <div className="r2c-shop__grid">
-            {products.map((product, i) => (
-              <article key={product.id} className="r2c-card">
-                <div className="r2c-card__ph">
-                  <img
-                    src={getImageUrl(product.image)}
-                    alt={product.name}
-                    loading="lazy"
-                    onError={(e) => { e.target.onerror = null; e.target.src = '/Chaussures-22.jpeg'; }}
-                  />
-                  <div className="r2c-card__btns">
-                    <Link to={`/produit/${product.id}`} className="r2c-card__view" style={{flex: 1}}>Voir</Link>
+            {products.map((product) => {
+              const sizes = (product.sizes || []).filter(s => s.stock > 0);
+              return (
+                <article key={product.id} className="r2c-card">
+                  <div className="r2c-card__ph">
+                    <img
+                      src={getImageUrl(product.image)}
+                      alt={product.name}
+                      loading="lazy"
+                      onError={(e) => { e.target.onerror = null; e.target.src = '/Chaussures-22.jpeg'; }}
+                    />
+                    <div className="r2c-card__btns">
+                      <Link to={`/produit/${product.id}`} className="r2c-card__view">Voir</Link>
+                    </div>
+                    {sizes.length > 0 && (
+                      <div className="r2c-card__sizes">
+                        {sizes.map(s => (
+                          <button
+                            key={s.size}
+                            className={`r2c-card__sz ${addedId === product.id + '-' + s.size ? 'r2c-card__sz--added' : ''}`}
+                            onClick={(e) => { e.preventDefault(); addToCart(product, s.size); }}
+                          >
+                            {addedId === product.id + '-' + s.size ? '!' : s.size}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                </div>
-                <div className="r2c-card__meta">
-                  <div>
-                    <Link to={`/produit/${product.id}`} className="r2c-card__nm">{product.name}</Link>
-                    <div className="r2c-card__ct">Sneakers</div>
+                  <div className="r2c-card__meta">
+                    <div>
+                      <Link to={`/produit/${product.id}`} className="r2c-card__nm">{product.name}</Link>
+                      <div className="r2c-card__ct">Sneakers</div>
+                    </div>
+                    <div className="r2c-card__pr">{product.price.toLocaleString('fr-FR')} FCFA</div>
                   </div>
-                  <div className="r2c-card__pr">{product.price.toLocaleString('fr-FR')} FCFA</div>
-                </div>
-              </article>
-            ))}
+                </article>
+              );
+            })}
           </div>
 
           {products.length === 0 && (
@@ -105,7 +119,6 @@ export default function Collections() {
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="r2c-footer">
         <div className="r2c-footer__cols">
           <div>

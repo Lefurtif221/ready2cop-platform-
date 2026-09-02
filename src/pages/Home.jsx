@@ -5,20 +5,20 @@ import { getImageUrl } from '../utils';
 import API from '../api';
 
 const FALLBACK_PRODUCTS = [
-  { id: 1, name: 'Air Max Revolution', price: 78500, category: 'sneakers', image: 'Chaussures-22.jpeg' },
-  { id: 2, name: 'Classic Comfort', price: 54500, category: 'casual', image: 'Chaussures-22.jpeg' },
-  { id: 3, name: 'Ultra Sport Pro', price: 96800, category: 'sport', image: 'Chaussures-22.jpeg' },
-  { id: 4, name: 'Street Style Elite', price: 72600, category: 'sneakers', image: 'Chaussures-22.jpeg' },
+  { id: 1, name: 'Air Max Revolution', price: 78500, category: 'sneakers', image: 'Chaussures-22.jpeg', sizes: [{size:40,stock:4},{size:41,stock:5},{size:42,stock:4},{size:43,stock:3}] },
+  { id: 2, name: 'Classic Comfort', price: 54500, category: 'casual', image: 'Chaussures-22.jpeg', sizes: [{size:40,stock:4},{size:41,stock:5}] },
+  { id: 3, name: 'Ultra Sport Pro', price: 96800, category: 'sport', image: 'Chaussures-22.jpeg', sizes: [{size:41,stock:3},{size:42,stock:4},{size:43,stock:3}] },
+  { id: 4, name: 'Street Style Elite', price: 72600, category: 'sneakers', image: 'Chaussures-22.jpeg', sizes: [{size:39,stock:2},{size:40,stock:3},{size:41,stock:4},{size:42,stock:5}] },
 ];
+
+const catMap = { sneakers: 'Sneakers', casual: 'Casual', sport: 'Sport' };
 
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [filter, setFilter] = useState('all');
-  const { count } = useCart();
+  const [addedId, setAddedId] = useState(null);
+  const { addItem, count } = useCart();
   const heroRef = useRef(null);
-  const revealRefs = useRef([]);
-  const wordRef = useRef(null);
-  const modelRef = useRef(null);
 
   useEffect(() => {
     API.get('/products')
@@ -33,6 +33,11 @@ export default function Home() {
     ? products
     : products.filter(p => p.category === filter);
 
+  const addToCart = (product, size) => {
+    addItem(product, size);
+    setAddedId(product.id + '-' + size);
+    setTimeout(() => setAddedId(null), 1300);
+  };
 
   // Reveal on scroll
   useEffect(() => {
@@ -90,8 +95,6 @@ export default function Home() {
     return () => window.removeEventListener('scroll', onScroll);
   }, [handleScroll]);
 
-  const catMap = { sneakers: 'Sneakers', casual: 'Casual', sport: 'Sport' };
-
   return (
     <>
       {/* Announcement Bar */}
@@ -138,7 +141,7 @@ export default function Home() {
           </div>
           <div className="r2c-hero__stage">
             <div className="r2c-hero__word" id="wb" aria-hidden="true">READY2COP</div>
-            <img ref={modelRef} id="hm" className="r2c-hero__model hv" src="/Chaussures-22.jpeg" alt="Sneakers Ready2Cop" />
+            <img id="hm" className="r2c-hero__model hv" src="/Chaussures-22.jpeg" alt="Sneakers Ready2Cop" />
           </div>
           <div className="r2c-hero__br hv" id="h2">
             <p>Collection<br/>Dakar<br/>2026</p>
@@ -219,28 +222,44 @@ export default function Home() {
             </div>
           </div>
           <div className="r2c-shop__grid">
-            {filtered.map((product, i) => (
-              <article key={product.id} className="r2c-card rv" style={{transitionDelay: `${(i % 4) * 70}ms`}}>
-                <div className="r2c-card__ph">
-                  <img
-                    src={getImageUrl(product.image)}
-                    alt={product.name}
-                    loading="lazy"
-                    onError={(e) => { e.target.onerror = null; e.target.src = '/Chaussures-22.jpeg'; }}
-                  />
-                  <div className="r2c-card__btns">
-                    <Link to={`/produit/${product.id}`} className="r2c-card__view" style={{flex: 1}}>Voir</Link>
+            {filtered.map((product, i) => {
+              const sizes = (product.sizes || []).filter(s => s.stock > 0);
+              return (
+                <article key={product.id} className="r2c-card rv" style={{transitionDelay: `${(i % 4) * 70}ms`}}>
+                  <div className="r2c-card__ph">
+                    <img
+                      src={getImageUrl(product.image)}
+                      alt={product.name}
+                      loading="lazy"
+                      onError={(e) => { e.target.onerror = null; e.target.src = '/Chaussures-22.jpeg'; }}
+                    />
+                    <div className="r2c-card__btns">
+                      <Link to={`/produit/${product.id}`} className="r2c-card__view">Voir</Link>
+                    </div>
+                    {sizes.length > 0 && (
+                      <div className="r2c-card__sizes">
+                        {sizes.map(s => (
+                          <button
+                            key={s.size}
+                            className={`r2c-card__sz ${addedId === product.id + '-' + s.size ? 'r2c-card__sz--added' : ''}`}
+                            onClick={(e) => { e.preventDefault(); addToCart(product, s.size); }}
+                          >
+                            {addedId === product.id + '-' + s.size ? '!' : s.size}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                </div>
-                <div className="r2c-card__meta">
-                  <div>
-                    <Link to={`/produit/${product.id}`} className="r2c-card__nm">{product.name}</Link>
-                    <div className="r2c-card__ct">{catMap[product.category] || product.category}</div>
+                  <div className="r2c-card__meta">
+                    <div>
+                      <Link to={`/produit/${product.id}`} className="r2c-card__nm">{product.name}</Link>
+                      <div className="r2c-card__ct">{catMap[product.category] || product.category}</div>
+                    </div>
+                    <div className="r2c-card__pr">{product.price.toLocaleString('fr-FR')} FCFA</div>
                   </div>
-                  <div className="r2c-card__pr">{product.price.toLocaleString('fr-FR')} FCFA</div>
-                </div>
-              </article>
-            ))}
+                </article>
+              );
+            })}
           </div>
         </div>
       </section>
