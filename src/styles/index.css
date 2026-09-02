@@ -1126,7 +1126,7 @@ ul {
 }
 
 /* ========================================
-   Intro Animation
+   Intro Animation (Pure CSS)
    ======================================== */
 
 .intro-overlay {
@@ -1138,15 +1138,11 @@ ul {
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  animation: introFadeOut 0.5s ease 3s forwards;
 }
 
-.intro-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+@keyframes introFadeOut {
+  to { opacity: 0; pointer-events: none; }
 }
 
 .intro-center {
@@ -1166,8 +1162,14 @@ ul {
   left: 50%;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(232, 101, 10, 0.25) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(232, 101, 10, 0.3) 0%, transparent 70%);
   z-index: 0;
+  animation: glowPulse 2s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+  50% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
 }
 
 .intro-logo {
@@ -1177,6 +1179,15 @@ ul {
   filter: drop-shadow(0 4px 30px rgba(232, 101, 10, 0.6));
   position: relative;
   z-index: 2;
+}
+
+.intro-logo--anim {
+  animation: logoPop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both;
+}
+
+@keyframes logoPop {
+  from { opacity: 0; transform: scale(0.3); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 .intro-tagline {
@@ -1190,16 +1201,40 @@ ul {
   z-index: 2;
 }
 
+.intro-tagline--anim {
+  animation: fadeUp 0.6s ease 1s both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .intro-sneaker {
   position: absolute;
-  width: 120px;
-  height: 120px;
+  width: 110px;
+  height: 110px;
   top: 50%;
   left: 50%;
-  margin-top: -60px;
-  margin-left: -60px;
+  margin-top: -55px;
+  margin-left: -55px;
   z-index: 1;
   filter: drop-shadow(0 10px 30px rgba(232, 101, 10, 0.3));
+}
+
+.intro-sneaker--anim {
+  animation: sneakerOrbit 3s ease-in-out infinite, sneakerFadeIn 0.6s ease both;
+}
+
+@keyframes sneakerFadeIn {
+  from { opacity: 0; transform: rotate(var(--angle)) translateX(280px) scale(0.3); }
+  to { opacity: 1; transform: rotate(var(--angle)) translateX(180px) scale(1); }
+}
+
+@keyframes sneakerOrbit {
+  0% { transform: rotate(var(--angle)) translateX(180px) scale(1); }
+  50% { transform: rotate(calc(var(--angle) + 30deg)) translateX(200px) scale(1.05); }
+  100% { transform: rotate(calc(var(--angle) + 60deg)) translateX(180px) scale(1); }
 }
 
 .intro-sneaker img {
