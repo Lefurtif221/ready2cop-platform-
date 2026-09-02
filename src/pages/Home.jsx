@@ -13,9 +13,8 @@ const FALLBACK_PRODUCTS = [
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [filter, setFilter] = useState('all');
-  const [bagCount, setBagCount] = useState(0);
   const [addedId, setAddedId] = useState(null);
-  const { addItem } = useCart();
+  const { addItem, count } = useCart();
   const heroRef = useRef(null);
   const revealRefs = useRef([]);
   const wordRef = useRef(null);
@@ -36,7 +35,6 @@ export default function Home() {
 
   const addToCart = (product) => {
     addItem(product);
-    setBagCount(prev => prev + 1);
     setAddedId(product.id);
     setTimeout(() => setAddedId(null), 1300);
   };
@@ -131,7 +129,7 @@ export default function Home() {
           <Link to="/" className="r2c-nav__mk"><img src="/logo-removebg-preview.png" alt="Ready2Cop" style={{height: 44, width: 'auto'}} /></Link>
           <div className="r2c-nav__util">
             <a href="https://wa.me/221771234567" target="_blank" rel="noopener"><i className="fab fa-whatsapp"></i> WhatsApp</a>
-            <Link to="/panier">Panier (<b>{bagCount}</b>)</Link>
+            <Link to="/panier">Panier (<b>{count}</b>)</Link>
           </div>
         </div>
       </nav>
