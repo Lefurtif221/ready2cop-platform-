@@ -22,37 +22,30 @@ export default function Login() {
   };
 
   return (
-    <div className="login-page">
-      <div className="login-card">
-        <h1 className="login-card__title">Ready2Cop</h1>
-        <p className="login-card__subtitle">Espace admin</p>
-        {error && <div className="login-error">{error}</div>}
+    <div className="r2c-login">
+      <div className="r2c-login__card">
+        <Link to="/" className="r2c-login__logo">
+          <img src="/logo-removebg-preview.png" alt="Ready2Cop" />
+        </Link>
+        <h1 className="r2c-login__title">READY2COP</h1>
+        <p className="r2c-login__subtitle">Espace admin</p>
+        {error && <div className="r2c-login__error">{error}</div>}
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
+          <div className="r2c-login__field">
             <label htmlFor="username">Identifiant</label>
-            <input
-              id="username"
-              type="text"
-              value={username}
-              onChange={e => setUsername(e.target.value)}
-              required
-            />
+            <input id="username" type="text" value={username} onChange={e => setUsername(e.target.value)} required />
           </div>
-          <div className="form-group">
+          <div className="r2c-login__field">
             <label htmlFor="password">Mot de passe</label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              required
-            />
+            <input id="password" type="password" value={password} onChange={e => setPassword(e.target.value)} required />
           </div>
-          <button type="submit" className="btn btn--primary">Se connecter</button>
+          <button type="submit" className="r2c-btn" style={{width: '100%', textAlign: 'center'}}>
+            <span>Se connecter</span>
+          </button>
         </form>
-        <p style={{ textAlign: 'center', marginTop: 16 }}>
-          <Link to="/" style={{ fontSize: '0.85rem', color: 'var(--muted)' }}>Retour au site</Link>
-        </p>
+        <Link to="/" className="r2c-login__back">
+          <i className="fas fa-arrow-left"></i> Retour au site
+        </Link>
       </div>
     </div>
   );

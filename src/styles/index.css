@@ -438,18 +438,31 @@ font-size:.9rem;color:var(--text);background:var(--off-white);outline:none;trans
 .form-actions{display:flex;gap:8px;margin-top:20px}
 
 /* ========================================
-   LOGIN
+   LOGIN (SABLE style)
    ======================================== */
-.login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;
-background:var(--off-white);padding:24px}
-.login-card{background:var(--white);padding:40px;border-radius:var(--radius);
-border:1px solid var(--warm-gray);width:100%;max-width:400px}
-.login-card__title{font-family:var(--font-display);font-size:1.5rem;font-weight:700;text-align:center;margin-bottom:8px}
-.login-card__subtitle{text-align:center;color:var(--muted);font-size:.9rem;margin-bottom:28px}
-.login-card .form-group{margin-bottom:16px}
-.login-card .btn{width:100%}
-.login-error{background:#fee2e2;color:#991b1b;padding:10px 14px;border-radius:var(--radius-sm);
+.r2c-login{min-height:100vh;display:flex;align-items:center;justify-content:center;
+background:var(--black);padding:24px}
+.r2c-login__card{background:var(--white);padding:48px 40px;border-radius:16px;
+width:100%;max-width:420px;text-align:center}
+.r2c-login__logo{display:inline-block;margin-bottom:20px}
+.r2c-login__logo img{height:60px;width:auto;margin:0 auto}
+.r2c-login__title{font-family:var(--font-display);font-weight:800;font-size:1.5rem;
+letter-spacing:.26em;text-transform:uppercase;margin-bottom:4px}
+.r2c-login__subtitle{color:var(--mid);font-size:.9rem;margin-bottom:28px}
+.r2c-login__error{background:#fee2e2;color:#991b1b;padding:10px 14px;border-radius:8px;
 font-size:.85rem;margin-bottom:16px;text-align:center}
+.r2c-login__field{margin-bottom:16px;text-align:left}
+.r2c-login__field label{display:block;font:600 .78rem/1 var(--font-display);letter-spacing:.04em;
+text-transform:uppercase;color:var(--text);margin-bottom:6px}
+.r2c-login__field input{width:100%;padding:12px 14px;border:1.5px solid var(--warm-gray);
+border-radius:10px;font-family:var(--font-body);font-size:.95rem;background:var(--off-white);
+transition:border-color .2s;outline:none}
+.r2c-login__field input:focus{border-color:var(--orange)}
+.r2c-login__back{display:inline-flex;align-items:center;gap:8px;margin-top:20px;
+font:500 11px/1 var(--font-display);letter-spacing:.14em;text-transform:uppercase;color:var(--mid);
+transition:color .2s}
+.r2c-login__back:hover{color:var(--orange)}
+.r2c-login__back i{font-size:.7rem}
 
 /* ========================================
    CART PAGE (SABLE style)
