@@ -14,8 +14,7 @@ const FALLBACK_PRODUCTS = [
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [filter, setFilter] = useState('all');
-  const [addedId, setAddedId] = useState(null);
-  const { addItem, count } = useCart();
+  const { count } = useCart();
   const heroRef = useRef(null);
   const revealRefs = useRef([]);
   const wordRef = useRef(null);
@@ -34,11 +33,6 @@ export default function Home() {
     ? products
     : products.filter(p => p.category === filter);
 
-  const addToCart = (product) => {
-    addItem(product);
-    setAddedId(product.id);
-    setTimeout(() => setAddedId(null), 1300);
-  };
 
   // Reveal on scroll
   useEffect(() => {
@@ -235,10 +229,7 @@ export default function Home() {
                     onError={(e) => { e.target.onerror = null; e.target.src = '/Chaussures-22.jpeg'; }}
                   />
                   <div className="r2c-card__btns">
-                    <Link to={`/produit/${product.id}`} className="r2c-card__view">Voir</Link>
-                    <button className="r2c-card__add" onClick={() => addToCart(product)}>
-                      {addedId === product.id ? 'Ajoute !' : 'Ajouter'}
-                    </button>
+                    <Link to={`/produit/${product.id}`} className="r2c-card__view" style={{flex: 1}}>Voir</Link>
                   </div>
                 </div>
                 <div className="r2c-card__meta">

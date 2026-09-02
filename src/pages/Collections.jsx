@@ -11,8 +11,7 @@ const FALLBACK_PRODUCTS = [
 
 export default function Collections() {
   const [products, setProducts] = useState([]);
-  const [addedId, setAddedId] = useState(null);
-  const { addItem, count } = useCart();
+  const { count } = useCart();
 
   useEffect(() => {
     API.get('/products')
@@ -84,10 +83,7 @@ export default function Collections() {
                     onError={(e) => { e.target.onerror = null; e.target.src = '/Chaussures-22.jpeg'; }}
                   />
                   <div className="r2c-card__btns">
-                    <Link to={`/produit/${product.id}`} className="r2c-card__view">Voir</Link>
-                    <button className="r2c-card__add" onClick={() => addToCart(product)}>
-                      {addedId === product.id ? 'Ajoute !' : 'Ajouter'}
-                    </button>
+                    <Link to={`/produit/${product.id}`} className="r2c-card__view" style={{flex: 1}}>Voir</Link>
                   </div>
                 </div>
                 <div className="r2c-card__meta">

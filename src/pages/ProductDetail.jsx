@@ -9,13 +9,13 @@ const catMap = { sneakers: 'Sneakers', casual: 'Casual', sport: 'Sport' };
 const FALLBACK_PRODUCT = {
   id: 1, name: 'Air Max Revolution', price: 78500,
   category: 'sneakers', image: 'Chaussures-22.jpeg',
-  description: 'Des sneakers authentiques, confortables et styl\u00e9es pour toutes les occasions.'
+  description: 'Des sneakers authentiques, confortables et styl\u00e9es pour toutes les occasions.',
+  sizes: [{size: 40, stock: 4}, {size: 41, stock: 5}, {size: 42, stock: 4}, {size: 43, stock: 3}]
 };
 
 const FALLBACK_SIMILAR = [
-  { id: 2, name: 'Classic Comfort', price: 54500, category: 'casual', image: 'Chaussures-22.jpeg' },
-  { id: 3, name: 'Ultra Sport Pro', price: 96800, category: 'sport', image: 'Chaussures-22.jpeg' },
-  { id: 4, name: 'Street Style Elite', price: 72600, category: 'sneakers', image: 'Chaussures-22.jpeg' },
+  { id: 2, name: 'Classic Comfort', price: 54500, category: 'casual', image: 'Chaussures-22.jpeg', sizes: [{size: 40, stock: 4}] },
+  { id: 4, name: 'Street Style Elite', price: 72600, category: 'sneakers', image: 'Chaussures-22.jpeg', sizes: [{size: 41, stock: 4}] },
 ];
 
 export default function ProductDetail() {
@@ -26,9 +26,11 @@ export default function ProductDetail() {
   const [similar, setSimilar] = useState([]);
   const [loading, setLoading] = useState(true);
   const [added, setAdded] = useState(false);
+  const [selectedSize, setSelectedSize] = useState(null);
 
   useEffect(() => {
     setLoading(true);
+    setSelectedSize(null);
     API.get(`/products/${id}`)
       .then(res => {
         setProduct(res.data);
@@ -49,7 +51,8 @@ export default function ProductDetail() {
   }, [id]);
 
   const addToCart = () => {
-    addItem(product);
+    if (product.sizes && product.sizes.length > 0 && !selectedSize) return;
+    addItem(product, selectedSize);
     setAdded(true);
     setTimeout(() => setAdded(false), 1300);
   };
@@ -64,9 +67,11 @@ export default function ProductDetail() {
 
   if (!product) return null;
 
+  const sizes = product.sizes || [];
+  const totalStock = sizes.reduce((sum, s) => sum + s.stock, 0);
+
   return (
     <>
-      {/* Announcement Bar */}
       <div className="ann" aria-hidden="true">
         <div className="ann__row">
           <div className="ann__tk"><span>Livraison 24-48h a Dakar</span><i>/</i><span>100% authentique</span><i>/</i><span>Paiement a la livraison</span><i>/</i><span>Satisfait ou rembourse</span><i>/</i></div>
@@ -74,7 +79,6 @@ export default function ProductDetail() {
         </div>
       </div>
 
-      {/* Nav */}
       <nav className="r2c-nav">
         <div className="r2c-nav__bar">
           <ul className="r2c-nav__links">
@@ -89,7 +93,6 @@ export default function ProductDetail() {
         </div>
       </nav>
 
-      {/* Product Detail - SABLE split layout */}
       <section className="r2c-pdp">
         <div className="r2c-pdp__wrap">
           <button className="r2c-pdp__back" onClick={() => navigate(-1)}>
@@ -97,7 +100,6 @@ export default function ProductDetail() {
           </button>
 
           <div className="r2c-pdp__split">
-            {/* Image - like the season/about split in template */}
             <div className="r2c-pdp__img-wrap">
               <img
                 src={getImageUrl(product.image)}
@@ -106,7 +108,6 @@ export default function ProductDetail() {
               />
             </div>
 
-            {/* Info - right side with specs */}
             <div className="r2c-pdp__info">
               <span className="r2c-pdp__cat">{catMap[product.category] || product.category}</span>
               <h1 className="r2c-pdp__name">{product.name}</h1>
@@ -115,24 +116,62 @@ export default function ProductDetail() {
                 {product.description || 'Des sneakers authentiques, confortables et styl\u00e9es pour toutes les occasions.'}
               </p>
 
-              {/* Specs - like the dl in about section */}
               <dl className="r2c-pdp__specs">
                 <div><dt>Categorie</dt><dd>{catMap[product.category] || product.category}</dd></div>
                 <div><dt>Reference</dt><dd>R2C-{String(product.id).padStart(4, '0')}</dd></div>
-                <div><dt>Disponibilite</dt><dd>{product.stock > 0 ? 'En stock' : 'Sur commande'}</dd></div>
+                <div><dt>Stock total</dt><dd>{totalStock} paire{totalStock > 1 ? 's' : ''}</dd></div>
                 <div><dt>Livraison</dt><dd>24-48h a Dakar</dd></div>
               </dl>
 
-              {/* Service meta */}
+              {sizes.length > 0 && (
+                <div style={{marginBottom: 24}}>
+                  <div style={{fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '12px', letterSpacing: '.14em', textTransform: 'uppercase', marginBottom: 12, color: 'var(--black)'}}>
+                    Choisir une taille
+                  </div>
+                  <div style={{display: 'flex', flexWrap: 'wrap', gap: 8}}>
+                    {sizes.map(s => (
+                      <button
+                        key={s.size}
+                        onClick={() => s.stock > 0 && setSelectedSize(s.size)}
+                        disabled={s.stock === 0}
+                        style={{
+                          minWidth: 52, height: 44, borderRadius: 8, border: selectedSize === s.size ? '2px solid var(--orange)' : '1.5px solid var(--warm-gray)',
+                          background: s.stock === 0 ? 'rgba(0,0,0,.04)' : selectedSize === s.size ? 'var(--orange)' : 'var(--white)',
+                          color: s.stock === 0 ? 'var(--mid)' : selectedSize === s.size ? 'var(--bone)' : 'var(--black)',
+                          fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: '.85rem', cursor: s.stock === 0 ? 'not-allowed' : 'pointer',
+                          position: 'relative', transition: 'all .2s'
+                        }}
+                      >
+                        {s.size}
+                        {s.stock <= 2 && s.stock > 0 && <span style={{position: 'absolute', top: -6, right: -6, width: 8, height: 8, borderRadius: '50%', background: 'var(--red)', border: '1.5px solid var(--white)'}}></span>}
+                      </button>
+                    ))}
+                  </div>
+                  {selectedSize && (
+                    <p style={{fontSize: '.8rem', color: 'var(--mid)', marginTop: 8}}>
+                      Taille {selectedSize} : <b style={{color: sizes.find(s => s.size === selectedSize)?.stock <= 2 ? 'var(--red)' : 'var(--green)'}}>
+                        {sizes.find(s => s.size === selectedSize)?.stock} en stock
+                      </b>
+                      {sizes.find(s => s.size === selectedSize)?.stock <= 2 && ' - derniere paire' + (sizes.find(s => s.size === selectedSize)?.stock === 1 ? '' : 's')}
+                    </p>
+                  )}
+                  {!selectedSize && <p style={{fontSize: '.8rem', color: 'var(--mid)', marginTop: 8}}>Selectionne ta taille</p>}
+                </div>
+              )}
+
               <div className="r2c-pdp__meta">
                 <div className="r2c-pdp__meta-item"><i className="fas fa-truck-fast"></i><span>Livraison 24-48h a Dakar</span></div>
                 <div className="r2c-pdp__meta-item"><i className="fas fa-certificate"></i><span>100% authentique</span></div>
                 <div className="r2c-pdp__meta-item"><i className="fas fa-money-bill-wave"></i><span>Paiement a la livraison</span></div>
               </div>
 
-              {/* Actions */}
               <div className="r2c-pdp__actions">
-                <button className="r2c-btn" onClick={addToCart}>
+                <button
+                  className="r2c-btn"
+                  onClick={addToCart}
+                  disabled={sizes.length > 0 && !selectedSize}
+                  style={{opacity: sizes.length > 0 && !selectedSize ? .5 : 1, cursor: sizes.length > 0 && !selectedSize ? 'not-allowed' : 'pointer'}}
+                >
                   <span><i className="fas fa-shopping-cart"></i> {added ? 'Ajoute !' : 'Ajouter au panier'}</span>
                 </button>
                 <a href="https://wa.me/221771234567" className="r2c-btn-line" target="_blank" rel="noopener">
@@ -144,7 +183,6 @@ export default function ProductDetail() {
         </div>
       </section>
 
-      {/* Similar */}
       {similar.length > 0 && (
         <section className="r2c-similar">
           <div className="r2c-similar__wrap">
@@ -161,7 +199,6 @@ export default function ProductDetail() {
                     />
                     <div className="r2c-card__btns">
                       <Link to={`/produit/${p.id}`} className="r2c-card__view">Voir</Link>
-                      <button className="r2c-card__add" onClick={() => addItem(p)}>Ajouter</button>
                     </div>
                   </div>
                   <div className="r2c-card__meta">
@@ -178,7 +215,6 @@ export default function ProductDetail() {
         </section>
       )}
 
-      {/* Footer */}
       <footer className="r2c-footer">
         <div className="r2c-footer__cols">
           <div>

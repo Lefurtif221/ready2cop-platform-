@@ -3,7 +3,7 @@ import { useCart } from '../CartContext';
 import { getImageUrl } from '../utils';
 
 export default function Cart() {
-  const { items, count, total, removeItem } = useCart();
+  const { items, count, total, updateQty, removeItem } = useCart();
 
   return (
     <>
@@ -45,27 +45,33 @@ export default function Cart() {
             <div style={{textAlign: 'center', padding: '80px 20px'}}>
               <i className="fas fa-bag-shopping" style={{fontSize: '4rem', color: 'var(--mid)', marginBottom: 20, display: 'block'}}></i>
               <p style={{color: 'var(--mid)', marginBottom: 32, fontSize: '1.1rem'}}>Ton panier est vide</p>
-              <Link to="/collections" className="r2c-btn"><span>Voir les produits</span></Link>
+              <Link to="/collections" className="r2c-btn"><span>Voir les sneakers</span></Link>
             </div>
           ) : (
             <div style={{display: 'grid', gridTemplateColumns: '1fr 380px', gap: 40, alignItems: 'start'}}>
               <div style={{display: 'flex', flexDirection: 'column', gap: 16}}>
-                {items.map(item => (
-                  <div key={item.id} style={{display: 'flex', gap: 20, padding: 20, background: 'var(--white)', border: '1px solid rgba(0,0,0,.06)', borderRadius: 14, alignItems: 'center'}}>
-                    <img src={getImageUrl(item.image)} alt={item.name} style={{width: 100, height: 100, objectFit: 'cover', borderRadius: 10, flex: '0 0 auto'}} onError={(e) => { e.target.src = '/Chaussures-22.jpeg'; }} />
-                    <div style={{flex: 1}}>
-                      <Link to={`/produit/${item.id}`} style={{fontWeight: 600, fontSize: '1rem', color: 'var(--black)'}}>{item.name}</Link>
-                      <p style={{color: 'var(--orange)', fontWeight: 700, fontSize: '.95rem', marginTop: 4}}>{item.price.toLocaleString('fr-FR')} FCFA</p>
-                      <div style={{display: 'flex', alignItems: 'center', gap: 16, marginTop: 10}}>
-                        <span style={{fontSize: '.85rem', color: 'var(--mid)'}}>Qte: {item.qty}</span>
-                        <button onClick={() => removeItem(item.id)} style={{font: '500 10px/1 var(--font-display)', letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--mid)', border: 'none', background: 'none', cursor: 'pointer', padding: '6px 12px', borderRadius: 6}}>Supprimer</button>
+                {items.map(item => {
+                  const itemKey = item.size ? `${item.id}-${item.size}` : `${item.id}`;
+                  return (
+                    <div key={itemKey} style={{display: 'flex', gap: 20, padding: 20, background: 'var(--white)', border: '1px solid rgba(0,0,0,.06)', borderRadius: 14, alignItems: 'center'}}>
+                      <img src={getImageUrl(item.image)} alt={item.name} style={{width: 100, height: 100, objectFit: 'cover', borderRadius: 10, flex: '0 0 auto'}} onError={(e) => { e.target.src = '/Chaussures-22.jpeg'; }} />
+                      <div style={{flex: 1}}>
+                        <Link to={`/produit/${item.id}`} style={{fontWeight: 600, fontSize: '1rem', color: 'var(--black)'}}>{item.name}</Link>
+                        <p style={{color: 'var(--orange)', fontWeight: 700, fontSize: '.95rem', marginTop: 4}}>{item.price.toLocaleString('fr-FR')} FCFA</p>
+                        {item.size && <div style={{fontSize: '.8rem', color: 'var(--mid)', marginTop: 2}}>Taille: <b style={{color: 'var(--black)'}}>{item.size}</b></div>}
+                        <div style={{display: 'flex', alignItems: 'center', gap: 10, marginTop: 10}}>
+                          <button onClick={() => updateQty(item.id, item.size, item.qty - 1)} style={{width: 30, height: 30, borderRadius: 8, border: '1.5px solid var(--warm-gray)', background: 'var(--white)', fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--black)'}}>-</button>
+                          <span style={{fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '.95rem', minWidth: 24, textAlign: 'center'}}>{item.qty}</span>
+                          <button onClick={() => updateQty(item.id, item.size, item.qty + 1)} style={{width: 30, height: 30, borderRadius: 8, border: '1.5px solid var(--warm-gray)', background: 'var(--white)', fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--black)'}}>+</button>
+                          <button onClick={() => removeItem(item.id, item.size)} style={{font: '500 10px/1 var(--font-display)', letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--mid)', border: 'none', background: 'none', cursor: 'pointer', padding: '6px 10px', marginLeft: 6}}>Supprimer</button>
+                        </div>
+                      </div>
+                      <div style={{fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1rem', color: 'var(--black)', whiteSpace: 'nowrap'}}>
+                        {(item.price * item.qty).toLocaleString('fr-FR')} FCFA
                       </div>
                     </div>
-                    <div style={{fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1rem', color: 'var(--black)', whiteSpace: 'nowrap'}}>
-                      {(item.price * item.qty).toLocaleString('fr-FR')} FCFA
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               <div style={{background: 'var(--off-white)', border: '1px solid rgba(0,0,0,.06)', borderRadius: 16, padding: 28, position: 'sticky', top: 120}}>
