@@ -24,7 +24,7 @@ export default function ProductDetail() {
         return API.get('/products');
       })
       .then(res => {
-        const all = res.data;
+        const all = Array.isArray(res.data) ? res.data : [];
         const current = all.find(p => p.id === Number(id));
         const sims = all.filter(p => p.id !== Number(id) && p.category === current?.category);
         setSimilar(sims.length ? sims : all.filter(p => p.id !== Number(id)).slice(0, 4));

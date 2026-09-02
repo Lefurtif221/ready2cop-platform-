@@ -21,7 +21,10 @@ export default function Collections() {
 
   useEffect(() => {
     API.get('/products')
-      .then(res => setProducts(res.data))
+      .then(res => {
+        const data = Array.isArray(res.data) ? res.data : [];
+        setProducts(data.length ? data : FALLBACK_PRODUCTS);
+      })
       .catch(() => setProducts(FALLBACK_PRODUCTS));
   }, []);
 
