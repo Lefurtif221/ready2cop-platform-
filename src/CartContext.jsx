@@ -1,9 +1,20 @@
-import { createContext, useContext, useState, useCallback } from 'react';
+import { createContext, useContext, useState, useCallback, useEffect } from 'react';
 
 const CartContext = createContext();
 
+function loadCart() {
+  try {
+    const data = localStorage.getItem('r2c_cart');
+    return data ? JSON.parse(data) : [];
+  } catch { return []; }
+}
+
 export function CartProvider({ children }) {
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState(loadCart);
+
+  useEffect(() => {
+    localStorage.setItem('r2c_cart', JSON.stringify(items));
+  }, [items]);
 
   const addItem = useCallback((product) => {
     setItems(prev => {
