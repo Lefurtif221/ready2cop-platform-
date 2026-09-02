@@ -7,7 +7,6 @@ export default function Cart() {
 
   return (
     <>
-      {/* Announcement Bar */}
       <div className="ann" aria-hidden="true">
         <div className="ann__row">
           <div className="ann__tk">
@@ -25,7 +24,6 @@ export default function Cart() {
         </div>
       </div>
 
-      {/* Nav */}
       <nav className="r2c-nav">
         <div className="r2c-nav__bar">
           <ul className="r2c-nav__links">
@@ -39,69 +37,61 @@ export default function Cart() {
         </div>
       </nav>
 
-      {/* Cart */}
-      <section className="r2c-cart">
-        <div className="r2c-cart__wrap">
-          <h1 className="r2c-cart__title rv">Mon panier</h1>
+      <section style={{padding: 'clamp(40px,7vh,86px) 0 clamp(48px,8vh,96px)'}}>
+        <div style={{maxWidth: 1440, margin: '0 auto', padding: '0 clamp(18px,3.4vw,44px)'}}>
+          <h1 style={{fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 'clamp(26px,3.4vw,44px)', letterSpacing: '-.015em', textTransform: 'uppercase', marginBottom: 'clamp(20px,3.4vh,34px)'}}>Mon panier</h1>
 
           {count === 0 ? (
-            <div className="r2c-cart__empty rv">
-              <i className="fas fa-bag-shopping"></i>
-              <p>Ton panier est vide</p>
+            <div style={{textAlign: 'center', padding: '80px 20px'}}>
+              <i className="fas fa-bag-shopping" style={{fontSize: '4rem', color: 'var(--mid)', marginBottom: 20, display: 'block'}}></i>
+              <p style={{color: 'var(--mid)', marginBottom: 32, fontSize: '1.1rem'}}>Ton panier est vide</p>
               <Link to="/collections" className="r2c-btn"><span>Voir les produits</span></Link>
             </div>
           ) : (
-            <div className="r2c-cart__grid">
-              <div className="r2c-cart__items">
-                {items.map((item, i) => (
-                  <div key={item.id} className="r2c-cart-item rv" style={{transitionDelay: `${i * 70}ms`}}>
-                    <img
-                      src={getImageUrl(item.image)}
-                      alt={item.name}
-                      className="r2c-cart-item__img"
-                      onError={(e) => { e.target.src = '/Chaussures-22.jpeg'; }}
-                    />
-                    <div className="r2c-cart-item__info">
-                      <Link to={`/produit/${item.id}`} className="r2c-cart-item__name">{item.name}</Link>
-                      <p className="r2c-cart-item__price">{item.price.toLocaleString('fr-FR')} FCFA</p>
-                      <div className="r2c-cart-item__actions">
-                        <span className="r2c-cart-item__qty">Qte: {item.qty}</span>
-                        <button className="r2c-cart-item__remove" onClick={() => removeItem(item.id)}>
-                          <i className="fas fa-trash"></i> Supprimer
-                        </button>
+            <div style={{display: 'grid', gridTemplateColumns: '1fr 380px', gap: 40, alignItems: 'start'}}>
+              <div style={{display: 'flex', flexDirection: 'column', gap: 16}}>
+                {items.map(item => (
+                  <div key={item.id} style={{display: 'flex', gap: 20, padding: 20, background: 'var(--white)', border: '1px solid rgba(0,0,0,.06)', borderRadius: 14, alignItems: 'center'}}>
+                    <img src={getImageUrl(item.image)} alt={item.name} style={{width: 100, height: 100, objectFit: 'cover', borderRadius: 10, flex: '0 0 auto'}} onError={(e) => { e.target.src = '/Chaussures-22.jpeg'; }} />
+                    <div style={{flex: 1}}>
+                      <Link to={`/produit/${item.id}`} style={{fontWeight: 600, fontSize: '1rem', color: 'var(--black)'}}>{item.name}</Link>
+                      <p style={{color: 'var(--orange)', fontWeight: 700, fontSize: '.95rem', marginTop: 4}}>{item.price.toLocaleString('fr-FR')} FCFA</p>
+                      <div style={{display: 'flex', alignItems: 'center', gap: 16, marginTop: 10}}>
+                        <span style={{fontSize: '.85rem', color: 'var(--mid)'}}>Qte: {item.qty}</span>
+                        <button onClick={() => removeItem(item.id)} style={{font: '500 10px/1 var(--font-display)', letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--mid)', border: 'none', background: 'none', cursor: 'pointer', padding: '6px 12px', borderRadius: 6}}>Supprimer</button>
                       </div>
                     </div>
-                    <div className="r2c-cart-item__total">
+                    <div style={{fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1rem', color: 'var(--black)', whiteSpace: 'nowrap'}}>
                       {(item.price * item.qty).toLocaleString('fr-FR')} FCFA
                     </div>
                   </div>
                 ))}
               </div>
 
-              <div className="r2c-cart-summary rv">
-                <h3 className="r2c-cart-summary__title">Resume de la commande</h3>
-                <div className="r2c-cart-summary__lines">
-                  <div className="r2c-cart-summary__line">
+              <div style={{background: 'var(--off-white)', border: '1px solid rgba(0,0,0,.06)', borderRadius: 16, padding: 28, position: 'sticky', top: 120}}>
+                <h3 style={{fontFamily: 'var(--font-display)', fontSize: '1.1rem', fontWeight: 700, marginBottom: 20}}>Resume de la commande</h3>
+                <div style={{display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 16, paddingBottom: 16, borderBottom: '1px solid rgba(0,0,0,.06)'}}>
+                  <div style={{display: 'flex', justifyContent: 'space-between', fontSize: '.9rem', color: 'var(--mid)'}}>
                     <span>Sous-total ({count} article{count > 1 ? 's' : ''})</span>
                     <span>{total.toLocaleString('fr-FR')} FCFA</span>
                   </div>
-                  <div className="r2c-cart-summary__line">
+                  <div style={{display: 'flex', justifyContent: 'space-between', fontSize: '.9rem', color: 'var(--mid)'}}>
                     <span>Livraison</span>
-                    <span className="r2c-cart-summary__free">Gratuite</span>
+                    <span style={{color: 'var(--green)', fontWeight: 600}}>Gratuite</span>
                   </div>
                 </div>
-                <div className="r2c-cart-summary__total">
+                <div style={{display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--font-display)', fontSize: '1.3rem', fontWeight: 700, marginBottom: 24}}>
                   <span>Total</span>
-                  <span>{total.toLocaleString('fr-FR')} FCFA</span>
+                  <span style={{color: 'var(--orange)'}}>{total.toLocaleString('fr-FR')} FCFA</span>
                 </div>
-                <Link to="/checkout" className="r2c-btn" style={{width: '100%', textAlign: 'center'}}>
+                <Link to="/checkout" className="r2c-btn" style={{width: '100%', textAlign: 'center', display: 'block'}}>
                   <span>Commander</span>
                 </Link>
-                <p className="r2c-cart-summary__note">
-                  <i className="fas fa-lock"></i> Paiement a la livraison
+                <p style={{fontSize: '.8rem', color: 'var(--mid)', textAlign: 'center', lineHeight: 1.5, marginTop: 16}}>
+                  <i className="fas fa-lock" style={{marginRight: 4, color: 'var(--orange)'}}></i> Paiement a la livraison
                 </p>
-                <Link to="/collections" className="r2c-cart-summary__continue">
-                  <i className="fas fa-arrow-left"></i> Continuer mes achats
+                <Link to="/collections" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginTop: 16, font: '500 11px/1 var(--font-display)', letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--mid)'}}>
+                  <i className="fas fa-arrow-left" style={{fontSize: '.7rem'}}></i> Continuer mes achats
                 </Link>
               </div>
             </div>
@@ -109,7 +99,6 @@ export default function Cart() {
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="r2c-footer">
         <div className="r2c-footer__cols">
           <div>
