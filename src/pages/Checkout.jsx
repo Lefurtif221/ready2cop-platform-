@@ -1,26 +1,16 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { useCart } from '../CartContext';
 import API from '../api';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import Toast from '../components/Toast';
 
 export default function Checkout() {
   const navigate = useNavigate();
   const { items, count, total, clearCart } = useCart();
-  const [toast, setToast] = useState({ show: false, message: '' });
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState({
-    name: '',
-    phone: '',
-    address: '',
-    note: '',
-  });
+  const [toast, setToast] = useState({ show: false, message: '' });
+  const [form, setForm] = useState({ name: '', phone: '', address: '', note: '' });
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -47,64 +37,82 @@ export default function Checkout() {
     setLoading(false);
   };
 
+  // Reveal on scroll
+  useEffect(() => {
+    const RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (RM) { document.querySelectorAll('.rv').forEach(el => el.classList.add('in')); return; }
+    const els = document.querySelectorAll('.rv');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting || e.boundingClientRect.top < 0) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    els.forEach((el, i) => { el.style.transitionDelay = `${i * 70}ms`; io.observe(el); });
+    return () => io.disconnect();
+  }, []);
+
+  const Nav = () => (
+    <>
+      <div className="ann" aria-hidden="true"><div className="ann__row"><div className="ann__tk"><span>Livraison 24-48h a Dakar</span><i>/</i><span>100% authentique</span><i>/</i><span>Paiement a la livraison</span><i>/</i><span>Satisfait ou rembourse</span><i>/</i></div><div className="ann__tk"><span>Livraison 24-48h a Dakar</span><i>/</i><span>100% authentique</span><i>/</i><span>Paiement a la livraison</span><i>/</i><span>Satisfait ou rembourse</span><i>/</i></div></div></div>
+      <nav className="r2c-nav"><div className="r2c-nav__bar"><ul className="r2c-nav__links"><li><Link to="/">Accueil</Link></li><li><Link to="/collections">Collections</Link></li></ul><Link to="/" className="r2c-nav__mk"><img src="/logo-removebg-preview.png" alt="Ready2Cop" style={{height: 44, width: 'auto'}} /></Link><div className="r2c-nav__util"><Link to="/panier">Panier (<b>{count}</b>)</Link></div></div></nav>
+    </>
+  );
+
   if (count === 0) return (
     <>
-      <Header cartCount={count} />
-      <div className="checkout-page">
-        <div className="container">
-          <div className="checkout-empty">
-            <i className="fas fa-bag-shopping"></i>
-            <p>Ton panier est vide</p>
-            <a href="/collections" className="btn btn--primary">Voir les produits</a>
-          </div>
+      <Nav />
+      <section className="r2c-cart"><div className="r2c-cart__wrap">
+        <div className="r2c-cart__empty rv">
+          <i className="fas fa-bag-shopping"></i>
+          <p>Ton panier est vide</p>
+          <Link to="/collections" className="r2c-btn"><span>Voir les produits</span></Link>
         </div>
-      </div>
-      <Footer />
+      </div></section>
     </>
   );
 
   return (
     <>
-      <Header cartCount={count} />
+      <Nav />
 
-      <section className="checkout-page">
-        <div className="container">
-          <h1 className="checkout-page__title">Finaliser la commande</h1>
+      <section className="r2c-checkout">
+        <div className="r2c-checkout__wrap">
+          <h1 className="r2c-checkout__title rv">Finaliser la commande</h1>
 
-          <div className="checkout-grid">
-            <form className="checkout-form" onSubmit={handleSubmit}>
-              <h2 className="checkout-form__subtitle">Tes informations</h2>
+          <div className="r2c-checkout__grid">
+            <form className="r2c-checkout__form rv" onSubmit={handleSubmit}>
+              <h2 className="r2c-checkout__form-title">Tes informations</h2>
 
-              <div className="checkout-form__group">
+              <div className="r2c-checkout__field">
                 <label htmlFor="name">Nom complet *</label>
                 <input type="text" id="name" name="name" value={form.name} onChange={handleChange} required placeholder="Ex: Mouhamadou" />
               </div>
 
-              <div className="checkout-form__group">
+              <div className="r2c-checkout__field">
                 <label htmlFor="phone">Numero WhatsApp *</label>
                 <input type="tel" id="phone" name="phone" value={form.phone} onChange={handleChange} required placeholder="Ex: 77 123 45 67" />
               </div>
 
-              <div className="checkout-form__group">
+              <div className="r2c-checkout__field">
                 <label htmlFor="address">Adresse de livraison *</label>
                 <input type="text" id="address" name="address" value={form.address} onChange={handleChange} required placeholder="Ex: Plateau, Dakar" />
               </div>
 
-              <div className="checkout-form__group">
+              <div className="r2c-checkout__field">
                 <label htmlFor="note">Note (optionnel)</label>
                 <textarea id="note" name="note" value={form.note} onChange={handleChange} rows="3" placeholder="Taille, couleur, etc." />
               </div>
 
-              <button type="submit" className="btn btn--primary btn--lg btn--full" disabled={loading}>
-                {loading ? 'Envoi en cours...' : <><i className="fas fa-paper-plane"></i> Envoyer la commande</>}
+              <button type="submit" className="r2c-btn" style={{width: '100%', textAlign: 'center'}} disabled={loading}>
+                <span>{loading ? 'Envoi en cours...' : 'Envoyer la commande'}</span>
               </button>
             </form>
 
-            <div className="checkout-summary">
-              <h2 className="checkout-summary__title">Recapitulatif</h2>
-              <div className="checkout-summary__items">
+            <div className="r2c-checkout__summary rv">
+              <h3 className="r2c-checkout__summary-title">Recapitulatif</h3>
+              <div className="r2c-checkout__summary-items">
                 {items.map(item => (
-                  <div key={item.id} className="checkout-summary__item">
+                  <div key={item.id} className="r2c-checkout__summary-item">
                     <img
                       src={item.image?.startsWith('http') ? item.image : `/uploads/${item.image}`}
                       alt={item.name}
@@ -117,11 +125,11 @@ export default function Checkout() {
                   </div>
                 ))}
               </div>
-              <div className="checkout-summary__total">
+              <div className="r2c-checkout__summary-total">
                 <span>Total</span>
                 <span>{total.toLocaleString('fr-FR')} FCFA</span>
               </div>
-              <p className="checkout-summary__note">
+              <p className="r2c-checkout__summary-note">
                 <i className="fas fa-info-circle"></i> Paiement a la livraison. On te contacte sur WhatsApp pour confirmer.
               </p>
             </div>
@@ -129,8 +137,21 @@ export default function Checkout() {
         </div>
       </section>
 
-      <Footer />
-      <Toast message={toast.message} show={toast.show} onClose={() => setToast({ show: false, message: '' })} />
+      {/* Toast */}
+      <div className={`toast ${toast.show ? 'show' : ''}`} onClick={() => setToast({ show: false, message: '' })}>
+        <i className="fas fa-check-circle"></i> {toast.message}
+      </div>
+
+      {/* Footer */}
+      <footer className="r2c-footer">
+        <div className="r2c-footer__cols">
+          <div><div className="r2c-footer__mk">READY2COP</div><address>Dakar, Senegal<br/><br/><a href="https://wa.me/221771234567">WhatsApp: +221 77 123 45 67</a></address></div>
+          <div><h4>Boutique</h4><Link to="/collections">Sneakers</Link><Link to="/collections">Casual</Link><Link to="/collections">Sport</Link></div>
+          <div><h4>Aide</h4><a href="#">Livraison</a><a href="#">Retours</a><a href="#">FAQ</a></div>
+          <div><h4>Suivez-nous</h4><a href="#">Instagram</a><a href="#">TikTok</a></div>
+        </div>
+        <div className="r2c-footer__legal"><span>&copy; 2026 Ready2Cop Dakar</span><span>Paiement a la livraison</span></div>
+      </footer>
     </>
   );
 }

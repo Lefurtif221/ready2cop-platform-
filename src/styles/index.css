@@ -352,35 +352,36 @@ font-size:1.3rem;font-weight:700;margin-bottom:20px}
 .cart-page__total span:last-child{color:var(--orange)}
 
 /* ========================================
-   CHECKOUT PAGE
+   CHECKOUT PAGE (SABLE style)
    ======================================== */
-.checkout-page{padding:120px 0 80px;min-height:70vh}
-.checkout-page__title{font-family:var(--font-display);font-size:clamp(2rem,5vw,3rem);color:var(--black);margin-bottom:40px}
-.checkout-empty{text-align:center;padding:60px 20px}
-.checkout-empty i{font-size:3rem;color:var(--warm-gray);margin-bottom:16px}
-.checkout-empty p{color:var(--warm-gray);margin-bottom:24px}
-.checkout-grid{display:grid;grid-template-columns:1fr 380px;gap:40px;align-items:start}
-.checkout-form{background:var(--white);border:1px solid rgba(0,0,0,.06);border-radius:16px;padding:32px}
-.checkout-form__subtitle{font-family:var(--font-display);font-size:1.2rem;font-weight:700;margin-bottom:24px}
-.checkout-form__group{margin-bottom:18px}
-.checkout-form__group label{display:block;font-size:.85rem;font-weight:600;color:var(--text);margin-bottom:6px}
-.checkout-form__group input,.checkout-form__group textarea{width:100%;padding:12px 14px;
+.r2c-checkout{padding:clamp(40px,7vh,86px) 0 clamp(48px,8vh,96px)}
+.r2c-checkout__wrap{max-width:var(--max-width);margin:0 auto;padding:0 clamp(18px,3.4vw,44px)}
+.r2c-checkout__title{font-family:var(--font-display);font-weight:800;font-size:clamp(26px,3.4vw,44px);
+letter-spacing:-.015em;text-transform:uppercase;margin-bottom:clamp(20px,3.4vh,34px)}
+.r2c-checkout__grid{display:grid;grid-template-columns:1fr 380px;gap:40px;align-items:start}
+.r2c-checkout__form{background:var(--white);border:1px solid rgba(0,0,0,.06);border-radius:16px;padding:32px}
+.r2c-checkout__form-title{font-family:var(--font-display);font-size:1.2rem;font-weight:700;margin-bottom:24px}
+.r2c-checkout__field{margin-bottom:18px}
+.r2c-checkout__field label{display:block;font-size:.85rem;font-weight:600;color:var(--text);margin-bottom:6px}
+.r2c-checkout__field input,.r2c-checkout__field textarea{width:100%;padding:12px 14px;
 border:1.5px solid var(--warm-gray);border-radius:10px;font-family:var(--font-body);
 font-size:.95rem;background:var(--off-white);transition:border-color .2s}
-.checkout-form__group input:focus,.checkout-form__group textarea:focus{outline:none;border-color:var(--orange)}
-.checkout-summary{background:var(--off-white);border-radius:16px;padding:28px;position:sticky;top:100px}
-.checkout-summary__title{font-family:var(--font-display);font-size:1.1rem;font-weight:700;margin-bottom:20px}
-.checkout-summary__items{display:flex;flex-direction:column;gap:14px;margin-bottom:20px}
-.checkout-summary__item{display:flex;gap:12px;align-items:center}
-.checkout-summary__item img{width:56px;height:56px;object-fit:cover;border-radius:8px}
-.checkout-summary__item p{font-weight:600;font-size:.9rem;margin-bottom:2px}
-.checkout-summary__item span{font-size:.8rem;color:var(--warm-gray)}
-.checkout-summary__total{display:flex;justify-content:space-between;font-family:var(--font-display);
-font-size:1.2rem;font-weight:700;padding-top:16px;border-top:1px solid rgba(0,0,0,.06);margin-bottom:16px}
-.checkout-summary__total span:last-child{color:var(--orange)}
-.checkout-summary__note{font-size:.8rem;color:var(--warm-gray);text-align:center;line-height:1.5}
-.checkout-summary__note i{margin-right:4px}
-@media(max-width:768px){.checkout-grid{grid-template-columns:1fr}}
+.r2c-checkout__field input:focus,.r2c-checkout__field textarea:focus{outline:none;border-color:var(--orange)}
+.r2c-checkout__summary{background:var(--off-white);border:1px solid rgba(0,0,0,.06);border-radius:16px;
+padding:28px;position:sticky;top:120px}
+.r2c-checkout__summary-title{font-family:var(--font-display);font-size:1.1rem;font-weight:700;margin-bottom:20px}
+.r2c-checkout__summary-items{display:flex;flex-direction:column;gap:14px;margin-bottom:20px;
+padding-bottom:16px;border-bottom:1px solid rgba(0,0,0,.06)}
+.r2c-checkout__summary-item{display:flex;gap:12px;align-items:center}
+.r2c-checkout__summary-item img{width:56px;height:56px;object-fit:cover;border-radius:8px}
+.r2c-checkout__summary-item p{font-weight:600;font-size:.9rem;margin-bottom:2px}
+.r2c-checkout__summary-item span{font-size:.8rem;color:var(--mid)}
+.r2c-checkout__summary-total{display:flex;justify-content:space-between;font-family:var(--font-display);
+font-size:1.3rem;font-weight:700;margin-bottom:20px}
+.r2c-checkout__summary-total span:last-child{color:var(--orange)}
+.r2c-checkout__summary-note{font-size:.8rem;color:var(--mid);text-align:center;line-height:1.5}
+.r2c-checkout__summary-note i{margin-right:4px;color:var(--orange)}
+@media(max-width:768px){.r2c-checkout__grid{grid-template-columns:1fr}}
 
 /* ========================================
    TOAST
