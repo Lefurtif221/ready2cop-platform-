@@ -576,22 +576,127 @@ color:var(--mid);transition:color .2s}
 .order-card:hover{box-shadow:0 8px 24px rgba(0,0,0,.06)}
 
 /* ========================================
-   RESPONSIVE
+   RESPONSIVE - COMPREHENSIVE
    ======================================== */
-@media(max-width:1024px){
-  .admin__stats{grid-template-columns:repeat(2,1fr)}
+
+/* ── NAV mobile ───────────────────────────────────── */
+@media(max-width:900px){
+  .r2c-nav__links{display:none}
+  .r2c-nav__bar{grid-template-columns:1fr auto 1fr}
+  .r2c-nav__util{gap:14px}
+  .r2c-nav__util a{font-size:10px}
 }
+
+/* ── HERO mobile ──────────────────────────────────── */
+@media(max-width:820px){
+  .r2c-hero{min-height:auto;padding:24px 0 32px}
+  .r2c-hero__wrap{display:flex;flex-direction:column;align-items:center}
+  .r2c-hero__stage{min-height:auto;height:auto;margin:0 0 16px}
+  .r2c-hero__model{height:40vh;max-width:80%}
+  .r2c-hero__word{font-size:clamp(48px,14vw,100px)}
+  .r2c-hero__tl,.r2c-hero__br{position:static;text-align:center;margin-bottom:8px}
+  .r2c-hero__acts{justify-content:center}
+}
+
+/* ── CATEGORIES mobile ────────────────────────────── */
+@media(max-width:860px){
+  .r2c-cats__row{grid-template-columns:1fr;gap:14px}
+}
+
+/* ── SEASON mobile ────────────────────────────────── */
+@media(max-width:860px){
+  .r2c-season__grid{grid-template-columns:1fr}
+  .r2c-season__shot{height:52vw;min-height:260px;order:-1}
+}
+
+/* ── SERVICE mobile ───────────────────────────────── */
+@media(max-width:640px){
+  .r2c-svc__row{grid-template-columns:1fr}
+}
+
+/* ── PRODUCT GRID mobile ──────────────────────────── */
 @media(max-width:768px){
-  .admin__stats{grid-template-columns:1fr}
-  .r2c-shop__grid{grid-template-columns:repeat(2,1fr)}
-  .r2c-footer__cols{grid-template-columns:1fr 1fr}
+  .r2c-shop__grid{grid-template-columns:repeat(2,1fr);gap:12px}
 }
 @media(max-width:480px){
-  .r2c-shop__grid{grid-template-columns:1fr}
+  .r2c-shop__grid{grid-template-columns:1fr 1fr;gap:10px}
+  .r2c-card__nm{font-size:12px}
+  .r2c-card__pr{font-size:12px}
+  .r2c-shop__hd{flex-direction:column;align-items:flex-start}
+  .r2c-shop__filters{flex-wrap:wrap}
+}
+
+/* ── ABOUT mobile ─────────────────────────────────── */
+@media(max-width:820px){
+  .r2c-about__grid{grid-template-columns:1fr}
+  .r2c-about__shot{min-height:50vw}
+}
+
+/* ── DAKAR mobile ─────────────────────────────────── */
+@media(max-width:820px){
+  .r2c-dakar__grid{grid-template-columns:1fr}
+  .r2c-dakar__shot img{min-height:50vw}
+}
+
+/* ── PRODUCT DETAIL mobile ────────────────────────── */
+@media(max-width:820px){
+  .r2c-pdp__split{grid-template-columns:1fr}
+  .r2c-pdp__img-wrap{min-height:60vw;position:relative}
+  .r2c-pdp__img-wrap img{position:relative;height:auto}
+  .r2c-pdp__info{padding:0}
+}
+
+/* ── CART PAGE ────────────────────────────────────── */
+.r2c-cart__grid{display:grid;grid-template-columns:1fr 380px;gap:40px;align-items:start}
+.r2c-cart__items{display:flex;flex-direction:column;gap:16px}
+.r2c-cart__item{display:flex;gap:16px;padding:16px;background:var(--white);border:1px solid rgba(0,0,0,.06);border-radius:14px;align-items:center}
+.r2c-cart__item img{width:80px;height:80px;object-fit:cover;border-radius:10px;flex:0 0 auto}
+.r2c-cart__item-info{flex:1;min-width:0}
+.r2c-cart__item-name{font-weight:600;font-size:.95rem;color:var(--black);text-decoration:none;display:block;margin-bottom:2px}
+.r2c-cart__item-price{color:var(--orange);font-weight:700;font-size:.9rem}
+.r2c-cart__item-size{font-size:.78rem;color:var(--mid);margin-top:2px}
+.r2c-cart__item-qty{display:flex;align-items:center;gap:8px;margin-top:8px}
+.r2c-cart__qty-btn{width:30px;height:30px;border-radius:8px;border:1.5px solid var(--warm-gray);background:var(--white);font-family:var(--font-display);font-weight:700;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--black);transition:all .2s}
+.r2c-cart__qty-btn:hover{border-color:var(--orange);color:var(--orange)}
+.r2c-cart__qty-val{font-family:var(--font-display);font-weight:700;font-size:.9rem;min-width:24px;text-align:center}
+.r2c-cart__item-del{font:500 9px/1 var(--font-display);letter-spacing:.14em;text-transform:uppercase;color:var(--mid);border:none;background:none;cursor:pointer;padding:4px 8px;margin-left:4px;transition:color .2s}
+.r2c-cart__item-del:hover{color:var(--red)}
+.r2c-cart__item-total{font-family:var(--font-display);font-weight:700;font-size:1rem;color:var(--black);white-space:nowrap}
+
+.r2c-cart__summary{background:var(--off-white);border:1px solid rgba(0,0,0,.06);border-radius:16px;padding:28px;position:sticky;top:120px}
+.r2c-cart__summary h3{font-family:var(--font-display);font-size:1.1rem;font-weight:700;margin-bottom:20px}
+.r2c-cart__summary-row{display:flex;flex-direction:column;gap:12px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid rgba(0,0,0,.06)}
+.r2c-cart__summary-line{display:flex;justify-content:space-between;font-size:.9rem;color:var(--mid)}
+.r2c-cart__summary-line span:last-child{color:var(--green);font-weight:600}
+.r2c-cart__summary-total{display:flex;justify-content:space-between;font-family:var(--font-display);font-size:1.3rem;font-weight:700;margin-bottom:24px}
+.r2c-cart__summary-total span:last-child{color:var(--orange)}
+
+@media(max-width:860px){
+  .r2c-cart__grid{grid-template-columns:1fr;gap:24px}
+  .r2c-cart__summary{position:static}
+}
+
+/* ── CHECKOUT mobile ──────────────────────────────── */
+@media(max-width:768px){
+  .r2c-checkout__grid{grid-template-columns:1fr}
+  .r2c-checkout__summary{position:static}
+}
+
+/* ── FOOTER mobile ────────────────────────────────── */
+@media(max-width:640px){
   .r2c-footer__cols{grid-template-columns:1fr}
 }
-@media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+
+/* ── SIMILAR mobile ───────────────────────────────── */
+@media(max-width:480px){
+  .r2c-similar__title{font-size:20px}
+}
+
+/* ── GENERAL ──────────────────────────────────────── */
+@media(max-width:480px){
+  .r2c-btn{padding:14px 24px;font-size:10px}
+  .r2c-btn-line{font-size:10px}
+  .r2c-btn-wa{padding:14px 28px;font-size:11px}
 }
 
 /* Smooth scrollbar */

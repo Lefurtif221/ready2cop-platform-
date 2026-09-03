@@ -16,8 +16,7 @@ const catMap = { sneakers: 'Sneakers', casual: 'Casual', sport: 'Sport' };
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [filter, setFilter] = useState('all');
-  const [addedId, setAddedId] = useState(null);
-  const { addItem, count } = useCart();
+  const { count } = useCart();
   const heroRef = useRef(null);
 
   useEffect(() => {
@@ -233,23 +232,10 @@ export default function Home() {
                       loading="lazy"
                       onError={(e) => { e.target.onerror = null; e.target.src = '/Chaussures-22.jpeg'; }}
                     />
-                    <div className="r2c-card__btns">
-                      <Link to={`/produit/${product.id}`} className="r2c-card__view">Voir</Link>
-                    </div>
-                    {sizes.length > 0 && (
-                      <div className="r2c-card__sizes">
-                        {sizes.map(s => (
-                          <button
-                            key={s.size}
-                            className={`r2c-card__sz ${addedId === product.id + '-' + s.size ? 'r2c-card__sz--added' : ''}`}
-                            onClick={(e) => { e.preventDefault(); addToCart(product, s.size); }}
-                          >
-                            {addedId === product.id + '-' + s.size ? '!' : s.size}
-                          </button>
-                        ))}
-                      </div>
-                    )}
+                  <div className="r2c-card__btns">
+                    <Link to={`/produit/${product.id}`} className="r2c-card__view" style={{flex:1}}>Voir</Link>
                   </div>
+                </div>
                   <div className="r2c-card__meta">
                     <div>
                       <Link to={`/produit/${product.id}`} className="r2c-card__nm">{product.name}</Link>

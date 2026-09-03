@@ -48,25 +48,25 @@ export default function Cart() {
               <Link to="/collections" className="r2c-btn"><span>Voir les sneakers</span></Link>
             </div>
           ) : (
-            <div style={{display: 'grid', gridTemplateColumns: '1fr 380px', gap: 40, alignItems: 'start'}}>
-              <div style={{display: 'flex', flexDirection: 'column', gap: 16}}>
+            <div className="r2c-cart__grid">
+              <div className="r2c-cart__items">
                 {items.map(item => {
                   const itemKey = item.size ? `${item.id}-${item.size}` : `${item.id}`;
                   return (
-                    <div key={itemKey} style={{display: 'flex', gap: 20, padding: 20, background: 'var(--white)', border: '1px solid rgba(0,0,0,.06)', borderRadius: 14, alignItems: 'center'}}>
-                      <img src={getImageUrl(item.image)} alt={item.name} style={{width: 100, height: 100, objectFit: 'cover', borderRadius: 10, flex: '0 0 auto'}} onError={(e) => { e.target.src = '/Chaussures-22.jpeg'; }} />
-                      <div style={{flex: 1}}>
-                        <Link to={`/produit/${item.id}`} style={{fontWeight: 600, fontSize: '1rem', color: 'var(--black)'}}>{item.name}</Link>
-                        <p style={{color: 'var(--orange)', fontWeight: 700, fontSize: '.95rem', marginTop: 4}}>{item.price.toLocaleString('fr-FR')} FCFA</p>
-                        {item.size && <div style={{fontSize: '.8rem', color: 'var(--mid)', marginTop: 2}}>Taille: <b style={{color: 'var(--black)'}}>{item.size}</b></div>}
-                        <div style={{display: 'flex', alignItems: 'center', gap: 10, marginTop: 10}}>
-                          <button onClick={() => updateQty(item.id, item.size, item.qty - 1)} style={{width: 30, height: 30, borderRadius: 8, border: '1.5px solid var(--warm-gray)', background: 'var(--white)', fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--black)'}}>-</button>
-                          <span style={{fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '.95rem', minWidth: 24, textAlign: 'center'}}>{item.qty}</span>
-                          <button onClick={() => updateQty(item.id, item.size, item.qty + 1)} style={{width: 30, height: 30, borderRadius: 8, border: '1.5px solid var(--warm-gray)', background: 'var(--white)', fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--black)'}}>+</button>
-                          <button onClick={() => removeItem(item.id, item.size)} style={{font: '500 10px/1 var(--font-display)', letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--mid)', border: 'none', background: 'none', cursor: 'pointer', padding: '6px 10px', marginLeft: 6}}>Supprimer</button>
+                    <div key={itemKey} className="r2c-cart__item">
+                      <img src={getImageUrl(item.image)} alt={item.name} onError={(e) => { e.target.src = '/Chaussures-22.jpeg'; }} />
+                      <div className="r2c-cart__item-info">
+                        <Link to={`/produit/${item.id}`} className="r2c-cart__item-name">{item.name}</Link>
+                        <div className="r2c-cart__item-price">{item.price.toLocaleString('fr-FR')} FCFA</div>
+                        {item.size && <div className="r2c-cart__item-size">Taille: <b>{item.size}</b></div>}
+                        <div className="r2c-cart__item-qty">
+                          <button className="r2c-cart__qty-btn" onClick={() => updateQty(item.id, item.size, item.qty - 1)}>-</button>
+                          <span className="r2c-cart__qty-val">{item.qty}</span>
+                          <button className="r2c-cart__qty-btn" onClick={() => updateQty(item.id, item.size, item.qty + 1)}>+</button>
+                          <button className="r2c-cart__item-del" onClick={() => removeItem(item.id, item.size)}>Supprimer</button>
                         </div>
                       </div>
-                      <div style={{fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1rem', color: 'var(--black)', whiteSpace: 'nowrap'}}>
+                      <div className="r2c-cart__item-total">
                         {(item.price * item.qty).toLocaleString('fr-FR')} FCFA
                       </div>
                     </div>
@@ -74,21 +74,21 @@ export default function Cart() {
                 })}
               </div>
 
-              <div style={{background: 'var(--off-white)', border: '1px solid rgba(0,0,0,.06)', borderRadius: 16, padding: 28, position: 'sticky', top: 120}}>
-                <h3 style={{fontFamily: 'var(--font-display)', fontSize: '1.1rem', fontWeight: 700, marginBottom: 20}}>Resume de la commande</h3>
-                <div style={{display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 16, paddingBottom: 16, borderBottom: '1px solid rgba(0,0,0,.06)'}}>
-                  <div style={{display: 'flex', justifyContent: 'space-between', fontSize: '.9rem', color: 'var(--mid)'}}>
+              <div className="r2c-cart__summary">
+                <h3>Resume de la commande</h3>
+                <div className="r2c-cart__summary-row">
+                  <div className="r2c-cart__summary-line">
                     <span>Sous-total ({count} article{count > 1 ? 's' : ''})</span>
                     <span>{total.toLocaleString('fr-FR')} FCFA</span>
                   </div>
-                  <div style={{display: 'flex', justifyContent: 'space-between', fontSize: '.9rem', color: 'var(--mid)'}}>
+                  <div className="r2c-cart__summary-line">
                     <span>Livraison</span>
-                    <span style={{color: 'var(--green)', fontWeight: 600}}>Gratuite</span>
+                    <span>Gratuite</span>
                   </div>
                 </div>
-                <div style={{display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--font-display)', fontSize: '1.3rem', fontWeight: 700, marginBottom: 24}}>
+                <div className="r2c-cart__summary-total">
                   <span>Total</span>
-                  <span style={{color: 'var(--orange)'}}>{total.toLocaleString('fr-FR')} FCFA</span>
+                  <span>{total.toLocaleString('fr-FR')} FCFA</span>
                 </div>
                 <Link to="/checkout" className="r2c-btn" style={{width: '100%', textAlign: 'center', display: 'block'}}>
                   <span>Commander</span>

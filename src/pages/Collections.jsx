@@ -11,8 +11,7 @@ const FALLBACK_PRODUCTS = [
 
 export default function Collections() {
   const [products, setProducts] = useState([]);
-  const [addedId, setAddedId] = useState(null);
-  const { addItem, count } = useCart();
+  const { count } = useCart();
 
   useEffect(() => {
     API.get('/products')
@@ -23,12 +22,6 @@ export default function Collections() {
       })
       .catch(() => setProducts(FALLBACK_PRODUCTS));
   }, []);
-
-  const addToCart = (product, size) => {
-    addItem(product, size);
-    setAddedId(product.id + '-' + size);
-    setTimeout(() => setAddedId(null), 1300);
-  };
 
   return (
     <>
@@ -83,21 +76,8 @@ export default function Collections() {
                       onError={(e) => { e.target.onerror = null; e.target.src = '/Chaussures-22.jpeg'; }}
                     />
                     <div className="r2c-card__btns">
-                      <Link to={`/produit/${product.id}`} className="r2c-card__view">Voir</Link>
+                      <Link to={`/produit/${product.id}`} className="r2c-card__view" style={{flex:1}}>Voir</Link>
                     </div>
-                    {sizes.length > 0 && (
-                      <div className="r2c-card__sizes">
-                        {sizes.map(s => (
-                          <button
-                            key={s.size}
-                            className={`r2c-card__sz ${addedId === product.id + '-' + s.size ? 'r2c-card__sz--added' : ''}`}
-                            onClick={(e) => { e.preventDefault(); addToCart(product, s.size); }}
-                          >
-                            {addedId === product.id + '-' + s.size ? '!' : s.size}
-                          </button>
-                        ))}
-                      </div>
-                    )}
                   </div>
                   <div className="r2c-card__meta">
                     <div>
