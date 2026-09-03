@@ -121,7 +121,7 @@ export default function Home() {
             <li><a href="#cats">Sneakers</a></li>
             <li><a href="#cats">Casual</a></li>
             <li><a href="#cats">Sport</a></li>
-            <li><a href="#shop">Collection</a></li>
+            <li><Link to="/collections">Collection</Link></li>
           </ul>
           <Link to="/" className="r2c-nav__mk"><img src="/logo-removebg-preview.png" alt="Ready2Cop" style={{height: 44, width: 'auto'}} /></Link>
           <div className="r2c-nav__util">
@@ -213,6 +213,7 @@ export default function Home() {
           <div className="r2c-shop__hd">
             <h2 className="rv">Nos best-sellers</h2>
             <div className="r2c-shop__filters rv">
+              <Link to="/collections" className="r2c-btn-line" style={{marginRight: 8}}>Voir tout</Link>
               {['all', 'sneakers', 'casual', 'sport'].map(cat => (
                 <button key={cat} className={`r2c-filter ${filter === cat ? 'active' : ''}`} onClick={() => setFilter(cat)}>
                   {cat === 'all' ? 'Tous' : cat.charAt(0).toUpperCase() + cat.slice(1)}
