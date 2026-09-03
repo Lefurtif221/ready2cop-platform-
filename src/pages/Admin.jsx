@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import API from '../api';
+import { getImageUrl } from '../utils';
 import Toast from '../components/Toast';
 
 export default function Admin() {
@@ -29,259 +30,252 @@ export default function Admin() {
   }, []);
 
   const loadStats = async () => {
-    try {
-      const res = await API.get('/orders/stats/overview');
-      setStats(res.data);
-    } catch {}
+    try { const res = await API.get('/orders/stats/overview'); setStats(res.data); } catch {}
   };
-
   const loadProducts = async () => {
-    try {
-      const res = await API.get('/products');
-      setProducts(res.data);
-    } catch {}
+    try { const res = await API.get('/products'); setProducts(res.data); } catch {}
   };
-
   const loadOrders = async () => {
-    try {
-      const res = await API.get('/orders');
-      setOrders(res.data);
-    } catch {}
+    try { const res = await API.get('/orders'); setOrders(res.data); } catch {}
   };
 
   const deleteProduct = async (id) => {
     if (!confirm('Supprimer ce produit ?')) return;
-    try {
-      await API.delete(`/products/${id}`);
-      setProducts(products.filter(p => p.id !== id));
-      showToast('Produit supprime');
-    } catch {
-      showToast('Erreur lors de la suppression');
-    }
+    try { await API.delete(`/products/${id}`); setProducts(products.filter(p => p.id !== id)); showToast('Produit supprime'); } catch { showToast('Erreur'); }
   };
 
   const updateOrderStatus = async (id, status) => {
-    try {
-      await API.put(`/orders/${id}`, { status });
-      setOrders(orders.map(o => o.id === id ? { ...o, status } : o));
-      loadStats();
-      showToast('Statut mis a jour');
-    } catch {
-      showToast('Erreur');
-    }
+    try { await API.put(`/orders/${id}`, { status }); setOrders(orders.map(o => o.id === id ? { ...o, status } : o)); loadStats(); showToast('Statut mis a jour'); } catch { showToast('Erreur'); }
   };
 
   const deleteOrder = async (id) => {
     if (!confirm('Supprimer cette commande ?')) return;
-    try {
-      await API.delete(`/orders/${id}`);
-      setOrders(orders.filter(o => o.id !== id));
-      loadStats();
-      showToast('Commande supprimee');
-    } catch {
-      showToast('Erreur');
-    }
+    try { await API.delete(`/orders/${id}`); setOrders(orders.filter(o => o.id !== id)); loadStats(); showToast('Commande supprimee'); } catch { showToast('Erreur'); }
   };
 
-  const statusLabel = (s) => {
-    const labels = {
-      pending: 'En attente',
-      contacted: 'Contacte',
-      delivered: 'Livre',
-      cancelled: 'Annule'
-    };
-    return labels[s] || s;
-  };
+  const statusLabel = (s) => ({ pending: 'En attente', contacted: 'Contacte', delivered: 'Livre', cancelled: 'Annule' })[s] || s;
+  const statusColor = (s) => ({ pending: '#f59e0b', contacted: '#6366f1', delivered: '#22c55e', cancelled: '#ef4444' })[s] || '#888';
 
   return (
-    <div className="admin">
-      <div className="container">
-        <div className="admin__header">
-          <h1 className="admin__title">Dashboard</h1>
-          <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-            <Link to="/" className="btn btn--ghost btn--sm">Voir le site</Link>
-            <button className="btn btn--danger btn--sm" onClick={logout}>Deconnexion</button>
+    <div className="adm">
+      {/* Sidebar */}
+      <aside className="adm__side">
+        <div className="adm__side-mk">
+          <img src="/logo-removebg-preview.png" alt="R2C" style={{height: 36, width: 'auto', filter: 'brightness(0) invert(1)'}} />
+        </div>
+        <nav className="adm__side-nav">
+          <button className={tab === 'dashboard' ? 'active' : ''} onClick={() => setTab('dashboard')}><i className="fas fa-chart-line"></i> Dashboard</button>
+          <button className={tab === 'products' ? 'active' : ''} onClick={() => setTab('products')}><i className="fas fa-shoe-prints"></i> Produits</button>
+          <button className={tab === 'orders' ? 'active' : ''} onClick={() => setTab('orders')}><i className="fas fa-bag-shopping"></i> Commandes</button>
+        </nav>
+        <div className="adm__side-footer">
+          <Link to="/" className="adm__side-link"><i className="fas fa-arrow-left"></i> Retour au site</Link>
+          <button className="adm__side-logout" onClick={logout}><i className="fas fa-right-from-bracket"></i> Deconnexion</button>
+        </div>
+      </aside>
+
+      {/* Main */}
+      <main className="adm__main">
+        <header className="adm__top">
+          <div>
+            <h1 className="adm__top-title">{tab === 'dashboard' ? 'Dashboard' : tab === 'products' ? 'Produits' : 'Commandes'}</h1>
+            <p className="adm__top-sub">Ready2Cop Admin</p>
           </div>
-        </div>
+          <div className="adm__top-right">
+            <span className="adm__top-badge"><i className="fas fa-circle" style={{fontSize: 6, color: '#22c55e'}}></i> Admin</span>
+          </div>
+        </header>
 
-        <div className="admin__tabs">
-          <button className={`admin__tab ${tab === 'dashboard' ? 'active' : ''}`} onClick={() => setTab('dashboard')}>Resume</button>
-          <button className={`admin__tab ${tab === 'products' ? 'active' : ''}`} onClick={() => setTab('products')}>Produits</button>
-          <button className={`admin__tab ${tab === 'orders' ? 'active' : ''}`} onClick={() => setTab('orders')}>Commandes</button>
-        </div>
-
+        {/* ── DASHBOARD ── */}
         {tab === 'dashboard' && stats && (
-          <>
-            <div className="admin__stats">
-              <div className="stat-card">
-                <div className="stat-card__label">Commandes</div>
-                <div className="stat-card__value">{stats.totalOrders}</div>
+          <div className="adm__content">
+            <div className="adm__stats">
+              <div className="adm__stat">
+                <div className="adm__stat-icon" style={{background: 'rgba(232,101,10,.1)', color: 'var(--orange)'}}><i className="fas fa-bag-shopping"></i></div>
+                <div><div className="adm__stat-val">{stats.totalOrders}</div><div className="adm__stat-lbl">Commandes</div></div>
               </div>
-              <div className="stat-card">
-                <div className="stat-card__label">Chiffre d'affaires</div>
-                <div className="stat-card__value stat-card__value--orange">{stats.totalRevenue.toLocaleString('fr-FR')} FCFA</div>
+              <div className="adm__stat">
+                <div className="adm__stat-icon" style={{background: 'rgba(34,197,94,.1)', color: '#22c55e'}}><i className="fas fa-coins"></i></div>
+                <div><div className="adm__stat-val">{stats.totalRevenue.toLocaleString('fr-FR')} <small>FCFA</small></div><div className="adm__stat-lbl">Chiffre d'affaires</div></div>
               </div>
-              <div className="stat-card">
-                <div className="stat-card__label">En attente</div>
-                <div className="stat-card__value">{stats.pendingOrders}</div>
+              <div className="adm__stat">
+                <div className="adm__stat-icon" style={{background: 'rgba(245,158,11,.1)', color: '#f59e0b'}}><i className="fas fa-clock"></i></div>
+                <div><div className="adm__stat-val">{stats.pendingOrders}</div><div className="adm__stat-lbl">En attente</div></div>
               </div>
-              <div className="stat-card">
-                <div className="stat-card__label">Produits</div>
-                <div className="stat-card__value">{stats.totalProducts}</div>
+              <div className="adm__stat">
+                <div className="adm__stat-icon" style={{background: 'rgba(99,102,241,.1)', color: '#6366f1'}}><i className="fas fa-shoe-prints"></i></div>
+                <div><div className="adm__stat-val">{stats.totalProducts}</div><div className="adm__stat-lbl">Produits</div></div>
               </div>
             </div>
-            <h3 style={{ fontFamily: 'var(--font-display)', marginBottom: 16, fontSize: '1.1rem' }}>Dernieres commandes</h3>
-            <table className="admin-table">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Client</th>
-                  <th>Telephone</th>
-                  <th>Total</th>
-                  <th>Statut</th>
-                  <th>Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {stats.recentOrders.map(order => (
-                  <tr key={order.id}>
-                    <td>{order.id}</td>
-                    <td>{order.customer_name}</td>
-                    <td>{order.customer_phone}</td>
-                    <td style={{ fontWeight: 600 }}>{order.total.toLocaleString('fr-FR')} FCFA</td>
-                    <td><span className={`status-badge status-badge--${order.status}`}>{statusLabel(order.status)}</span></td>
-                    <td>{new Date(order.created_at).toLocaleDateString('fr-FR')}</td>
-                  </tr>
-                ))}
-                {stats.recentOrders.length === 0 && (
-                  <tr><td colSpan={6} style={{ textAlign: 'center', color: 'var(--muted)', padding: 24 }}>Aucune commande pour le moment</td></tr>
+
+            {/* Charts row */}
+            <div className="adm__charts">
+              {/* Top products bar chart */}
+              <div className="adm__card">
+                <h3 className="adm__card-title"><i className="fas fa-chart-bar" style={{color: 'var(--orange)', marginRight: 8}}></i> Produits les plus vendus</h3>
+                {stats.topProducts && stats.topProducts.length > 0 ? (
+                  <div className="adm__bars">
+                    {stats.topProducts.map((p, i) => {
+                      const max = stats.topProducts[0].count;
+                      const pct = max > 0 ? (p.count / max) * 100 : 0;
+                      return (
+                        <div key={i} className="adm__bar-row">
+                          <div className="adm__bar-name">{p.name}</div>
+                          <div className="adm__bar-track">
+                            <div className="adm__bar-fill" style={{width: `${pct}%`}}></div>
+                          </div>
+                          <div className="adm__bar-count">{p.count}</div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <p className="adm__empty">Aucune vente pour le moment</p>
                 )}
-              </tbody>
-            </table>
-          </>
+              </div>
+
+              {/* Orders by status */}
+              <div className="adm__card">
+                <h3 className="adm__card-title"><i className="fas fa-chart-pie" style={{color: '#6366f1', marginRight: 8}}></i> Commandes par statut</h3>
+                {stats.ordersByStatus && Object.keys(stats.ordersByStatus).length > 0 ? (
+                  <div className="adm__status-chart">
+                    {['pending', 'contacted', 'delivered', 'cancelled'].map(s => {
+                      const count = stats.ordersByStatus[s] || 0;
+                      const total = stats.totalOrders || 1;
+                      const pct = Math.round((count / total) * 100);
+                      return (
+                        <div key={s} className="adm__status-row">
+                          <div className="adm__status-dot" style={{background: statusColor(s)}}></div>
+                          <div className="adm__status-label">{statusLabel(s)}</div>
+                          <div className="adm__status-bar-track">
+                            <div className="adm__status-bar-fill" style={{width: `${pct}%`, background: statusColor(s)}}></div>
+                          </div>
+                          <div className="adm__status-count">{count}</div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <p className="adm__empty">Aucune commande</p>
+                )}
+              </div>
+            </div>
+
+            {/* Recent orders */}
+            <div className="adm__card">
+              <h3 className="adm__card-title"><i className="fas fa-clock-rotate-left" style={{color: '#f59e0b', marginRight: 8}}></i> Dernieres commandes</h3>
+              <div className="adm__table-wrap">
+                <table className="adm__table">
+                  <thead><tr><th>#</th><th>Client</th><th>Telephone</th><th>Total</th><th>Statut</th><th>Date</th></tr></thead>
+                  <tbody>
+                    {stats.recentOrders.map(o => (
+                      <tr key={o.id}>
+                        <td className="adm__td-id">#{o.id}</td>
+                        <td className="adm__td-name">{o.customer_name}</td>
+                        <td>{o.customer_phone}</td>
+                        <td className="adm__td-price">{o.total.toLocaleString('fr-FR')} FCFA</td>
+                        <td><span className="adm__badge" style={{background: statusColor(o.status) + '18', color: statusColor(o.status)}}>{statusLabel(o.status)}</span></td>
+                        <td className="adm__td-date">{new Date(o.created_at).toLocaleDateString('fr-FR')}</td>
+                      </tr>
+                    ))}
+                    {stats.recentOrders.length === 0 && <tr><td colSpan={6} className="adm__empty">Aucune commande</td></tr>}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         )}
 
+        {/* ── PRODUCTS ── */}
         {tab === 'products' && (
-          <>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem' }}>{products.length} produits</h3>
-              <button className="btn btn--primary btn--sm" onClick={() => { setEditingProduct(null); setShowProductForm(true); }}>
-                + Ajouter un produit
+          <div className="adm__content">
+            <div className="adm__content-header">
+              <span className="adm__content-count">{products.length} produit{products.length > 1 ? 's' : ''}</span>
+              <button className="adm__btn adm__btn--primary" onClick={() => { setEditingProduct(null); setShowProductForm(true); }}>
+                <i className="fas fa-plus"></i> Ajouter
               </button>
             </div>
+
             {showProductForm && (
-              <ProductForm
-                product={editingProduct}
-                onSave={(p) => {
-                  if (editingProduct) {
-                    setProducts(products.map(x => x.id === p.id ? p : x));
-                  } else {
-                    setProducts([p, ...products]);
-                  }
-                  setShowProductForm(false);
-                  setEditingProduct(null);
-                  showToast(editingProduct ? 'Produit modifie' : 'Produit ajoute');
-                }}
-                onCancel={() => { setShowProductForm(false); setEditingProduct(null); }}
-              />
+              <ProductForm product={editingProduct} onSave={(p) => {
+                if (editingProduct) setProducts(products.map(x => x.id === p.id ? p : x));
+                else setProducts([p, ...products]);
+                setShowProductForm(false); setEditingProduct(null);
+                showToast(editingProduct ? 'Produit modifie' : 'Produit ajoute');
+              }} onCancel={() => { setShowProductForm(false); setEditingProduct(null); }} />
             )}
-            <table className="admin-table">
-              <thead>
-                <tr>
-                  <th>Image</th>
-                  <th>Nom</th>
-                  <th>Prix</th>
-                  <th>Categorie</th>
-                  <th>Stock</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {products.map(product => (
-                  <tr key={product.id}>
-                    <td>
-                      <img
-                        src={product.image?.startsWith('http') ? product.image : `/uploads/${product.image}`}
-                        alt={product.name}
-                        style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 6 }}
-                      />
-                    </td>
-                    <td style={{ fontWeight: 600 }}>{product.name}</td>
-                    <td>{product.price.toLocaleString('fr-FR')} FCFA</td>
-                    <td>{product.category}</td>
-                    <td>{product.stock}</td>
-                    <td>
-                      <div style={{ display: 'flex', gap: 6 }}>
-                        <button className="btn btn--ghost btn--sm" onClick={() => { setEditingProduct(product); setShowProductForm(true); }}>Modifier</button>
-                        <button className="btn btn--danger btn--sm" onClick={() => deleteProduct(product.id)}>Supprimer</button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </>
-        )}
 
-        {tab === 'orders' && (
-          <>
-            <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem', marginBottom: 24 }}>{orders.length} commandes</h3>
-            <div className="orders-list">
-              {orders.map(order => (
-                <div key={order.id} className="order-card">
-                  <div className="order-card__header">
-                    <div>
-                      <strong>Commande #{order.id}</strong>
-                      <span className={`status-badge status-badge--${order.status}`}>{statusLabel(order.status)}</span>
+            <div className="adm__products-grid">
+              {products.map(p => (
+                <div key={p.id} className="adm__product-card">
+                  <div className="adm__product-img">
+                    <img src={getImageUrl(p.image)} alt={p.name} onError={(e) => { e.target.src = '/Chaussures-22.jpeg'; }} />
+                    {p.featured ? <span className="adm__product-badge">Featured</span> : null}
+                  </div>
+                  <div className="adm__product-info">
+                    <div className="adm__product-name">{p.name}</div>
+                    <div className="adm__product-meta">
+                      <span className="adm__product-price">{p.price.toLocaleString('fr-FR')} FCFA</span>
+                      <span className="adm__product-cat">{p.category}</span>
                     </div>
-                    <span className="order-card__date">{new Date(order.created_at).toLocaleDateString('fr-FR')}</span>
-                  </div>
-
-                  <div className="order-card__customer">
-                    <p><i className="fas fa-user"></i> {order.customer_name}</p>
-                    <p><i className="fas fa-phone"></i> {order.customer_phone}</p>
-                    {order.customer_address && <p><i className="fas fa-location-dot"></i> {order.customer_address}</p>}
-                    {order.note && <p><i className="fas fa-comment"></i> {order.note}</p>}
-                  </div>
-
-                  <div className="order-card__items">
-                    {order.items.map((item, i) => (
-                      <span key={i}>{item.quantity || 1}x produit #{item.id}</span>
-                    ))}
-                  </div>
-
-                  <div className="order-card__footer">
-                    <span className="order-card__total">{order.total.toLocaleString('fr-FR')} FCFA</span>
-                    <div className="order-card__actions">
-                      {order.status === 'pending' && (
-                        <button className="btn btn--primary btn--sm" onClick={() => updateOrderStatus(order.id, 'contacted')}>
-                          <i className="fas fa-phone"></i> Marquer contacte
-                        </button>
-                      )}
-                      {order.status === 'contacted' && (
-                        <button className="btn btn--primary btn--sm" onClick={() => updateOrderStatus(order.id, 'delivered')}>
-                          <i className="fas fa-check"></i> Marquer livre
-                        </button>
-                      )}
-                      {order.status !== 'delivered' && order.status !== 'cancelled' && (
-                        <button className="btn btn--danger btn--sm" onClick={() => updateOrderStatus(order.id, 'cancelled')}>
-                          <i className="fas fa-times"></i> Annuler
-                        </button>
-                      )}
-                      <button className="btn btn--danger btn--sm" onClick={() => deleteOrder(order.id)}>
-                        <i className="fas fa-trash"></i>
-                      </button>
+                    <div className="adm__product-stock">Stock: <b>{p.stock}</b></div>
+                    {p.sizes && p.sizes.length > 0 && (
+                      <div className="adm__product-sizes">
+                        {p.sizes.map(s => <span key={s.size} className="adm__product-sz">{s.size} ({s.stock})</span>)}
+                      </div>
+                    )}
+                    <div className="adm__product-actions">
+                      <button className="adm__btn adm__btn--ghost" onClick={() => { setEditingProduct(p); setShowProductForm(true); }}><i className="fas fa-pen"></i></button>
+                      <button className="adm__btn adm__btn--danger" onClick={() => deleteProduct(p.id)}><i className="fas fa-trash"></i></button>
                     </div>
                   </div>
                 </div>
               ))}
-              {orders.length === 0 && (
-                <p style={{ textAlign: 'center', color: 'var(--muted)', padding: 40 }}>Aucune commande</p>
-              )}
             </div>
-          </>
+          </div>
         )}
-      </div>
+
+        {/* ── ORDERS ── */}
+        {tab === 'orders' && (
+          <div className="adm__content">
+            <div className="adm__content-header">
+              <span className="adm__content-count">{orders.length} commande{orders.length > 1 ? 's' : ''}</span>
+            </div>
+            <div className="adm__orders">
+              {orders.map(order => (
+                <div key={order.id} className="adm__order">
+                  <div className="adm__order-top">
+                    <div className="adm__order-id">#{order.id}</div>
+                    <span className="adm__badge" style={{background: statusColor(order.status) + '18', color: statusColor(order.status)}}>{statusLabel(order.status)}</span>
+                    <div className="adm__order-date">{new Date(order.created_at).toLocaleDateString('fr-FR')}</div>
+                  </div>
+                  <div className="adm__order-customer">
+                    <div><i className="fas fa-user"></i> {order.customer_name}</div>
+                    <div><i className="fas fa-phone"></i> {order.customer_phone}</div>
+                    {order.customer_address && <div><i className="fas fa-location-dot"></i> {order.customer_address}</div>}
+                    {order.note && <div><i className="fas fa-comment"></i> {order.note}</div>}
+                  </div>
+                  <div className="adm__order-items">
+                    {(order.items || []).map((item, i) => (
+                      <span key={i} className="adm__order-item">{item.quantity || item.qty || 1}x {item.name || `#${item.id}`}{item.size ? ` (T${item.size})` : ''}</span>
+                    ))}
+                  </div>
+                  <div className="adm__order-bottom">
+                    <div className="adm__order-total">{order.total.toLocaleString('fr-FR')} FCFA</div>
+                    <div className="adm__order-actions">
+                      {order.status === 'pending' && <button className="adm__btn adm__btn--primary adm__btn--sm" onClick={() => updateOrderStatus(order.id, 'contacted')}><i className="fas fa-phone"></i> Contacte</button>}
+                      {order.status === 'contacted' && <button className="adm__btn adm__btn--primary adm__btn--sm" onClick={() => updateOrderStatus(order.id, 'delivered')}><i className="fas fa-check"></i> Livre</button>}
+                      {order.status !== 'delivered' && order.status !== 'cancelled' && <button className="adm__btn adm__btn--danger adm__btn--sm" onClick={() => updateOrderStatus(order.id, 'cancelled')}><i className="fas fa-times"></i></button>}
+                      <button className="adm__btn adm__btn--danger adm__btn--sm" onClick={() => deleteOrder(order.id)}><i className="fas fa-trash"></i></button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+              {orders.length === 0 && <p className="adm__empty">Aucune commande</p>}
+            </div>
+          </div>
+        )}
+      </main>
       <Toast message={toast.message} show={toast.show} onClose={closeToast} />
     </div>
   );
@@ -289,75 +283,45 @@ export default function Admin() {
 
 function ProductForm({ product, onSave, onCancel }) {
   const [form, setForm] = useState({
-    name: product?.name || '',
-    price: product?.price || '',
-    category: product?.category || 'sneakers',
-    stock: product?.stock || 0,
-    description: product?.description || '',
-    featured: product?.featured || 0,
+    name: product?.name || '', price: product?.price || '', category: product?.category || 'sneakers',
+    stock: product?.stock || 0, description: product?.description || '', featured: product?.featured || 0,
   });
   const [imageFile, setImageFile] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+    e.preventDefault(); setLoading(true);
     try {
-      const formData = new FormData();
-      Object.entries(form).forEach(([k, v]) => formData.append(k, v));
-      if (imageFile) formData.append('image', imageFile);
-      let res;
-      if (product) {
-        res = await API.put(`/products/${product.id}`, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
-      } else {
-        res = await API.post('/products', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
-      }
+      const fd = new FormData();
+      Object.entries(form).forEach(([k, v]) => fd.append(k, v));
+      if (imageFile) fd.append('image', imageFile);
+      const res = product
+        ? await API.put(`/products/${product.id}`, fd, { headers: { 'Content-Type': 'multipart/form-data' } })
+        : await API.post('/products', fd, { headers: { 'Content-Type': 'multipart/form-data' } });
       onSave(res.data);
-    } catch {
-      alert('Erreur lors de la sauvegarde');
-    }
+    } catch { alert('Erreur lors de la sauvegarde'); }
     setLoading(false);
   };
 
   return (
-    <div className="admin-form" style={{ marginBottom: 24 }}>
-      <h3 className="admin-form__title">{product ? 'Modifier le produit' : 'Nouveau produit'}</h3>
+    <div className="adm__form">
+      <h3 className="adm__form-title">{product ? 'Modifier le produit' : 'Nouveau produit'}</h3>
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Nom</label>
-          <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} required />
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
-          <div className="form-group">
-            <label>Prix (FCFA)</label>
-            <input type="number" value={form.price} onChange={e => setForm({ ...form, price: e.target.value })} required />
-          </div>
-          <div className="form-group">
-            <label>Categorie</label>
-            <select value={form.category} onChange={e => setForm({ ...form, category: e.target.value })}>
-              <option value="sneakers">Sneakers</option>
-              <option value="casual">Casual</option>
-              <option value="sport">Sport</option>
+        <div className="adm__form-grid">
+          <div className="adm__field"><label>Nom</label><input value={form.name} onChange={e => setForm({...form, name: e.target.value})} required /></div>
+          <div className="adm__field"><label>Prix (FCFA)</label><input type="number" value={form.price} onChange={e => setForm({...form, price: e.target.value})} required /></div>
+          <div className="adm__field"><label>Categorie</label>
+            <select value={form.category} onChange={e => setForm({...form, category: e.target.value})}>
+              <option value="sneakers">Sneakers</option><option value="casual">Casual</option><option value="sport">Sport</option>
             </select>
           </div>
-          <div className="form-group">
-            <label>Stock</label>
-            <input type="number" value={form.stock} onChange={e => setForm({ ...form, stock: e.target.value })} />
-          </div>
+          <div className="adm__field"><label>Stock</label><input type="number" value={form.stock} onChange={e => setForm({...form, stock: e.target.value})} /></div>
         </div>
-        <div className="form-group">
-          <label>Description</label>
-          <textarea value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} />
-        </div>
-        <div className="form-group">
-          <label>Image</label>
-          <input type="file" accept="image/*" onChange={e => setImageFile(e.target.files[0])} />
-        </div>
-        <div className="form-actions">
-          <button type="submit" className="btn btn--primary btn--sm" disabled={loading}>
-            {loading ? 'Enregistrement...' : 'Enregistrer'}
-          </button>
-          <button type="button" className="btn btn--ghost btn--sm" onClick={onCancel}>Annuler</button>
+        <div className="adm__field"><label>Description</label><textarea value={form.description} onChange={e => setForm({...form, description: e.target.value})} /></div>
+        <div className="adm__field"><label>Image</label><input type="file" accept="image/*" onChange={e => setImageFile(e.target.files[0])} /></div>
+        <div className="adm__form-actions">
+          <button type="submit" className="adm__btn adm__btn--primary" disabled={loading}>{loading ? 'Enregistrement...' : 'Enregistrer'}</button>
+          <button type="button" className="adm__btn adm__btn--ghost" onClick={onCancel}>Annuler</button>
         </div>
       </form>
     </div>

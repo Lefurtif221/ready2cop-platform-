@@ -435,47 +435,194 @@ box-shadow:0 8px 32px rgba(10,10,10,.3);pointer-events:none}
 .toast i{color:#4ade80}
 
 /* ========================================
-   ADMIN
+   ADMIN - SABLE STYLE
    ======================================== */
-.admin{padding-top:88px;min-height:100vh;background:var(--off-white)}
-.admin__header{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px}
-.admin__title{font-family:var(--font-display);font-size:1.8rem;font-weight:700}
-.admin__stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px}
-.stat-card{background:var(--white);padding:20px;border-radius:var(--radius);border:1px solid var(--warm-gray)}
-.stat-card__label{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;
-font-family:var(--font-display);font-weight:600;margin-bottom:4px}
-.stat-card__value{font-family:var(--font-display);font-size:1.8rem;font-weight:700;color:var(--black)}
-.stat-card__value--orange{color:var(--orange)}
-.admin__tabs{display:flex;gap:4px;margin-bottom:24px;border-bottom:1px solid var(--warm-gray)}
-.admin__tab{padding:10px 20px;font-family:var(--font-display);font-size:.85rem;font-weight:600;
-color:var(--muted);border-bottom:2px solid transparent;transition:all var(--transition);background:transparent}
-.admin__tab:hover{color:var(--text)}
-.admin__tab.active{color:var(--orange);border-bottom-color:var(--orange)}
-.admin-table{width:100%;border-collapse:collapse;background:var(--white);border-radius:var(--radius);
-overflow:hidden;border:1px solid var(--warm-gray)}
-.admin-table th{font-family:var(--font-display);font-size:.72rem;font-weight:600;text-transform:uppercase;
-letter-spacing:.06em;color:var(--muted);padding:12px 16px;text-align:left;border-bottom:1px solid var(--warm-gray);background:var(--off-white)}
-.admin-table td{padding:12px 16px;font-size:.85rem;border-bottom:1px solid var(--warm-gray);vertical-align:middle}
-.admin-table tr:last-child td{border-bottom:none}
-.admin-table tr:hover td{background:var(--off-white)}
-.status-badge{display:inline-block;padding:3px 10px;border-radius:100px;font-family:var(--font-display);
-font-size:.7rem;font-weight:600;text-transform:uppercase}
-.status-badge--pending{background:#fef3c7;color:#92400e}
-.status-badge--shipped{background:#dbeafe;color:#1e40af}
-.status-badge--contacted{background:#e0e7ff;color:#3730a3}
-.status-badge--delivered{background:#dcfce7;color:#166534}
-.status-badge--cancelled{background:#fee2e2;color:#991b1b}
-.admin-form{background:var(--white);padding:24px;border-radius:var(--radius);border:1px solid var(--warm-gray);max-width:600px}
-.admin-form__title{font-family:var(--font-display);font-size:1.2rem;font-weight:700;margin-bottom:20px}
-.form-group{margin-bottom:16px}
-.form-group label{display:block;font-family:var(--font-display);font-size:.78rem;font-weight:600;
-color:var(--text);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em}
-.form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 14px;
-border:1.5px solid var(--warm-gray);border-radius:var(--radius-sm);font-family:var(--font-body);
-font-size:.9rem;color:var(--text);background:var(--off-white);outline:none;transition:border-color var(--transition)}
-.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--orange)}
-.form-group textarea{resize:vertical;min-height:80px}
-.form-actions{display:flex;gap:8px;margin-top:20px}
+.adm{display:grid;grid-template-columns:240px 1fr;min-height:100vh;background:var(--bone)}
+
+/* ── Sidebar ── */
+.adm__side{background:var(--black);color:var(--bone);display:flex;flex-direction:column;
+padding:28px 20px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.adm__side-mk{margin-bottom:36px;text-align:center}
+.adm__side-nav{display:flex;flex-direction:column;gap:4px;flex:1}
+.adm__side-nav button{display:flex;align-items:center;gap:10px;padding:12px 14px;border:none;
+background:transparent;color:rgba(247,245,240,.6);font:600 13px/1 var(--font-display);
+letter-spacing:.04em;border-radius:10px;cursor:pointer;transition:all .2s;text-align:left}
+.adm__side-nav button:hover{background:rgba(255,255,255,.08);color:var(--bone)}
+.adm__side-nav button.active{background:var(--orange);color:var(--bone)}
+.adm__side-nav button i{width:18px;text-align:center;font-size:.85rem}
+.adm__side-footer{display:flex;flex-direction:column;gap:6px;margin-top:auto;padding-top:20px;
+border-top:1px solid rgba(255,255,255,.1)}
+.adm__side-link,.adm__side-logout{display:flex;align-items:center;gap:8px;padding:10px 14px;
+border:none;border-radius:8px;font:500 12px/1 var(--font-display);letter-spacing:.06em;
+cursor:pointer;transition:all .2s;text-decoration:none}
+.adm__side-link{background:transparent;color:rgba(247,245,240,.5)}
+.adm__side-link:hover{color:var(--bone);background:rgba(255,255,255,.06)}
+.adm__side-logout{background:transparent;color:rgba(247,245,240,.5)}
+.adm__side-logout:hover{color:#ef4444;background:rgba(239,68,68,.1)}
+
+/* ── Main ── */
+.adm__main{padding:0;overflow-y:auto}
+.adm__top{display:flex;justify-content:space-between;align-items:center;padding:24px 32px;
+border-bottom:1px solid var(--line);background:var(--white);position:sticky;top:0;z-index:10}
+.adm__top-title{font-family:var(--font-display);font-weight:800;font-size:1.4rem;letter-spacing:-.01em}
+.adm__top-sub{font-size:.8rem;color:var(--mid);margin-top:2px}
+.adm__top-badge{display:flex;align-items:center;gap:6px;font:500 11px/1 var(--font-display);
+letter-spacing:.08em;text-transform:uppercase;color:var(--mid);background:var(--off-white);
+padding:6px 12px;border-radius:100px}
+
+/* ── Content ── */
+.adm__content{padding:28px 32px}
+
+/* ── Stats cards ── */
+.adm__stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+.adm__stat{display:flex;align-items:center;gap:16px;background:var(--white);
+padding:20px;border-radius:14px;border:1px solid rgba(0,0,0,.06);
+transition:box-shadow .2s}
+.adm__stat:hover{box-shadow:0 4px 16px rgba(0,0,0,.06)}
+.adm__stat-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;
+justify-content:center;font-size:1.1rem;flex-shrink:0}
+.adm__stat-val{font-family:var(--font-display);font-weight:800;font-size:1.5rem;
+letter-spacing:-.01em;line-height:1.2}
+.adm__stat-val small{font-size:.7em;font-weight:600;opacity:.7}
+.adm__stat-lbl{font-size:.75rem;color:var(--mid);margin-top:2px}
+
+/* ── Charts ── */
+.adm__charts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px}
+.adm__card{background:var(--white);border:1px solid rgba(0,0,0,.06);border-radius:14px;padding:24px}
+.adm__card-title{font-family:var(--font-display);font-weight:700;font-size:.95rem;
+margin-bottom:20px;display:flex;align-items:center}
+
+/* Bar chart */
+.adm__bars{display:flex;flex-direction:column;gap:14px}
+.adm__bar-row{display:grid;grid-template-columns:140px 1fr 40px;gap:12px;align-items:center}
+.adm__bar-name{font-size:.82rem;font-weight:600;color:var(--text);overflow:hidden;
+text-overflow:ellipsis;white-space:nowrap}
+.adm__bar-track{height:24px;background:var(--off-white);border-radius:6px;overflow:hidden}
+.adm__bar-fill{height:100%;background:var(--orange);border-radius:6px;
+transition:width .8s cubic-bezier(.22,.61,.36,1)}
+.adm__bar-count{font-family:var(--font-display);font-weight:700;font-size:.85rem;
+color:var(--orange);text-align:right}
+
+/* Status chart */
+.adm__status-chart{display:flex;flex-direction:column;gap:16px}
+.adm__status-row{display:grid;grid-template-columns:12px 90px 1fr 30px;gap:10px;align-items:center}
+.adm__status-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.adm__status-label{font-size:.82rem;font-weight:500;color:var(--text)}
+.adm__status-bar-track{height:20px;background:var(--off-white);border-radius:5px;overflow:hidden}
+.adm__status-bar-fill{height:100%;border-radius:5px;transition:width .8s cubic-bezier(.22,.61,.36,1)}
+.adm__status-count{font-family:var(--font-display);font-weight:700;font-size:.85rem;text-align:right}
+
+/* ── Table ── */
+.adm__table-wrap{overflow-x:auto}
+.adm__table{width:100%;border-collapse:collapse}
+.adm__table th{font:600 .7rem/1 var(--font-display);text-transform:uppercase;letter-spacing:.08em;
+color:var(--mid);padding:10px 14px;text-align:left;border-bottom:1px solid var(--line);background:var(--off-white)}
+.adm__table td{padding:12px 14px;font-size:.85rem;border-bottom:1px solid rgba(0,0,0,.04)}
+.adm__table tr:hover td{background:rgba(0,0,0,.01)}
+.adm__td-id{font-family:var(--font-display);font-weight:600;color:var(--mid);font-size:.8rem}
+.adm__td-name{font-weight:600}
+.adm__td-price{font-family:var(--font-display);font-weight:700;color:var(--orange)}
+.adm__td-date{color:var(--mid);font-size:.8rem}
+
+/* ── Badge ── */
+.adm__badge{display:inline-block;padding:4px 10px;border-radius:100px;
+font:600 .7rem/1 var(--font-display);text-transform:uppercase;letter-spacing:.04em}
+
+/* ── Content header ── */
+.adm__content-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+.adm__content-count{font-family:var(--font-display);font-weight:600;font-size:.9rem;color:var(--mid)}
+
+/* ── Buttons ── */
+.adm__btn{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border:none;
+border-radius:10px;font:600 .8rem/1 var(--font-display);letter-spacing:.04em;cursor:pointer;
+transition:all .2s}
+.adm__btn--primary{background:var(--orange);color:var(--bone)}
+.adm__btn--primary:hover{background:var(--orange-dim)}
+.adm__btn--ghost{background:var(--off-white);color:var(--text);border:1px solid var(--line)}
+.adm__btn--ghost:hover{background:var(--white);border-color:var(--orange);color:var(--orange)}
+.adm__btn--danger{background:rgba(239,68,68,.08);color:#ef4444}
+.adm__btn--danger:hover{background:rgba(239,68,68,.15)}
+.adm__btn--sm{padding:7px 12px;font-size:.75rem}
+
+/* ── Products grid ── */
+.adm__products-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));gap:16px}
+.adm__product-card{background:var(--white);border:1px solid rgba(0,0,0,.06);border-radius:14px;
+overflow:hidden;transition:box-shadow .2s}
+.adm__product-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.06)}
+.adm__product-img{position:relative;aspect-ratio:3/4;background:#E4E1DC;overflow:hidden}
+.adm__product-img img{width:100%;height:100%;object-fit:cover}
+.adm__product-badge{position:absolute;top:10px;left:10px;background:var(--orange);color:var(--bone);
+padding:4px 10px;border-radius:6px;font:600 .65rem/1 var(--font-display);text-transform:uppercase;letter-spacing:.06em}
+.adm__product-info{padding:16px}
+.adm__product-name{font-family:var(--font-display);font-weight:700;font-size:.9rem;margin-bottom:6px}
+.adm__product-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.adm__product-price{font-family:var(--font-display);font-weight:700;font-size:.85rem;color:var(--orange)}
+.adm__product-cat{font-size:.7rem;color:var(--mid);text-transform:uppercase;letter-spacing:.06em;
+background:var(--off-white);padding:3px 8px;border-radius:4px}
+.adm__product-stock{font-size:.8rem;color:var(--mid);margin-bottom:8px}
+.adm__product-stock b{color:var(--text)}
+.adm__product-sizes{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
+.adm__product-sz{font-size:.65rem;background:var(--off-white);padding:2px 6px;border-radius:4px;
+color:var(--mid);font-family:var(--font-display);font-weight:600}
+.adm__product-actions{display:flex;gap:6px}
+
+/* ── Orders ── */
+.adm__orders{display:flex;flex-direction:column;gap:16px}
+.adm__order{background:var(--white);border:1px solid rgba(0,0,0,.06);border-radius:14px;padding:20px;
+transition:box-shadow .2s}
+.adm__order:hover{box-shadow:0 4px 16px rgba(0,0,0,.06)}
+.adm__order-top{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.adm__order-id{font-family:var(--font-display);font-weight:700;font-size:1rem}
+.adm__order-date{font-size:.8rem;color:var(--mid);margin-left:auto}
+.adm__order-customer{display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;margin-bottom:12px}
+.adm__order-customer div{font-size:.85rem;color:var(--text);display:flex;align-items:center;gap:6px}
+.adm__order-customer i{color:var(--orange);width:14px;text-align:center;font-size:.8rem}
+.adm__order-items{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.adm__order-item{background:var(--off-white);padding:4px 10px;border-radius:6px;font-size:.78rem;
+color:var(--mid);font-family:var(--font-display);font-weight:500}
+.adm__order-bottom{display:flex;justify-content:space-between;align-items:center;
+padding-top:14px;border-top:1px solid rgba(0,0,0,.06)}
+.adm__order-total{font-family:var(--font-display);font-weight:800;font-size:1.1rem;color:var(--orange)}
+.adm__order-actions{display:flex;gap:8px;flex-wrap:wrap}
+
+/* ── Form ── */
+.adm__form{background:var(--white);border:1px solid rgba(0,0,0,.06);border-radius:14px;
+padding:28px;margin-bottom:24px;max-width:700px}
+.adm__form-title{font-family:var(--font-display);font-weight:700;font-size:1.1rem;margin-bottom:24px}
+.adm__form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.adm__field{margin-bottom:14px}
+.adm__field label{display:block;font:600 .72rem/1 var(--font-display);letter-spacing:.06em;
+text-transform:uppercase;color:var(--mid);margin-bottom:6px}
+.adm__field input,.adm__field select,.adm__field textarea{width:100%;padding:10px 14px;
+border:1.5px solid var(--line);border-radius:10px;font-family:var(--font-body);
+font-size:.9rem;background:var(--off-white);outline:none;transition:border-color .2s}
+.adm__field input:focus,.adm__field select:focus,.adm__field textarea:focus{border-color:var(--orange)}
+.adm__field textarea{resize:vertical;min-height:80px}
+.adm__form-actions{display:flex;gap:10px;margin-top:20px}
+
+.adm__empty{text-align:center;padding:40px;color:var(--mid);font-size:.9rem}
+
+/* ── Admin responsive ── */
+@media(max-width:1024px){
+  .adm{grid-template-columns:200px 1fr}
+  .adm__stats{grid-template-columns:repeat(2,1fr)}
+  .adm__charts{grid-template-columns:1fr}
+}
+@media(max-width:768px){
+  .adm{grid-template-columns:1fr}
+  .adm__side{display:none}
+  .adm__top{padding:16px 20px}
+  .adm__content{padding:20px}
+  .adm__stats{grid-template-columns:1fr 1fr}
+  .adm__products-grid{grid-template-columns:repeat(auto-fill, minmax(200px, 1fr))}
+  .adm__order-customer{grid-template-columns:1fr}
+  .adm__bar-row{grid-template-columns:100px 1fr 30px}
+  .adm__form-grid{grid-template-columns:1fr}
+}
+@media(max-width:480px){
+  .adm__stats{grid-template-columns:1fr}
+  .adm__products-grid{grid-template-columns:1fr}
+}
 
 /* ========================================
    LOGIN (SABLE style)
