@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import API from './api';
 
 const CartContext = createContext();
 
@@ -11,6 +12,29 @@ function loadCart() {
 
 export function CartProvider({ children }) {
   const [items, setItems] = useState(loadCart);
+
+  // Fetch stock from API on mount to sync old cart items
+  useEffect(() => {
+    const loadStock = async () => {
+      try {
+        const res = await API.get('/products');
+        const products = Array.isArray(res.data) ? res.data : [];
+        setItems(prev => {
+          let changed = false;
+          const updated = prev.map(item => {
+            const product = products.find(p => p.id === item.id);
+            if (!product) return item;
+            const sizeObj = (product.sizes || []).find(s => s.size === item.size);
+            const newStock = sizeObj ? sizeObj.stock : (product.stock || 0);
+            if (item.stock !== newStock) { changed = true; return { ...item, stock: newStock }; }
+            return item;
+          });
+          return changed ? updated : prev;
+        });
+      } catch {}
+    };
+    loadStock();
+  }, []);
 
   useEffect(() => {
     localStorage.setItem('r2c_cart', JSON.stringify(items));

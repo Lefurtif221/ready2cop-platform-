@@ -12,6 +12,7 @@ export default function Admin() {
   const [editingProduct, setEditingProduct] = useState(null);
   const [showProductForm, setShowProductForm] = useState(false);
   const [toast, setToast] = useState({ show: false, message: '' });
+  const [period, setPeriod] = useState('');
   const navigate = useNavigate();
 
   const logout = () => {
@@ -29,8 +30,14 @@ export default function Admin() {
     loadOrders();
   }, []);
 
+  useEffect(() => { loadStats(); }, [period]);
+
   const loadStats = async () => {
-    try { const res = await API.get('/orders/stats/overview'); setStats(res.data); } catch {}
+    try {
+      const q = period ? `?period=${period}` : '';
+      const res = await API.get(`/orders/stats/overview${q}`);
+      setStats(res.data);
+    } catch {}
   };
   const loadProducts = async () => {
     try { const res = await API.get('/products'); setProducts(res.data); } catch {}
@@ -89,6 +96,18 @@ export default function Admin() {
         {/* ── DASHBOARD ── */}
         {tab === 'dashboard' && stats && (
           <div className="adm__content">
+            {/* Period filter */}
+            <div className="adm__period">
+              <label className="adm__period-label"><i className="fas fa-calendar"></i> Periode</label>
+              <select className="adm__period-select" value={period} onChange={e => setPeriod(e.target.value)}>
+                <option value="">Tout</option>
+                {stats.monthlyData && stats.monthlyData.slice().reverse().map(m => (
+                  <option key={m.month} value={m.month}>{m.label}</option>
+                ))}
+              </select>
+              {period && <button className="adm__btn adm__btn--ghost adm__btn--sm" onClick={() => setPeriod('')}><i className="fas fa-times"></i> Reset</button>}
+            </div>
+
             <div className="adm__stats">
               <div className="adm__stat">
                 <div className="adm__stat-icon" style={{background: 'rgba(232,101,10,.1)', color: 'var(--orange)'}}><i className="fas fa-bag-shopping"></i></div>
@@ -107,6 +126,28 @@ export default function Admin() {
                 <div><div className="adm__stat-val">{stats.totalProducts}</div><div className="adm__stat-lbl">Produits</div></div>
               </div>
             </div>
+
+            {/* Monthly evolution chart */}
+            {stats.monthlyData && stats.monthlyData.length > 0 && (
+              <div className="adm__card" style={{marginBottom: 16}}>
+                <h3 className="adm__card-title"><i className="fas fa-chart-line" style={{color: 'var(--orange)', marginRight: 8}}></i> Evolution mensuelle</h3>
+                <div className="adm__monthly">
+                  {stats.monthlyData.map((m, i) => {
+                    const maxRev = Math.max(...stats.monthlyData.map(x => x.revenue), 1);
+                    const pct = (m.revenue / maxRev) * 100;
+                    return (
+                      <div key={m.month} className="adm__monthly-col">
+                        <div className="adm__monthly-val">{m.revenue > 0 ? (m.revenue / 1000).toFixed(0) + 'k' : '-'}</div>
+                        <div className="adm__monthly-bar-wrap">
+                          <div className="adm__monthly-bar" style={{height: `${Math.max(pct, m.revenue > 0 ? 4 : 0)}%`}}></div>
+                        </div>
+                        <div className="adm__monthly-label">{m.label.split(' ')[0].slice(0,3)}</div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             {/* Charts row */}
             <div className="adm__charts">

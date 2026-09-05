@@ -224,18 +224,24 @@ export default function Home() {
           </div>
           <div className="r2c-shop__grid">
             {filtered.map((product, i) => {
-              const sizes = (product.sizes || []).filter(s => s.stock > 0);
+              const allSizes = product.sizes || [];
+              const totalStock = allSizes.reduce((sum, s) => sum + s.stock, 0);
+              const lowStock = totalStock > 0 && totalStock <= 3;
+              const outOfStock = totalStock === 0;
               return (
-                <article key={product.id} className="r2c-card rv" style={{transitionDelay: `${(i % 4) * 70}ms`}}>
+                <article key={product.id} className={`r2c-card rv ${outOfStock ? 'r2c-card--oos' : ''}`} style={{transitionDelay: `${(i % 4) * 70}ms`}}>
                   <div className="r2c-card__ph">
+                    {outOfStock && <div className="r2c-card__oos-badge">Rupture</div>}
+                    {lowStock && !outOfStock && <div className="r2c-card__low-badge">Dernières paires</div>}
                     <img
                       src={getImageUrl(product.image)}
                       alt={product.name}
                       loading="lazy"
                       onError={(e) => { e.target.onerror = null; e.target.src = '/Chaussures-22.jpeg'; }}
+                      style={outOfStock ? {filter: 'grayscale(1) opacity(.5)'} : {}}
                     />
                   <div className="r2c-card__btns">
-                    <Link to={`/produit/${product.id}`} className="r2c-card__view" style={{flex:1}}>Voir</Link>
+                    <Link to={`/produit/${product.id}`} className="r2c-card__view" style={{flex:1}}>{outOfStock ? 'Indisponible' : 'Voir'}</Link>
                   </div>
                 </div>
                   <div className="r2c-card__meta">
