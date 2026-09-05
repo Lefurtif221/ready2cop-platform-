@@ -52,7 +52,7 @@ export default function Admin() {
   };
 
   const updateOrderStatus = async (id, status) => {
-    try { await API.put(`/orders/${id}`, { status }); setOrders(orders.map(o => o.id === id ? { ...o, status } : o)); loadStats(); showToast('Statut mis a jour'); } catch { showToast('Erreur'); }
+    try { await API.put(`/orders/${id}`, { status }); setOrders(orders.map(o => o.id === id ? { ...o, status } : o)); loadStats(); loadProducts(); showToast('Statut mis a jour'); } catch { showToast('Erreur'); }
   };
 
   const deleteOrder = async (id) => {
