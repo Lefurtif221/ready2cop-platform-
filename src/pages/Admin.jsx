@@ -108,6 +108,46 @@ export default function Admin() {
               {period && <button className="adm__btn adm__btn--ghost adm__btn--sm" onClick={() => setPeriod('')}><i className="fas fa-times"></i> Reset</button>}
             </div>
 
+            {/* Stock alerts */}
+            {(() => {
+              const outOfStock = products.filter(p => (p.sizes || []).reduce((s, x) => s + x.stock, 0) === 0);
+              const lowStock = products.filter(p => { const t = (p.sizes || []).reduce((s, x) => s + x.stock, 0); return t > 0 && t <= 3; });
+              if (outOfStock.length === 0 && lowStock.length === 0) return null;
+              return (
+                <div className="adm__alerts">
+                  {outOfStock.length > 0 && (
+                    <div className="adm__alert adm__alert--danger">
+                      <div className="adm__alert-icon"><i className="fas fa-exclamation-triangle"></i></div>
+                      <div className="adm__alert-body">
+                        <div className="adm__alert-title">Rupture de stock</div>
+                        <div className="adm__alert-list">
+                          {outOfStock.map(p => (
+                            <span key={p.id} className="adm__alert-chip adm__alert-chip--danger">{p.name}</span>
+                          ))}
+                        </div>
+                      </div>
+                      <button className="adm__alert-go" onClick={() => setTab('products')}><i className="fas fa-arrow-right"></i></button>
+                    </div>
+                  )}
+                  {lowStock.length > 0 && (
+                    <div className="adm__alert adm__alert--warning">
+                      <div className="adm__alert-icon"><i className="fas fa-fire"></i></div>
+                      <div className="adm__alert-body">
+                        <div className="adm__alert-title">Stock critique</div>
+                        <div className="adm__alert-list">
+                          {lowStock.map(p => {
+                            const t = (p.sizes || []).reduce((s, x) => s + x.stock, 0);
+                            return <span key={p.id} className="adm__alert-chip adm__alert-chip--warning">{p.name} — {t} restant{t > 1 ? 's' : ''}</span>;
+                          })}
+                        </div>
+                      </div>
+                      <button className="adm__alert-go" onClick={() => setTab('products')}><i className="fas fa-arrow-right"></i></button>
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
+
             <div className="adm__stats">
               <div className="adm__stat">
                 <div className="adm__stat-icon" style={{background: 'rgba(232,101,10,.1)', color: 'var(--orange)'}}><i className="fas fa-bag-shopping"></i></div>

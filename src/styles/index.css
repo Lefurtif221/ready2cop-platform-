@@ -666,6 +666,32 @@ font:500 .85rem/1 var(--font-display);background:var(--white);outline:none;text-
 /* ── Period filter ── */
 .adm__period{display:flex;align-items:center;gap:10px;margin-bottom:20px;background:var(--white);
 padding:12px 16px;border-radius:12px;border:1px solid rgba(0,0,0,.06)}
+
+/* ── Alerts ── */
+.adm__alerts{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.adm__alert{display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:12px;
+border:1px solid;animation:alert-in .4s cubic-bezier(.22,.61,.36,1)}
+.adm__alert--danger{background:rgba(239,68,68,.06);border-color:rgba(239,68,68,.15)}
+.adm__alert--warning{background:rgba(245,158,11,.06);border-color:rgba(245,158,11,.15)}
+.adm__alert-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;
+justify-content:center;font-size:.9rem;flex-shrink:0}
+.adm__alert--danger .adm__alert-icon{background:rgba(239,68,68,.12);color:#ef4444;
+animation:pulse-alert 2s ease-in-out infinite}
+.adm__alert--warning .adm__alert-icon{background:rgba(245,158,11,.12);color:#f59e0b}
+.adm__alert-body{flex:1;min-width:0}
+.adm__alert-title{font:700 .8rem/1 var(--font-display);margin-bottom:6px}
+.adm__alert--danger .adm__alert-title{color:#ef4444}
+.adm__alert--warning .adm__alert-title{color:#d97706}
+.adm__alert-list{display:flex;flex-wrap:wrap;gap:6px}
+.adm__alert-chip{font:500 .7rem/1 var(--font-display);padding:4px 10px;border-radius:6px;white-space:nowrap}
+.adm__alert-chip--danger{background:rgba(239,68,68,.1);color:#dc2626}
+.adm__alert-chip--warning{background:rgba(245,158,11,.1);color:#b45309}
+.adm__alert-go{width:32px;height:32px;border-radius:8px;border:1px solid rgba(0,0,0,.08);
+background:var(--white);color:var(--mid);display:flex;align-items:center;justify-content:center;
+cursor:pointer;transition:all .2s;flex-shrink:0}
+.adm__alert-go:hover{border-color:var(--orange);color:var(--orange)}
+@keyframes alert-in{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse-alert{0%,100%{opacity:1}50%{opacity:.5}}
 .adm__period-label{font:600 .75rem/1 var(--font-display);color:var(--mid);display:flex;align-items:center;gap:6px;white-space:nowrap}
 .adm__period-select{padding:8px 12px;border:1.5px solid var(--line);border-radius:8px;
 font:500 .85rem/1 var(--font-display);background:var(--off-white);outline:none;min-width:140px}
