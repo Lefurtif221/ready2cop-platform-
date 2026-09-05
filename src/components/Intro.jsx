@@ -20,7 +20,7 @@ export default function Intro({ onComplete }) {
       <div className="intro-center">
         <div className="intro-glow" />
         <img src="/logo-removebg-preview.png" alt="Ready2Cop" className="intro-logo intro-logo--anim" />
-        <p className="intro-tagline intro-tagline--anim">Sneakers authentiques. Livrees a Dakar.</p>
+        <p className="intro-tagline intro-tagline--anim">Ta prochaine paire, au bon prix, c'est ici.</p>
       </div>
       {[...Array(SNEAKER_COUNT)].map((_, i) => (
         <div

@@ -28,13 +28,13 @@ export default function Collections() {
       <div className="ann" aria-hidden="true">
         <div className="ann__row">
           <div className="ann__tk">
-            <span>Livraison 24-48h a Dakar</span><i>/</i>
+            <span>Livraison 24-48h au Sénégal</span><i>/</i>
             <span>100% authentique</span><i>/</i>
             <span>Paiement a la livraison</span><i>/</i>
             <span>Satisfait ou rembourse</span><i>/</i>
           </div>
           <div className="ann__tk">
-            <span>Livraison 24-48h a Dakar</span><i>/</i>
+            <span>Livraison 24-48h au Sénégal</span><i>/</i>
             <span>100% authentique</span><i>/</i>
             <span>Paiement a la livraison</span><i>/</i>
             <span>Satisfait ou rembourse</span><i>/</i>
@@ -50,7 +50,7 @@ export default function Collections() {
           </ul>
           <Link to="/" className="r2c-nav__mk"><img src="/logo-removebg-preview.png" alt="Ready2Cop" style={{height: 44, width: 'auto'}} /></Link>
           <div className="r2c-nav__util">
-            <a href="https://wa.me/221771234567" target="_blank" rel="noopener"><i className="fab fa-whatsapp"></i> WhatsApp</a>
+            <a href="https://wa.me/221769960000" target="_blank" rel="noopener"><i className="fab fa-whatsapp"></i> WhatsApp</a>
             <Link to="/panier">Panier (<b>{count}</b>)</Link>
           </div>
         </div>
@@ -103,14 +103,14 @@ export default function Collections() {
         <div className="r2c-footer__cols">
           <div>
             <div className="r2c-footer__mk">READY2COP</div>
-            <address>Dakar, Senegal<br/><br/><a href="https://wa.me/221771234567">WhatsApp: +221 77 123 45 67</a></address>
+            <address>Dakar, Sénégal<br/><br/><a href="https://wa.me/221769960000">WhatsApp: +221 76 996 00 00</a></address>
           </div>
           <div><h4>Boutique</h4><Link to="/collections">Sneakers</Link></div>
           <div><h4>Aide</h4><a href="#">Livraison</a><a href="#">Retours</a><a href="#">FAQ</a></div>
           <div><h4>Suivez-nous</h4><a href="#">Instagram</a><a href="#">TikTok</a></div>
         </div>
         <div className="r2c-footer__legal">
-          <span>&copy; 2026 Ready2Cop Dakar</span>
+          <span>&copy; 2026 Ready2Cop</span>
           <span>Paiement a la livraison</span>
         </div>
       </footer>

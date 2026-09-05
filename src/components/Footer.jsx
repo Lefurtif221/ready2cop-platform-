@@ -5,7 +5,7 @@ export default function Footer() {
         <div className="footer__grid">
           <div className="footer__brand">
             <img src="/logo-removebg-preview.png" alt="Ready2Cop" className="footer__logo-img" />
-            <p className="footer__tagline">Sneakers authentiques. Livrees a Dakar en 24h.</p>
+            <p className="footer__tagline">Sneakers authentiques. Livrees au Sénégal en 24h.</p>
             <div className="footer__socials">
               <a href="#" aria-label="Instagram"><i className="fab fa-instagram"></i></a>
               <a href="#" aria-label="TikTok"><i className="fab fa-tiktok"></i></a>
@@ -33,7 +33,7 @@ export default function Footer() {
             <h4>Contact</h4>
             <ul>
               <li><i className="fab fa-whatsapp"></i> +221 77 123 45 67</li>
-              <li><i className="fas fa-location-dot"></i> Dakar, Senegal</li>
+              <li><i className="fas fa-location-dot"></i> Senegal</li>
             </ul>
           </div>
         </div>

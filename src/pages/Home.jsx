@@ -100,13 +100,13 @@ export default function Home() {
       <div className="ann" aria-hidden="true">
         <div className="ann__row">
           <div className="ann__tk">
-            <span>Livraison 24-48h a Dakar</span><i>/</i>
+            <span>Livraison 24-48h au Sénégal</span><i>/</i>
             <span>100% authentique</span><i>/</i>
             <span>Paiement a la livraison</span><i>/</i>
             <span>Satisfait ou rembourse</span><i>/</i>
           </div>
           <div className="ann__tk">
-            <span>Livraison 24-48h a Dakar</span><i>/</i>
+            <span>Livraison 24-48h au Sénégal</span><i>/</i>
             <span>100% authentique</span><i>/</i>
             <span>Paiement a la livraison</span><i>/</i>
             <span>Satisfait ou rembourse</span><i>/</i>
@@ -125,7 +125,7 @@ export default function Home() {
           </ul>
           <Link to="/" className="r2c-nav__mk"><img src="/logo-removebg-preview.png" alt="Ready2Cop" style={{height: 44, width: 'auto'}} /></Link>
           <div className="r2c-nav__util">
-            <a href="https://wa.me/221771234567" target="_blank" rel="noopener"><i className="fab fa-whatsapp"></i> WhatsApp</a>
+            <a href="https://wa.me/221769960000" target="_blank" rel="noopener"><i className="fab fa-whatsapp"></i> WhatsApp</a>
             <Link to="/panier">Panier (<b>{count}</b>)</Link>
           </div>
         </div>
@@ -135,19 +135,20 @@ export default function Home() {
       <header id="hero" className="r2c-hero">
         <div className="r2c-hero__wrap">
           <div className="r2c-hero__tl hv" id="h1">
-            <p>Sneakers<br/>authentiques<br/>a Dakar.</p>
+            <p>Sneakers<br/>authentiques<br/>au Sénégal.</p>
             <div className="r2c-hero__rule"></div>
+            <p className="r2c-hero__slogan">Ta prochaine paire, au bon prix, c'est ici.</p>
           </div>
           <div className="r2c-hero__stage">
             <div className="r2c-hero__word" id="wb" aria-hidden="true">READY2COP</div>
             <img id="hm" className="r2c-hero__model hv" src="/Chaussures-22.jpeg" alt="Sneakers Ready2Cop" />
           </div>
           <div className="r2c-hero__br hv" id="h2">
-            <p>Collection<br/>Dakar<br/>2026</p>
+            <p>Collection<br/>Sénégal<br/>2026</p>
           </div>
           <div className="r2c-hero__acts hv" id="h3">
             <a href="#shop" className="r2c-btn"><span>Voir les sneakers</span></a>
-            <a href="https://wa.me/221771234567" className="r2c-btn-line" target="_blank" rel="noopener">Nous ecrire</a>
+            <a href="https://wa.me/221769960000" className="r2c-btn-line" target="_blank" rel="noopener">Nous ecrire</a>
           </div>
         </div>
       </header>
@@ -200,7 +201,7 @@ export default function Home() {
       {/* Service */}
       <section id="svc" className="r2c-svc">
         <div className="r2c-svc__row">
-          <div className="rv"><h4><i className="fas fa-truck-fast"></i> Livraison 24-48h</h4><p>Livraison rapide a Dakar.</p></div>
+          <div className="rv"><h4><i className="fas fa-truck-fast"></i> Livraison 24-48h</h4><p>Livraison rapide au Sénégal.</p></div>
           <div className="rv"><h4><i className="fas fa-certificate"></i> 100% authentique</h4><p>Paires verifiees, pas de contrefacon.</p></div>
           <div className="rv"><h4><i className="fas fa-money-bill-wave"></i> Paiement livraison</h4><p>Paye quand tu recois.</p></div>
           <div className="rv"><h4><i className="fas fa-shield-halved"></i> Satisfait ou rembourse</h4><p>Garantie satisfait.</p></div>
@@ -259,18 +260,18 @@ export default function Home() {
             <h2 className="rv">On vend des<br/>vraies paires.<br/>Point.</h2>
             <p className="rv">Ready2Cop, c'est ne pas avoir a stresser quand tu commandes des sneakers en ligne. Pas de contrefacon, pas de delais interminables.</p>
             <dl className="rv">
-              <div><dt>Base a Dakar</dt><dd>On connait le marche</dd></div>
+              <div><dt>Base au Sénégal</dt><dd>On couvre tout le Sénégal</dd></div>
               <div><dt>Livraison 24h</dt><dd>Rapide et fiable</dd></div>
               <div><dt>Paiement flexible</dt><dd>A la livraison</dd></div>
             </dl>
           </div>
           <div className="r2c-about__shot rv">
-            <img src="/Chaussures-22.jpeg" alt="Ready2Cop Dakar" loading="lazy" />
+            <img src="/Chaussures-22.jpeg" alt="Ready2Cop Sénégal" loading="lazy" />
           </div>
         </div>
       </section>
 
-      {/* Stats / Dakar */}
+      {/* Stats / Sénégal */}
       <section id="dakar" className="r2c-dakar">
         <div className="r2c-dakar__grid">
           <figure className="r2c-dakar__shot rv">
@@ -278,8 +279,8 @@ export default function Home() {
           </figure>
           <div className="r2c-dakar__copy">
             <div className="r2c-lbl rv" style={{marginBottom: 16}}>Notre expertise</div>
-            <h2 className="rv">Dakar,<br/>notre terrain.</h2>
-            <p className="rv">On connait le marche senegalais. On sait ce que les gens veulent, et on sait ce qu'ils ne veulent pas : des mauvaises surprises.</p>
+            <h2 className="rv">Le Sénégal,<br/>notre terrain.</h2>
+            <p className="rv">On couvre tout le Sénégal senegalais. On sait ce que les gens veulent, et on sait ce qu'ils ne veulent pas : des mauvaises surprises.</p>
             <div className="r2c-dakar__count rv">
               <div><b data-to="500">0</b><span>Paires vendues</span></div>
               <div><b data-to="50">0</b><span>Modeles dispo</span></div>
@@ -293,7 +294,7 @@ export default function Home() {
       <section id="wa" className="r2c-wa">
         <h2 className="rv">Une question ?</h2>
         <p className="rv">Ecris-nous sur WhatsApp, on repond en quelques minutes.</p>
-        <a href="https://wa.me/221771234567" className="r2c-btn-wa rv" target="_blank" rel="noopener">
+        <a href="https://wa.me/221769960000" className="r2c-btn-wa rv" target="_blank" rel="noopener">
           <i className="fab fa-whatsapp"></i> Ouvrir WhatsApp
         </a>
       </section>
@@ -303,14 +304,14 @@ export default function Home() {
         <div className="r2c-footer__cols">
           <div>
             <div className="r2c-footer__mk">READY2COP</div>
-            <address>Dakar, Senegal<br/><br/><a href="https://wa.me/221771234567">WhatsApp: +221 77 123 45 67</a></address>
+            <address>Sénégal<br/><br/><a href="https://wa.me/221769960000">WhatsApp: +221 76 996 00 00</a></address>
           </div>
           <div><h4>Boutique</h4><a href="#cats">Sneakers</a><a href="#cats">Casual</a><a href="#cats">Sport</a><a href="#shop">Tout voir</a></div>
           <div><h4>Aide</h4><a href="#">Livraison</a><a href="#">Retours</a><a href="#">Tailles</a><a href="#">FAQ</a></div>
           <div><h4>Suivez-nous</h4><a href="#">Instagram</a><a href="#">TikTok</a><a href="#">Facebook</a></div>
         </div>
         <div className="r2c-footer__legal">
-          <span>&copy; 2026 Ready2Cop Dakar</span>
+          <span>&copy; 2026 Ready2Cop</span>
           <span>Paiement a la livraison</span>
         </div>
       </footer>

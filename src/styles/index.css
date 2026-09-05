@@ -75,6 +75,7 @@ box-shadow:0 30px 60px rgba(10,10,10,.3)}
 .r2c-hero__tl{position:absolute;left:clamp(18px,3.4vw,44px);top:clamp(6px,2vh,22px);z-index:4}
 .r2c-hero__tl p{font:500 12px/1.9 var(--font-display);letter-spacing:.24em;text-transform:uppercase}
 .r2c-hero__rule{width:52px;height:1px;background:var(--orange);margin-top:12px}
+.r2c-hero__slogan{font-family:var(--font-body);font-size:.85rem;color:var(--mid);font-style:italic;margin-top:8px}
 .r2c-hero__br{position:absolute;right:clamp(18px,3.4vw,44px);bottom:clamp(52px,9vh,86px);z-index:4;text-align:right}
 .r2c-hero__br p{font:500 11px/1.9 var(--font-display);letter-spacing:.24em;text-transform:uppercase}
 .r2c-hero__acts{position:relative;z-index:4;display:flex;gap:18px;align-items:center;
@@ -416,6 +417,7 @@ padding-bottom:16px;border-bottom:1px solid rgba(0,0,0,.06)}
 .r2c-checkout__summary-item img{width:56px;height:56px;object-fit:cover;border-radius:8px}
 .r2c-checkout__summary-item p{font-weight:600;font-size:.9rem;margin-bottom:2px}
 .r2c-checkout__summary-item span{font-size:.8rem;color:var(--mid)}
+.r2c-checkout__size{font-size:.75rem;color:var(--orange);font-weight:600}
 .r2c-checkout__summary-total{display:flex;justify-content:space-between;font-family:var(--font-display);
 font-size:1.3rem;font-weight:700;margin-bottom:20px}
 .r2c-checkout__summary-total span:last-child{color:var(--orange)}

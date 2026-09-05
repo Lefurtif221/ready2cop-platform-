@@ -26,7 +26,7 @@ export default function Checkout() {
         customer_phone: form.phone,
         customer_address: form.address,
         customer_note: form.note,
-        items: items.map(i => ({ id: i.id, quantity: i.qty, price: i.price })),
+        items: items.map(i => ({ id: i.id, name: i.name, quantity: i.qty, price: i.price, size: i.size || null })),
         total,
       });
       clearCart();
@@ -54,7 +54,7 @@ export default function Checkout() {
 
   const Nav = () => (
     <>
-      <div className="ann" aria-hidden="true"><div className="ann__row"><div className="ann__tk"><span>Livraison 24-48h a Dakar</span><i>/</i><span>100% authentique</span><i>/</i><span>Paiement a la livraison</span><i>/</i><span>Satisfait ou rembourse</span><i>/</i></div><div className="ann__tk"><span>Livraison 24-48h a Dakar</span><i>/</i><span>100% authentique</span><i>/</i><span>Paiement a la livraison</span><i>/</i><span>Satisfait ou rembourse</span><i>/</i></div></div></div>
+      <div className="ann" aria-hidden="true"><div className="ann__row"><div className="ann__tk"><span>Livraison 24-48h au Sénégal</span><i>/</i><span>100% authentique</span><i>/</i><span>Paiement a la livraison</span><i>/</i><span>Satisfait ou rembourse</span><i>/</i></div><div className="ann__tk"><span>Livraison 24-48h au Sénégal</span><i>/</i><span>100% authentique</span><i>/</i><span>Paiement a la livraison</span><i>/</i><span>Satisfait ou rembourse</span><i>/</i></div></div></div>
       <nav className="r2c-nav"><div className="r2c-nav__bar"><ul className="r2c-nav__links"><li><Link to="/">Accueil</Link></li><li><Link to="/collections">Collections</Link></li></ul><Link to="/" className="r2c-nav__mk"><img src="/logo-removebg-preview.png" alt="Ready2Cop" style={{height: 44, width: 'auto'}} /></Link><div className="r2c-nav__util"><Link to="/panier">Panier (<b>{count}</b>)</Link></div></div></nav>
     </>
   );
@@ -96,12 +96,12 @@ export default function Checkout() {
 
               <div className="r2c-checkout__field">
                 <label htmlFor="address">Adresse de livraison *</label>
-                <input type="text" id="address" name="address" value={form.address} onChange={handleChange} required placeholder="Ex: Plateau, Dakar" />
+                <input type="text" id="address" name="address" value={form.address} onChange={handleChange} required placeholder="Ex: Dakar, Plateau" />
               </div>
 
               <div className="r2c-checkout__field">
                 <label htmlFor="note">Note (optionnel)</label>
-                <textarea id="note" name="note" value={form.note} onChange={handleChange} rows="3" placeholder="Taille, couleur, etc." />
+                <textarea id="note" name="note" value={form.note} onChange={handleChange} rows="3" placeholder="Ex: Couleur preferée, remarque..." />
               </div>
 
               <button type="submit" className="r2c-btn" style={{width: '100%', textAlign: 'center'}} disabled={loading}>
@@ -120,7 +120,7 @@ export default function Checkout() {
                       onError={(e) => { e.target.src = '/Chaussures-22.jpeg'; }}
                     />
                     <div>
-                      <p>{item.name}</p>
+                      <p>{item.name}{item.size ? <span className="r2c-checkout__size"> — T{item.size}</span> : null}</p>
                       <span>{item.qty} x {item.price.toLocaleString('fr-FR')} FCFA</span>
                     </div>
                   </div>
@@ -146,12 +146,12 @@ export default function Checkout() {
       {/* Footer */}
       <footer className="r2c-footer">
         <div className="r2c-footer__cols">
-          <div><div className="r2c-footer__mk">READY2COP</div><address>Dakar, Senegal<br/><br/><a href="https://wa.me/221771234567">WhatsApp: +221 77 123 45 67</a></address></div>
+          <div><div className="r2c-footer__mk">READY2COP</div><address>Dakar, Sénégal<br/><br/><a href="https://wa.me/221769960000">WhatsApp: +221 76 996 00 00</a></address></div>
           <div><h4>Boutique</h4><Link to="/collections">Sneakers</Link><Link to="/collections">Casual</Link><Link to="/collections">Sport</Link></div>
           <div><h4>Aide</h4><a href="#">Livraison</a><a href="#">Retours</a><a href="#">FAQ</a></div>
           <div><h4>Suivez-nous</h4><a href="#">Instagram</a><a href="#">TikTok</a></div>
         </div>
-        <div className="r2c-footer__legal"><span>&copy; 2026 Ready2Cop Dakar</span><span>Paiement a la livraison</span></div>
+        <div className="r2c-footer__legal"><span>&copy; 2026 Ready2Cop</span><span>Paiement a la livraison</span></div>
       </footer>
     </>
   );

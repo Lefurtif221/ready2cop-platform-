@@ -59,7 +59,7 @@ export default function ProductDetail() {
 
   if (loading) return (
     <>
-      <div className="ann" aria-hidden="true"><div className="ann__row"><div className="ann__tk"><span>Livraison 24-48h a Dakar</span><i>/</i><span>100% authentique</span><i>/</i><span>Paiement a la livraison</span><i>/</i><span>Satisfait ou rembourse</span><i>/</i></div><div className="ann__tk"><span>Livraison 24-48h a Dakar</span><i>/</i><span>100% authentique</span><i>/</i><span>Paiement a la livraison</span><i>/</i><span>Satisfait ou rembourse</span><i>/</i></div></div></div>
+      <div className="ann" aria-hidden="true"><div className="ann__row"><div className="ann__tk"><span>Livraison 24-48h au Sénégal</span><i>/</i><span>100% authentique</span><i>/</i><span>Paiement a la livraison</span><i>/</i><span>Satisfait ou rembourse</span><i>/</i></div><div className="ann__tk"><span>Livraison 24-48h au Sénégal</span><i>/</i><span>100% authentique</span><i>/</i><span>Paiement a la livraison</span><i>/</i><span>Satisfait ou rembourse</span><i>/</i></div></div></div>
       <nav className="r2c-nav"><div className="r2c-nav__bar"><ul className="r2c-nav__links"><li><Link to="/">Accueil</Link></li><li><Link to="/collections">Collections</Link></li></ul><Link to="/" className="r2c-nav__mk"><img src="/logo-removebg-preview.png" alt="Ready2Cop" style={{height: 44, width: 'auto'}} /></Link><div className="r2c-nav__util"><Link to="/panier">Panier (<b>{count}</b>)</Link></div></div></nav>
       <div className="product-detail__loading"><div className="spinner"></div></div>
     </>
@@ -74,8 +74,8 @@ export default function ProductDetail() {
     <>
       <div className="ann" aria-hidden="true">
         <div className="ann__row">
-          <div className="ann__tk"><span>Livraison 24-48h a Dakar</span><i>/</i><span>100% authentique</span><i>/</i><span>Paiement a la livraison</span><i>/</i><span>Satisfait ou rembourse</span><i>/</i></div>
-          <div className="ann__tk"><span>Livraison 24-48h a Dakar</span><i>/</i><span>100% authentique</span><i>/</i><span>Paiement a la livraison</span><i>/</i><span>Satisfait ou rembourse</span><i>/</i></div>
+          <div className="ann__tk"><span>Livraison 24-48h au Sénégal</span><i>/</i><span>100% authentique</span><i>/</i><span>Paiement a la livraison</span><i>/</i><span>Satisfait ou rembourse</span><i>/</i></div>
+          <div className="ann__tk"><span>Livraison 24-48h au Sénégal</span><i>/</i><span>100% authentique</span><i>/</i><span>Paiement a la livraison</span><i>/</i><span>Satisfait ou rembourse</span><i>/</i></div>
         </div>
       </div>
 
@@ -87,7 +87,7 @@ export default function ProductDetail() {
           </ul>
           <Link to="/" className="r2c-nav__mk"><img src="/logo-removebg-preview.png" alt="Ready2Cop" style={{height: 44, width: 'auto'}} /></Link>
           <div className="r2c-nav__util">
-            <a href="https://wa.me/221771234567" target="_blank" rel="noopener"><i className="fab fa-whatsapp"></i> WhatsApp</a>
+            <a href="https://wa.me/221769960000" target="_blank" rel="noopener"><i className="fab fa-whatsapp"></i> WhatsApp</a>
             <Link to="/panier">Panier (<b>{count}</b>)</Link>
           </div>
         </div>
@@ -120,7 +120,7 @@ export default function ProductDetail() {
                 <div><dt>Categorie</dt><dd>{catMap[product.category] || product.category}</dd></div>
                 <div><dt>Reference</dt><dd>R2C-{String(product.id).padStart(4, '0')}</dd></div>
                 <div><dt>Stock total</dt><dd>{totalStock} paire{totalStock > 1 ? 's' : ''}</dd></div>
-                <div><dt>Livraison</dt><dd>24-48h a Dakar</dd></div>
+                <div><dt>Livraison</dt><dd>24-48h au Sénégal</dd></div>
               </dl>
 
               {sizes.length > 0 && (
@@ -160,7 +160,7 @@ export default function ProductDetail() {
               )}
 
               <div className="r2c-pdp__meta">
-                <div className="r2c-pdp__meta-item"><i className="fas fa-truck-fast"></i><span>Livraison 24-48h a Dakar</span></div>
+                <div className="r2c-pdp__meta-item"><i className="fas fa-truck-fast"></i><span>Livraison 24-48h au Sénégal</span></div>
                 <div className="r2c-pdp__meta-item"><i className="fas fa-certificate"></i><span>100% authentique</span></div>
                 <div className="r2c-pdp__meta-item"><i className="fas fa-money-bill-wave"></i><span>Paiement a la livraison</span></div>
               </div>
@@ -174,7 +174,7 @@ export default function ProductDetail() {
                 >
                   <span><i className="fas fa-shopping-cart"></i> {added ? 'Ajoute !' : 'Ajouter au panier'}</span>
                 </button>
-                <a href="https://wa.me/221771234567" className="r2c-btn-line" target="_blank" rel="noopener">
+                <a href="https://wa.me/221769960000" className="r2c-btn-line" target="_blank" rel="noopener">
                   <i className="fab fa-whatsapp"></i> Commander via WhatsApp
                 </a>
               </div>
@@ -219,14 +219,14 @@ export default function ProductDetail() {
         <div className="r2c-footer__cols">
           <div>
             <div className="r2c-footer__mk">READY2COP</div>
-            <address>Dakar, Senegal<br/><br/><a href="https://wa.me/221771234567">WhatsApp: +221 77 123 45 67</a></address>
+            <address>Dakar, Sénégal<br/><br/><a href="https://wa.me/221769960000">WhatsApp: +221 76 996 00 00</a></address>
           </div>
           <div><h4>Boutique</h4><Link to="/collections">Sneakers</Link></div>
           <div><h4>Aide</h4><a href="#">Livraison</a><a href="#">Retours</a><a href="#">FAQ</a></div>
           <div><h4>Suivez-nous</h4><a href="#">Instagram</a><a href="#">TikTok</a></div>
         </div>
         <div className="r2c-footer__legal">
-          <span>&copy; 2026 Ready2Cop Dakar</span>
+          <span>&copy; 2026 Ready2Cop</span>
           <span>Paiement a la livraison</span>
         </div>
       </footer>
