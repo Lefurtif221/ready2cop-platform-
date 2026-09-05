@@ -266,7 +266,7 @@ export default function Admin() {
                       {order.status === 'pending' && <button className="adm__btn adm__btn--primary adm__btn--sm" onClick={() => updateOrderStatus(order.id, 'contacted')}><i className="fas fa-phone"></i> Contacte</button>}
                       {order.status === 'contacted' && <button className="adm__btn adm__btn--primary adm__btn--sm" onClick={() => updateOrderStatus(order.id, 'delivered')}><i className="fas fa-check"></i> Livre</button>}
                       {order.status !== 'delivered' && order.status !== 'cancelled' && <button className="adm__btn adm__btn--danger adm__btn--sm" onClick={() => updateOrderStatus(order.id, 'cancelled')}><i className="fas fa-times"></i></button>}
-                      <button className="adm__btn adm__btn--danger adm__btn--sm" onClick={() => deleteOrder(order.id)}><i className="fas fa-trash"></i></button>
+                      {order.status !== 'delivered' && <button className="adm__btn adm__btn--danger adm__btn--sm" onClick={() => deleteOrder(order.id)}><i className="fas fa-trash"></i></button>}
                     </div>
                   </div>
                 </div>
