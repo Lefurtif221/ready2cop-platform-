@@ -21,7 +21,7 @@ const FALLBACK_SIMILAR = [
 export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { addItem, count } = useCart();
+  const { addItem, count, items } = useCart();
   const [product, setProduct] = useState(null);
   const [similar, setSimilar] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -70,6 +70,11 @@ export default function ProductDetail() {
 
   const sizes = product.sizes || [];
   const totalStock = sizes.reduce((sum, s) => sum + s.stock, 0);
+
+  // Check if already in cart with max stock for selected size
+  const cartItem = selectedSize ? items.find(i => i.id === product.id && i.size === selectedSize) : null;
+  const sizeObj = selectedSize ? sizes.find(s => s.size === selectedSize) : null;
+  const maxReached = cartItem && sizeObj && cartItem.qty >= sizeObj.stock;
 
   return (
     <>
@@ -170,10 +175,10 @@ export default function ProductDetail() {
                 <button
                   className="r2c-btn"
                   onClick={addToCart}
-                  disabled={(sizes.length > 0 && !selectedSize) || added}
-                  style={{opacity: (sizes.length > 0 && !selectedSize) || added ? .5 : 1, cursor: (sizes.length > 0 && !selectedSize) || added ? 'not-allowed' : 'pointer'}}
+                  disabled={(sizes.length > 0 && !selectedSize) || added || maxReached}
+                  style={{opacity: (sizes.length > 0 && !selectedSize) || added || maxReached ? .5 : 1, cursor: (sizes.length > 0 && !selectedSize) || added || maxReached ? 'not-allowed' : 'pointer'}}
                 >
-                  <span><i className="fas fa-shopping-cart"></i> {added ? 'Ajoute !' : 'Ajouter au panier'}</span>
+                  <span><i className="fas fa-shopping-cart"></i> {maxReached ? 'Stock maximum atteint' : added ? 'Ajoute !' : 'Ajouter au panier'}</span>
                 </button>
                 <a href="https://wa.me/221769960000" className="r2c-btn-line" target="_blank" rel="noopener">
                   <i className="fab fa-whatsapp"></i> Commander via WhatsApp
