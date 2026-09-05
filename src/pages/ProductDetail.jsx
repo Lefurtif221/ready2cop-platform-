@@ -170,8 +170,8 @@ export default function ProductDetail() {
                 <button
                   className="r2c-btn"
                   onClick={addToCart}
-                  disabled={sizes.length > 0 && !selectedSize}
-                  style={{opacity: sizes.length > 0 && !selectedSize ? .5 : 1, cursor: sizes.length > 0 && !selectedSize ? 'not-allowed' : 'pointer'}}
+                  disabled={(sizes.length > 0 && !selectedSize) || added}
+                  style={{opacity: (sizes.length > 0 && !selectedSize) || added ? .5 : 1, cursor: (sizes.length > 0 && !selectedSize) || added ? 'not-allowed' : 'pointer'}}
                 >
                   <span><i className="fas fa-shopping-cart"></i> {added ? 'Ajoute !' : 'Ajouter au panier'}</span>
                 </button>
