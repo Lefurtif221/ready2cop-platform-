@@ -11,17 +11,26 @@ const FALLBACK_PRODUCTS = [
 
 export default function Collections() {
   const [products, setProducts] = useState([]);
+  const [search, setSearch] = useState('');
+  const [filter, setFilter] = useState('all');
   const { count } = useCart();
 
   useEffect(() => {
     API.get('/products')
       .then(res => {
         const data = Array.isArray(res.data) ? res.data : [];
-        const sneakers = data.filter(p => p.category === 'sneakers');
-        setProducts(sneakers.length ? sneakers : FALLBACK_PRODUCTS);
+        setProducts(data.length ? data : FALLBACK_PRODUCTS);
       })
       .catch(() => setProducts(FALLBACK_PRODUCTS));
   }, []);
+
+  const catMap = { sneakers: 'Sneakers', casual: 'Casual', sport: 'Sport' };
+
+  const filtered = products.filter(p => {
+    const matchSearch = !search || p.name.toLowerCase().includes(search.toLowerCase());
+    const matchCat = filter === 'all' || p.category === filter;
+    return matchSearch && matchCat;
+  });
 
   return (
     <>
@@ -59,12 +68,26 @@ export default function Collections() {
       <section className="r2c-collections">
         <div className="r2c-collections__wrap">
           <div className="r2c-collections__hd">
-            <h1>Nos Sneakers</h1>
-            <p>Toutes nos paires sneakers, verifiees et pretes a etre cop.</p>
+            <h1>Toutes nos paires</h1>
+            <p>Retrouve ta prochaine paire, au bon prix.</p>
+          </div>
+
+          {/* Search + filters */}
+          <div className="r2c-collections__tools">
+            <div className="r2c-collections__search">
+              <i className="fas fa-search"></i>
+              <input type="text" placeholder="Rechercher une paire..." value={search} onChange={e => setSearch(e.target.value)} />
+              {search && <button className="r2c-collections__search-clear" onClick={() => setSearch('')}><i className="fas fa-times"></i></button>}
+            </div>
+            <div className="r2c-collections__filters">
+              {[{k:'all',l:'Tous'},{k:'sneakers',l:'Sneakers'},{k:'casual',l:'Casual'},{k:'sport',l:'Sport'}].map(c => (
+                <button key={c.k} className={`r2c-filter ${filter === c.k ? 'active' : ''}`} onClick={() => setFilter(c.k)}>{c.l}</button>
+              ))}
+            </div>
           </div>
 
           <div className="r2c-shop__grid">
-            {products.map((product) => {
+            {filtered.map((product) => {
               const allSizes = product.sizes || [];
               const totalStock = allSizes.reduce((sum, s) => sum + s.stock, 0);
               const lowStock = totalStock > 0 && totalStock <= 3;
@@ -88,7 +111,7 @@ export default function Collections() {
                   <div className="r2c-card__meta">
                     <div>
                       <Link to={`/produit/${product.id}`} className="r2c-card__nm">{product.name}</Link>
-                      <div className="r2c-card__ct">Sneakers</div>
+                      <div className="r2c-card__ct">{catMap[product.category] || product.category}</div>
                     </div>
                     <div className="r2c-card__pr">{product.price.toLocaleString('fr-FR')} FCFA</div>
                   </div>
@@ -97,9 +120,11 @@ export default function Collections() {
             })}
           </div>
 
-          {products.length === 0 && (
+          {filtered.length === 0 && (
             <div style={{textAlign: 'center', padding: '80px 20px'}}>
-              <p style={{color: 'var(--mid)'}}>Aucune sneaker disponible pour le moment.</p>
+              <i className="fas fa-search" style={{fontSize: '2.5rem', color: 'var(--mid)', marginBottom: 16, display: 'block'}}></i>
+              <p style={{color: 'var(--mid)', marginBottom: 8}}>Aucun produit trouve</p>
+              <button className="r2c-btn-line" onClick={() => { setSearch(''); setFilter('all'); }}>Voir tous les produits</button>
             </div>
           )}
         </div>

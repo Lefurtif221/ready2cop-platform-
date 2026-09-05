@@ -370,6 +370,20 @@ letter-spacing:-.015em;text-transform:uppercase;margin-bottom:clamp(20px,3.4vh,3
 .r2c-collections__hd h1{font-family:var(--font-display);font-weight:800;font-size:clamp(26px,3.4vw,44px);
 letter-spacing:-.015em;text-transform:uppercase;margin-bottom:8px}
 .r2c-collections__hd p{color:var(--mid);font-size:1rem}
+.r2c-collections__tools{display:flex;flex-direction:column;gap:14px;margin-bottom:clamp(20px,3.4vh,34px)}
+.r2c-collections__search{position:relative;max-width:480px;width:100%;margin:0 auto}
+.r2c-collections__search i{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--mid);font-size:.9rem}
+.r2c-collections__search input{width:100%;padding:14px 44px 14px 44px;border:1.5px solid var(--line);
+border-radius:var(--radius);font:500 .9rem/1 var(--font-body);background:var(--white);
+outline:none;transition:border-color .2s}
+.r2c-collections__search input:focus{border-color:var(--orange)}
+.r2c-collections__search input::placeholder{color:var(--mid)}
+.r2c-collections__search-clear{position:absolute;right:12px;top:50%;transform:translateY(-50%);
+width:28px;height:28px;border-radius:50%;border:none;background:var(--off-white);
+color:var(--mid);display:flex;align-items:center;justify-content:center;cursor:pointer;
+font-size:.75rem;transition:all .2s}
+.r2c-collections__search-clear:hover{background:var(--orange);color:var(--bone)}
+.r2c-collections__filters{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
 
 /* Spinner */
 .product-detail__loading{display:flex;justify-content:center;align-items:center;min-height:60vh}
