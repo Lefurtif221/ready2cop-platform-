@@ -52,7 +52,8 @@ export default function ProductDetail() {
 
   const addToCart = () => {
     if (product.sizes && product.sizes.length > 0 && !selectedSize) return;
-    addItem(product, selectedSize);
+    const sizeObj = sizes.find(s => s.size === selectedSize);
+    addItem(product, selectedSize, sizeObj?.stock || 0);
     setAdded(true);
     setTimeout(() => setAdded(false), 1300);
   };

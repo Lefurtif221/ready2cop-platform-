@@ -16,7 +16,7 @@ export function CartProvider({ children }) {
     localStorage.setItem('r2c_cart', JSON.stringify(items));
   }, [items]);
 
-  const addItem = useCallback((product, size) => {
+  const addItem = useCallback((product, size, stock) => {
     setItems(prev => {
       const key = size ? `${product.id}-${size}` : `${product.id}`;
       const exists = prev.find(p => {
@@ -29,7 +29,7 @@ export function CartProvider({ children }) {
           return pKey === key ? { ...p, qty: p.qty + 1 } : p;
         });
       }
-      return [...prev, { ...product, qty: 1, size: size || null }];
+      return [...prev, { ...product, qty: 1, size: size || null, stock: stock || 0 }];
     });
   }, []);
 

@@ -62,7 +62,7 @@ export default function Cart() {
                         <div className="r2c-cart__item-qty">
                           <button className="r2c-cart__qty-btn" onClick={() => updateQty(item.id, item.size, item.qty - 1)}>-</button>
                           <span className="r2c-cart__qty-val">{item.qty}</span>
-                          <button className="r2c-cart__qty-btn" onClick={() => updateQty(item.id, item.size, item.qty + 1)}>+</button>
+                          <button className="r2c-cart__qty-btn" onClick={() => updateQty(item.id, item.size, item.qty + 1)} disabled={item.stock > 0 && item.qty >= item.stock} style={item.stock > 0 && item.qty >= item.stock ? {opacity: .3, cursor: 'not-allowed'} : {}}>{item.qty >= item.stock && item.stock > 0 ? '' : '+'}</button>
                           <button className="r2c-cart__item-del" onClick={() => removeItem(item.id, item.size)}>Supprimer</button>
                         </div>
                       </div>
