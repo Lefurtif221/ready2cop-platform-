@@ -259,7 +259,7 @@ export default function Admin() {
                       <span className="adm__product-price">{p.price.toLocaleString('fr-FR')} FCFA</span>
                       <span className="adm__product-cat">{p.category}</span>
                     </div>
-                    <div className="adm__product-stock">Stock: <b>{p.stock}</b></div>
+                    <div className="adm__product-stock">Stock: <b>{(p.sizes || []).reduce((sum, s) => sum + s.stock, 0)}</b></div>
                     {p.sizes && p.sizes.length > 0 && (
                       <div className="adm__product-sizes">
                         {p.sizes.map(s => <span key={s.size} className="adm__product-sz">{s.size} ({s.stock})</span>)}
