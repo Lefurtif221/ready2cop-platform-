@@ -600,6 +600,37 @@ font-size:.9rem;background:var(--off-white);outline:none;transition:border-color
 .adm__field textarea{resize:vertical;min-height:80px}
 .adm__form-actions{display:flex;gap:10px;margin-top:20px}
 
+/* ── Sizes manager ── */
+.adm__sizes-section{margin-top:20px;padding:20px;background:var(--off-white);border-radius:12px;border:1px solid rgba(0,0,0,.06)}
+.adm__sizes-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.adm__sizes-header label{font:600 .72rem/1 var(--font-display);letter-spacing:.06em;text-transform:uppercase;color:var(--mid)}
+.adm__sizes-total{font:600 .8rem/1 var(--font-display);color:var(--mid)}
+.adm__sizes-total b{color:var(--orange);font-size:1rem}
+.adm__sizes-list{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.adm__size-row{display:flex;align-items:center;gap:12px;background:var(--white);padding:10px 14px;
+border-radius:10px;border:1px solid rgba(0,0,0,.06)}
+.adm__size-label{font:600 .85rem/1 var(--font-display);min-width:70px;color:var(--text)}
+.adm__size-stock-controls{display:flex;align-items:center;gap:6px}
+.adm__size-btn{width:30px;height:30px;border-radius:8px;border:1.5px solid var(--line);
+background:var(--white);font:700 .9rem/1 var(--font-display);cursor:pointer;
+display:flex;align-items:center;justify-content:center;color:var(--text);transition:all .2s}
+.adm__size-btn:hover{border-color:var(--orange);color:var(--orange)}
+.adm__size-input{width:56px;height:30px;text-align:center;border:1.5px solid var(--line);
+border-radius:8px;font:600 .85rem/1 var(--font-display);background:var(--white);outline:none}
+.adm__size-input:focus{border-color:var(--orange)}
+.adm__size-remove{width:28px;height:28px;border-radius:6px;border:none;background:rgba(239,68,68,.08);
+color:#ef4444;cursor:pointer;display:flex;align-items:center;justify-content:center;
+font-size:.75rem;transition:all .2s}
+.adm__size-remove:hover{background:rgba(239,68,68,.2)}
+.adm__sizes-add{padding-top:8px;border-top:1px solid rgba(0,0,0,.06)}
+.adm__sizes-add-fields{display:flex;gap:8px;align-items:center}
+.adm__sizes-select{padding:8px 12px;border:1.5px solid var(--line);border-radius:8px;
+font:500 .85rem/1 var(--font-display);background:var(--white);outline:none;min-width:100px}
+.adm__sizes-select:focus{border-color:var(--orange)}
+.adm__sizes-stock-input{width:70px;padding:8px 10px;border:1.5px solid var(--line);border-radius:8px;
+font:500 .85rem/1 var(--font-display);background:var(--white);outline:none;text-align:center}
+.adm__sizes-stock-input:focus{border-color:var(--orange)}
+
 .adm__empty{text-align:center;padding:40px;color:var(--mid);font-size:.9rem}
 
 /* ── Admin responsive ── */

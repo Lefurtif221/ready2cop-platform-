@@ -284,16 +284,40 @@ export default function Admin() {
 function ProductForm({ product, onSave, onCancel }) {
   const [form, setForm] = useState({
     name: product?.name || '', price: product?.price || '', category: product?.category || 'sneakers',
-    stock: product?.stock || 0, description: product?.description || '', featured: product?.featured || 0,
+    description: product?.description || '', featured: product?.featured || 0,
   });
+  const [sizes, setSizes] = useState(product?.sizes || []);
+  const [newSize, setNewSize] = useState('');
+  const [newStock, setNewStock] = useState('');
   const [imageFile, setImageFile] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const totalStock = sizes.reduce((sum, s) => sum + (s.stock || 0), 0);
+
+  const addSize = () => {
+    const sz = parseInt(newSize);
+    const st = parseInt(newStock) || 0;
+    if (!sz || sz < 30 || sz > 50) return;
+    if (sizes.find(s => s.size === sz)) { setNewSize(''); setNewStock(''); return; }
+    setSizes([...sizes, { size: sz, stock: st }].sort((a, b) => a.size - b.size));
+    setNewSize(''); setNewStock('');
+  };
+
+  const updateSizeStock = (size, stock) => {
+    setSizes(sizes.map(s => s.size === size ? { ...s, stock: Math.max(0, parseInt(stock) || 0) } : s));
+  };
+
+  const removeSize = (size) => {
+    setSizes(sizes.filter(s => s.size !== size));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault(); setLoading(true);
     try {
       const fd = new FormData();
       Object.entries(form).forEach(([k, v]) => fd.append(k, v));
+      fd.append('stock', totalStock);
+      fd.append('sizes', JSON.stringify(sizes));
       if (imageFile) fd.append('image', imageFile);
       const res = product
         ? await API.put(`/products/${product.id}`, fd, { headers: { 'Content-Type': 'multipart/form-data' } })
@@ -315,10 +339,57 @@ function ProductForm({ product, onSave, onCancel }) {
               <option value="sneakers">Sneakers</option><option value="casual">Casual</option><option value="sport">Sport</option>
             </select>
           </div>
-          <div className="adm__field"><label>Stock</label><input type="number" value={form.stock} onChange={e => setForm({...form, stock: e.target.value})} /></div>
+          <div className="adm__field"><label>Featured</label>
+            <select value={form.featured} onChange={e => setForm({...form, featured: parseInt(e.target.value)})}>
+              <option value={0}>Non</option><option value={1}>Oui</option>
+            </select>
+          </div>
         </div>
         <div className="adm__field"><label>Description</label><textarea value={form.description} onChange={e => setForm({...form, description: e.target.value})} /></div>
         <div className="adm__field"><label>Image</label><input type="file" accept="image/*" onChange={e => setImageFile(e.target.files[0])} /></div>
+
+        {/* Sizes manager */}
+        <div className="adm__sizes-section">
+          <div className="adm__sizes-header">
+            <label>Tailles & Stock</label>
+            <span className="adm__sizes-total">Stock total: <b>{totalStock}</b></span>
+          </div>
+
+          {sizes.length > 0 && (
+            <div className="adm__sizes-list">
+              {sizes.map(s => (
+                <div key={s.size} className="adm__size-row">
+                  <span className="adm__size-label">Taille {s.size}</span>
+                  <div className="adm__size-stock-controls">
+                    <button type="button" className="adm__size-btn" onClick={() => updateSizeStock(s.size, s.stock - 1)}>-</button>
+                    <input type="number" className="adm__size-input" value={s.stock} min={0}
+                      onChange={e => updateSizeStock(s.size, e.target.value)} />
+                    <button type="button" className="adm__size-btn" onClick={() => updateSizeStock(s.size, s.stock + 1)}>+</button>
+                  </div>
+                  <button type="button" className="adm__size-remove" onClick={() => removeSize(s.size)}>
+                    <i className="fas fa-times"></i>
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="adm__sizes-add">
+            <div className="adm__sizes-add-fields">
+              <select className="adm__sizes-select" value={newSize} onChange={e => setNewSize(e.target.value)}>
+                <option value="">Pointure</option>
+                {[36,37,38,39,40,41,42,43,44,45,46,47,48].filter(s => !sizes.find(x => x.size === s)).map(s => (
+                  <option key={s} value={s}>{s}</option>
+                ))}
+              </select>
+              <input type="number" className="adm__sizes-stock-input" placeholder="Stock" min={0} value={newStock} onChange={e => setNewStock(e.target.value)} />
+              <button type="button" className="adm__btn adm__btn--primary adm__btn--sm" onClick={addSize} disabled={!newSize}>
+                <i className="fas fa-plus"></i> Ajouter
+              </button>
+            </div>
+          </div>
+        </div>
+
         <div className="adm__form-actions">
           <button type="submit" className="adm__btn adm__btn--primary" disabled={loading}>{loading ? 'Enregistrement...' : 'Enregistrer'}</button>
           <button type="button" className="adm__btn adm__btn--ghost" onClick={onCancel}>Annuler</button>
