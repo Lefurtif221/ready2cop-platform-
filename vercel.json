@@ -4,6 +4,7 @@
   "installCommand": "npm install",
   "rewrites": [
     { "source": "/api/:path*", "destination": "https://ready2cop-server.onrender.com/api/:path*" },
-    { "source": "/((?!assets/).*)", "destination": "/index.html" }
+    { "source": "/uploads/:path*", "destination": "https://ready2cop-server.onrender.com/uploads/:path*" },
+    { "source": "/((?!assets/|uploads/).*)", "destination": "/index.html" }
   ]
 }
