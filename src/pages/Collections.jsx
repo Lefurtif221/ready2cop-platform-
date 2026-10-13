@@ -5,8 +5,8 @@ import { getImageUrl } from '../utils';
 import API from '../api';
 
 const FALLBACK_PRODUCTS = [
-  { id: 1, name: 'Air Max Revolution', price: 78500, category: 'sneakers', image: 'Chaussures-22.jpeg', sizes: [{size:40,stock:4},{size:41,stock:5},{size:42,stock:4},{size:43,stock:3}] },
-  { id: 4, name: 'Street Style Elite', price: 72600, category: 'sneakers', image: 'Chaussures-22.jpeg', sizes: [{size:39,stock:2},{size:40,stock:3},{size:41,stock:4},{size:42,stock:5}] },
+  { id: 1, name: 'T-shirt Essentiel', price: 25000, category: 'vetements', image: 'Chaussures-22.jpeg', sizes: [{size:'M',stock:5},{size:'L',stock:4}] },
+  { id: 2, name: 'Sacoche Classic', price: 35000, category: 'sacs', image: 'Chaussures-22.jpeg', sizes: [{size:'Unique',stock:6}] },
 ];
 
 export default function Collections() {
@@ -24,7 +24,7 @@ export default function Collections() {
       .catch(() => setProducts(FALLBACK_PRODUCTS));
   }, []);
 
-  const catMap = { sneakers: 'Sneakers', casual: 'Casual', sport: 'Sport' };
+  const catMap = { sneakers: 'Sneakers', casual: 'Casual', sport: 'Sport', vetements: 'Vêtements', sacs: 'Sacs' };
 
   const filtered = products.filter(p => {
     const matchSearch = !search || p.name.toLowerCase().includes(search.toLowerCase());
@@ -68,8 +68,8 @@ export default function Collections() {
       <section className="r2c-collections">
         <div className="r2c-collections__wrap">
           <div className="r2c-collections__hd">
-            <h1>Toutes nos paires</h1>
-            <p>Retrouve ta prochaine paire, au bon prix.</p>
+            <h1>Vêtements & Sacs</h1>
+            <p>T-shirts, ensembles, sacoches — verifiés et prêts.</p>
           </div>
 
           {/* Search + filters */}
@@ -80,7 +80,7 @@ export default function Collections() {
               {search && <button className="r2c-collections__search-clear" onClick={() => setSearch('')}><i className="fas fa-times"></i></button>}
             </div>
             <div className="r2c-collections__filters">
-              {[{k:'all',l:'Tous'},{k:'sneakers',l:'Sneakers'},{k:'casual',l:'Casual'},{k:'sport',l:'Sport'}].map(c => (
+              {[{k:'all',l:'Tous'},{k:'vetements',l:'Vêtements'},{k:'sacs',l:'Sacs'}].map(c => (
                 <button key={c.k} className={`r2c-filter ${filter === c.k ? 'active' : ''}`} onClick={() => setFilter(c.k)}>{c.l}</button>
               ))}
             </div>
@@ -136,7 +136,7 @@ export default function Collections() {
             <div className="r2c-footer__mk">READY2COP</div>
             <address>Dakar, Sénégal<br/><br/><a href="https://wa.me/221769960000">WhatsApp: +221 76 996 00 00</a></address>
           </div>
-          <div><h4>Boutique</h4><Link to="/collections">Sneakers</Link></div>
+          <div><h4>Boutique</h4><Link to="/collections">Vêtements</Link><Link to="/collections">Sacs</Link></div>
           <div><h4>Aide</h4><a href="#">Livraison</a><a href="#">Retours</a><a href="#">FAQ</a></div>
           <div><h4>Suivez-nous</h4><a href="#">Instagram</a><a href="#">TikTok</a></div>
         </div>

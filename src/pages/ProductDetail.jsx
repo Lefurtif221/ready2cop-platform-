@@ -4,18 +4,26 @@ import { useCart } from '../CartContext';
 import { getImageUrl } from '../utils';
 import API from '../api';
 
-const catMap = { sneakers: 'Sneakers', casual: 'Casual', sport: 'Sport' };
+const catMap = { sneakers: 'Sneakers', casual: 'Casual', sport: 'Sport', vetements: 'Vêtements', sacs: 'Sacs' };
+
+const SIZE_ORDER = ['XS','S','M','L','XL','XXL','Unique','36','37','38','39','40','41','42','43','44','45','46','47','48'];
+const sortSizes = (arr) => [...(arr || [])].sort((a, b) => {
+  const ia = SIZE_ORDER.indexOf(String(a.size)), ib = SIZE_ORDER.indexOf(String(b.size));
+  if (ia === -1 && ib === -1) return String(a.size).localeCompare(String(b.size));
+  if (ia === -1) return 1;
+  if (ib === -1) return -1;
+  return ia - ib;
+});
 
 const FALLBACK_PRODUCT = {
-  id: 1, name: 'Air Max Revolution', price: 78500,
-  category: 'sneakers', image: 'Chaussures-22.jpeg',
-  description: 'Des sneakers authentiques, confortables et styl\u00e9es pour toutes les occasions.',
-  sizes: [{size: 40, stock: 4}, {size: 41, stock: 5}, {size: 42, stock: 4}, {size: 43, stock: 3}]
+  id: 1, name: 'T-shirt Essentiel', price: 25000,
+  category: 'vetements', image: 'Chaussures-22.jpeg',
+  description: 'Des vêtements de qualité, confortables et stylés pour toutes les occasions.',
+  sizes: [{size: 'M', stock: 5}, {size: 'L', stock: 4}, {size: 'XL', stock: 3}]
 };
 
 const FALLBACK_SIMILAR = [
-  { id: 2, name: 'Classic Comfort', price: 54500, category: 'casual', image: 'Chaussures-22.jpeg', sizes: [{size: 40, stock: 4}] },
-  { id: 4, name: 'Street Style Elite', price: 72600, category: 'sneakers', image: 'Chaussures-22.jpeg', sizes: [{size: 41, stock: 4}] },
+  { id: 2, name: 'Sacoche Classic', price: 35000, category: 'sacs', image: 'Chaussures-22.jpeg', sizes: [{size: 'Unique', stock: 4}] },
 ];
 
 export default function ProductDetail() {
@@ -52,7 +60,7 @@ export default function ProductDetail() {
 
   const addToCart = () => {
     if (product.sizes && product.sizes.length > 0 && !selectedSize) return;
-    const sizeObj = sizes.find(s => s.size === selectedSize);
+    const sizeObj = sizes.find(s => String(s.size) === String(selectedSize));
     addItem(product, selectedSize, sizeObj?.stock || 0);
     setAdded(true);
     setTimeout(() => setAdded(false), 1300);
@@ -68,12 +76,12 @@ export default function ProductDetail() {
 
   if (!product) return null;
 
-  const sizes = product.sizes || [];
+  const sizes = sortSizes(product.sizes || []);
   const totalStock = sizes.reduce((sum, s) => sum + s.stock, 0);
 
   // Check if already in cart with max stock for selected size
-  const cartItem = selectedSize ? items.find(i => i.id === product.id && i.size === selectedSize) : null;
-  const sizeObj = selectedSize ? sizes.find(s => s.size === selectedSize) : null;
+  const cartItem = selectedSize ? items.find(i => i.id === product.id && String(i.size) === String(selectedSize)) : null;
+  const sizeObj = selectedSize ? sizes.find(s => String(s.size) === String(selectedSize)) : null;
   const maxReached = cartItem && sizeObj && cartItem.qty >= sizeObj.stock;
 
   return (
@@ -125,25 +133,25 @@ export default function ProductDetail() {
               <dl className="r2c-pdp__specs">
                 <div><dt>Categorie</dt><dd>{catMap[product.category] || product.category}</dd></div>
                 <div><dt>Reference</dt><dd>R2C-{String(product.id).padStart(4, '0')}</dd></div>
-                <div><dt>Stock total</dt><dd>{totalStock} paire{totalStock > 1 ? 's' : ''}</dd></div>
+                <div><dt>Stock total</dt><dd>{totalStock} article{totalStock > 1 ? 's' : ''}</dd></div>
                 <div><dt>Livraison</dt><dd>24-48h au Sénégal</dd></div>
               </dl>
 
               {sizes.length > 0 && (
                 <div style={{marginBottom: 24}}>
                   <div style={{fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '12px', letterSpacing: '.14em', textTransform: 'uppercase', marginBottom: 12, color: 'var(--black)'}}>
-                    Choisir une taille
+                    Choisir une option
                   </div>
                   <div style={{display: 'flex', flexWrap: 'wrap', gap: 8}}>
                     {sizes.map(s => (
                       <button
-                        key={s.size}
+                        key={String(s.size)}
                         onClick={() => s.stock > 0 && setSelectedSize(s.size)}
                         disabled={s.stock === 0}
                         style={{
-                          minWidth: 52, height: 44, borderRadius: 8, border: selectedSize === s.size ? '2px solid var(--orange)' : '1.5px solid var(--warm-gray)',
-                          background: s.stock === 0 ? 'rgba(0,0,0,.04)' : selectedSize === s.size ? 'var(--orange)' : 'var(--white)',
-                          color: s.stock === 0 ? 'var(--mid)' : selectedSize === s.size ? 'var(--bone)' : 'var(--black)',
+                          minWidth: 52, padding: '0 14px', height: 44, borderRadius: 8, border: String(selectedSize) === String(s.size) ? '2px solid var(--orange)' : '1.5px solid var(--warm-gray)',
+                          background: s.stock === 0 ? 'rgba(0,0,0,.04)' : String(selectedSize) === String(s.size) ? 'var(--orange)' : 'var(--white)',
+                          color: s.stock === 0 ? 'var(--mid)' : String(selectedSize) === String(s.size) ? 'var(--bone)' : 'var(--black)',
                           fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: '.85rem', cursor: s.stock === 0 ? 'not-allowed' : 'pointer',
                           position: 'relative', transition: 'all .2s'
                         }}
@@ -155,10 +163,10 @@ export default function ProductDetail() {
                   </div>
                   {selectedSize && (
                     <p style={{fontSize: '.8rem', color: 'var(--mid)', marginTop: 8}}>
-                      Taille {selectedSize} : <b style={{color: sizes.find(s => s.size === selectedSize)?.stock <= 2 ? 'var(--red)' : 'var(--green)'}}>
-                        {sizes.find(s => s.size === selectedSize)?.stock} en stock
+                      Taille {selectedSize} : <b style={{color: sizes.find(s => String(s.size) === String(selectedSize))?.stock <= 2 ? 'var(--red)' : 'var(--green)'}}>
+                        {sizes.find(s => String(s.size) === String(selectedSize))?.stock} en stock
                       </b>
-                      {sizes.find(s => s.size === selectedSize)?.stock <= 2 && ' - derniere paire' + (sizes.find(s => s.size === selectedSize)?.stock === 1 ? '' : 's')}
+                      {sizes.find(s => String(s.size) === String(selectedSize))?.stock <= 2 && ' - dernier article' + (sizes.find(s => String(s.size) === String(selectedSize))?.stock === 1 ? '' : 's')}
                     </p>
                   )}
                   {!selectedSize && <p style={{fontSize: '.8rem', color: 'var(--mid)', marginTop: 8}}>Selectionne ta taille</p>}

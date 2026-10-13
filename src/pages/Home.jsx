@@ -5,13 +5,11 @@ import { getImageUrl } from '../utils';
 import API from '../api';
 
 const FALLBACK_PRODUCTS = [
-  { id: 1, name: 'Air Max Revolution', price: 78500, category: 'sneakers', image: 'Chaussures-22.jpeg', sizes: [{size:40,stock:4},{size:41,stock:5},{size:42,stock:4},{size:43,stock:3}] },
-  { id: 2, name: 'Classic Comfort', price: 54500, category: 'casual', image: 'Chaussures-22.jpeg', sizes: [{size:40,stock:4},{size:41,stock:5}] },
-  { id: 3, name: 'Ultra Sport Pro', price: 96800, category: 'sport', image: 'Chaussures-22.jpeg', sizes: [{size:41,stock:3},{size:42,stock:4},{size:43,stock:3}] },
-  { id: 4, name: 'Street Style Elite', price: 72600, category: 'sneakers', image: 'Chaussures-22.jpeg', sizes: [{size:39,stock:2},{size:40,stock:3},{size:41,stock:4},{size:42,stock:5}] },
+  { id: 1, name: 'T-shirt Essentiel', price: 25000, category: 'vetements', image: 'Chaussures-22.jpeg', sizes: [{size:'M',stock:5},{size:'L',stock:4},{size:'XL',stock:3}] },
+  { id: 2, name: 'Sacoche Classic', price: 35000, category: 'sacs', image: 'Chaussures-22.jpeg', sizes: [{size:'Unique',stock:6}] },
 ];
 
-const catMap = { sneakers: 'Sneakers', casual: 'Casual', sport: 'Sport' };
+const catMap = { sneakers: 'Sneakers', casual: 'Casual', sport: 'Sport', vetements: 'Vêtements', sacs: 'Sacs' };
 
 export default function Home() {
   const [products, setProducts] = useState([]);
@@ -118,9 +116,8 @@ export default function Home() {
       <nav className="r2c-nav">
         <div className="r2c-nav__bar">
           <ul className="r2c-nav__links">
-            <li><a href="#cats">Sneakers</a></li>
-            <li><a href="#cats">Casual</a></li>
-            <li><a href="#cats">Sport</a></li>
+            <li><a href="#cats">Vêtements</a></li>
+            <li><a href="#cats">Sacs</a></li>
             <li><Link to="/collections">Collection</Link></li>
           </ul>
           <Link to="/" className="r2c-nav__mk"><img src="/logo-removebg-preview.png" alt="Ready2Cop" style={{height: 44, width: 'auto'}} /></Link>
@@ -157,27 +154,19 @@ export default function Home() {
       <section id="cats" className="r2c-cats">
         <div className="r2c-cats__row">
           <a href="#shop" className="r2c-cats__item rv">
-            <div className="r2c-cats__ph"><img src="/Chaussures-22.jpeg" alt="Sneakers" loading="lazy" /></div>
+            <div className="r2c-cats__ph"><img src="/Chaussures-22.jpeg" alt="Vêtements" loading="lazy" /></div>
             <div>
-              <h3>Sneakers</h3>
-              <p>Paires iconiques, edition limitee.</p>
-              <span className="r2c-cats__go">Voir les sneakers <i>&rarr;</i></span>
+              <h3>Vêtements</h3>
+              <p>T-shirts, ensembles, streetwear.</p>
+              <span className="r2c-cats__go">Voir vêtements <i>&rarr;</i></span>
             </div>
           </a>
           <a href="#shop" className="r2c-cats__item rv">
-            <div className="r2c-cats__ph"><img src="/Chaussures-22.jpeg" alt="Casual" loading="lazy" /></div>
+            <div className="r2c-cats__ph"><img src="/Chaussures-22.jpeg" alt="Sacs" loading="lazy" /></div>
             <div>
-              <h3>Casual</h3>
-              <p>Confort au quotidien, style assure.</p>
-              <span className="r2c-cats__go">Voir casual <i>&rarr;</i></span>
-            </div>
-          </a>
-          <a href="#shop" className="r2c-cats__item rv">
-            <div className="r2c-cats__ph"><img src="/Chaussures-22.jpeg" alt="Sport" loading="lazy" /></div>
-            <div>
-              <h3>Sport</h3>
-              <p>Performance et design.</p>
-              <span className="r2c-cats__go">Voir sport <i>&rarr;</i></span>
+              <h3>Sacs</h3>
+              <p>Sacoches et sacs pratiques.</p>
+              <span className="r2c-cats__go">Voir sacs <i>&rarr;</i></span>
             </div>
           </a>
         </div>
@@ -215,9 +204,9 @@ export default function Home() {
             <h2 className="rv">Nos best-sellers</h2>
             <div className="r2c-shop__filters rv">
               <Link to="/collections" className="r2c-btn-line" style={{marginRight: 8}}>Voir tout</Link>
-              {['all', 'sneakers', 'casual', 'sport'].map(cat => (
+              {['all', 'vetements', 'sacs'].map(cat => (
                 <button key={cat} className={`r2c-filter ${filter === cat ? 'active' : ''}`} onClick={() => setFilter(cat)}>
-                  {cat === 'all' ? 'Tous' : cat.charAt(0).toUpperCase() + cat.slice(1)}
+                  {cat === 'all' ? 'Tous' : cat === 'vetements' ? 'Vêtements' : 'Sacs'}
                 </button>
               ))}
             </div>
@@ -312,7 +301,7 @@ export default function Home() {
             <div className="r2c-footer__mk">READY2COP</div>
             <address>Sénégal<br/><br/><a href="https://wa.me/221769960000">WhatsApp: +221 76 996 00 00</a></address>
           </div>
-          <div><h4>Boutique</h4><a href="#cats">Sneakers</a><a href="#cats">Casual</a><a href="#cats">Sport</a><a href="#shop">Tout voir</a></div>
+          <div><h4>Boutique</h4><a href="#cats">Vêtements</a><a href="#cats">Sacs</a><a href="#shop">Tout voir</a></div>
           <div><h4>Aide</h4><a href="#">Livraison</a><a href="#">Retours</a><a href="#">Tailles</a><a href="#">FAQ</a></div>
           <div><h4>Suivez-nous</h4><a href="#">Instagram</a><a href="#">TikTok</a><a href="#">Facebook</a></div>
         </div>

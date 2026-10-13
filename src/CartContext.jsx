@@ -24,7 +24,7 @@ export function CartProvider({ children }) {
           const updated = prev.map(item => {
             const product = products.find(p => p.id === item.id);
             if (!product) return item;
-            const sizeObj = (product.sizes || []).find(s => s.size === item.size);
+            const sizeObj = (product.sizes || []).find(s => String(s.size) === String(item.size));
             const newStock = sizeObj ? sizeObj.stock : (product.stock || 0);
             if (item.stock !== newStock) { changed = true; return { ...item, stock: newStock }; }
             return item;

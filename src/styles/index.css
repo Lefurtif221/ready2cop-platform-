@@ -951,6 +951,17 @@ color:var(--mid);transition:color .2s}
 @media(max-width:860px){
   .r2c-cart__grid{grid-template-columns:1fr;gap:24px}
   .r2c-cart__summary{position:static}
+  .r2c-cart__item{flex-wrap:wrap;gap:12px;padding:14px}
+  .r2c-cart__item img{width:64px;height:64px}
+  .r2c-cart__item-info{flex:1 1 calc(100% - 76px)}
+  .r2c-cart__item-name{font-size:.88rem}
+  .r2c-cart__item-qty{flex-wrap:wrap;row-gap:10px}
+  .r2c-cart__qty-btn{width:38px;height:38px;font-size:1.1rem}
+  .r2c-cart__qty-val{font-size:1rem;min-width:28px}
+  .r2c-cart__item-del{margin-left:auto;padding:8px}
+  .r2c-cart__item-total{width:100%;text-align:right;border-top:1px solid rgba(0,0,0,.06);padding-top:10px;font-size:1.05rem}
+  .r2c-cart__summary{padding:20px}
+  .r2c-cart__summary-total{font-size:1.15rem}
 }
 
 /* ── CHECKOUT mobile ──────────────────────────────── */

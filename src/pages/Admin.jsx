@@ -338,7 +338,7 @@ export default function Admin() {
                   </div>
                   <div className="adm__order-items">
                     {(order.items || []).map((item, i) => (
-                      <span key={i} className="adm__order-item">{item.quantity || item.qty || 1}x {item.name || `#${item.id}`}{item.size ? ` (T${item.size})` : ''}</span>
+                      <span key={i} className="adm__order-item">{item.quantity || item.qty || 1}x {item.name || `#${item.id}`}{item.size ? ` (Taille ${item.size})` : ''}</span>
                     ))}
                   </div>
                   <div className="adm__order-bottom">
@@ -364,32 +364,47 @@ export default function Admin() {
 
 function ProductForm({ product, onSave, onCancel }) {
   const [form, setForm] = useState({
-    name: product?.name || '', price: product?.price || '', category: product?.category || 'sneakers',
+    name: product?.name || '', price: product?.price || '', category: product?.category || 'vetements',
     description: product?.description || '', featured: product?.featured || 0,
   });
-  const [sizes, setSizes] = useState(product?.sizes || []);
+  const [sizes, setSizes] = useState((product?.sizes || []).map(s => ({ size: String(s.size), stock: s.stock || 0 })));
   const [newSize, setNewSize] = useState('');
   const [newStock, setNewStock] = useState('');
   const [imageFile, setImageFile] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const SIZE_ORDER = ['XS','S','M','L','XL','XXL','Unique','36','37','38','39','40','41','42','43','44','45','46','47','48'];
+  const SIZE_PRESETS = {
+    vetements: ['XS','S','M','L','XL','XXL'],
+    sacs: ['Unique'],
+    sneakers: ['36','37','38','39','40','41','42','43','44','45','46','47','48'],
+  };
+  const presets = SIZE_PRESETS[form.category] || [...SIZE_PRESETS.vetements, ...SIZE_PRESETS.sacs];
+  const sortSizes = (arr) => [...arr].sort((a, b) => {
+    const ia = SIZE_ORDER.indexOf(String(a.size)), ib = SIZE_ORDER.indexOf(String(b.size));
+    if (ia === -1 && ib === -1) return String(a.size).localeCompare(String(b.size));
+    if (ia === -1) return 1;
+    if (ib === -1) return -1;
+    return ia - ib;
+  });
+
   const totalStock = sizes.reduce((sum, s) => sum + (s.stock || 0), 0);
 
   const addSize = () => {
-    const sz = parseInt(newSize);
+    const sz = String(newSize).trim().slice(0, 8);
     const st = parseInt(newStock) || 0;
-    if (!sz || sz < 30 || sz > 50) return;
-    if (sizes.find(s => s.size === sz)) { setNewSize(''); setNewStock(''); return; }
-    setSizes([...sizes, { size: sz, stock: st }].sort((a, b) => a.size - b.size));
+    if (!sz) return;
+    if (sizes.find(s => String(s.size) === sz)) { setNewSize(''); setNewStock(''); return; }
+    setSizes(sortSizes([...sizes, { size: sz, stock: st }]));
     setNewSize(''); setNewStock('');
   };
 
   const updateSizeStock = (size, stock) => {
-    setSizes(sizes.map(s => s.size === size ? { ...s, stock: Math.max(0, parseInt(stock) || 0) } : s));
+    setSizes(sizes.map(s => String(s.size) === String(size) ? { ...s, stock: Math.max(0, parseInt(stock) || 0) } : s));
   };
 
   const removeSize = (size) => {
-    setSizes(sizes.filter(s => s.size !== size));
+    setSizes(sizes.filter(s => String(s.size) !== String(size)));
   };
 
   const handleSubmit = async (e) => {
@@ -416,8 +431,8 @@ function ProductForm({ product, onSave, onCancel }) {
           <div className="adm__field"><label>Nom</label><input value={form.name} onChange={e => setForm({...form, name: e.target.value})} required /></div>
           <div className="adm__field"><label>Prix (FCFA)</label><input type="number" value={form.price} onChange={e => setForm({...form, price: e.target.value})} required /></div>
           <div className="adm__field"><label>Categorie</label>
-            <select value={form.category} onChange={e => setForm({...form, category: e.target.value})}>
-              <option value="sneakers">Sneakers</option><option value="casual">Casual</option><option value="sport">Sport</option>
+            <select value={form.category} onChange={e => { setForm({...form, category: e.target.value}); setNewSize(''); }}>
+              <option value="vetements">Vêtements</option><option value="sacs">Sacs</option>
             </select>
           </div>
           <div className="adm__field"><label>Featured</label>
@@ -439,7 +454,7 @@ function ProductForm({ product, onSave, onCancel }) {
           {sizes.length > 0 && (
             <div className="adm__sizes-list">
               {sizes.map(s => (
-                <div key={s.size} className="adm__size-row">
+                <div key={String(s.size)} className="adm__size-row">
                   <span className="adm__size-label">Taille {s.size}</span>
                   <div className="adm__size-stock-controls">
                     <button type="button" className="adm__size-btn" onClick={() => updateSizeStock(s.size, s.stock - 1)}>-</button>
@@ -458,9 +473,9 @@ function ProductForm({ product, onSave, onCancel }) {
           <div className="adm__sizes-add">
             <div className="adm__sizes-add-fields">
               <select className="adm__sizes-select" value={newSize} onChange={e => setNewSize(e.target.value)}>
-                <option value="">Pointure</option>
-                {[36,37,38,39,40,41,42,43,44,45,46,47,48].filter(s => !sizes.find(x => x.size === s)).map(s => (
-                  <option key={s} value={s}>{s}</option>
+                <option value="">{form.category === 'sacs' ? 'Option' : 'Taille'}</option>
+                {presets.filter(s => !sizes.find(x => String(x.size) === String(s))).map(s => (
+                  <option key={String(s)} value={s}>{s}</option>
                 ))}
               </select>
               <input type="number" className="adm__sizes-stock-input" placeholder="Stock" min={0} value={newStock} onChange={e => setNewStock(e.target.value)} />

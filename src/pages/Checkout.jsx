@@ -120,7 +120,7 @@ export default function Checkout() {
                       onError={(e) => { e.target.src = '/Chaussures-22.jpeg'; }}
                     />
                     <div>
-                      <p>{item.name}{item.size ? <span className="r2c-checkout__size"> — T{item.size}</span> : null}</p>
+                      <p>{item.name}{item.size ? <span className="r2c-checkout__size"> — Taille {item.size}</span> : null}</p>
                       <span>{item.qty} x {item.price.toLocaleString('fr-FR')} FCFA</span>
                     </div>
                   </div>
@@ -147,7 +147,7 @@ export default function Checkout() {
       <footer className="r2c-footer">
         <div className="r2c-footer__cols">
           <div><div className="r2c-footer__mk">READY2COP</div><address>Dakar, Sénégal<br/><br/><a href="https://wa.me/221769960000">WhatsApp: +221 76 996 00 00</a></address></div>
-          <div><h4>Boutique</h4><Link to="/collections">Sneakers</Link><Link to="/collections">Casual</Link><Link to="/collections">Sport</Link></div>
+          <div><h4>Boutique</h4><Link to="/collections">Vêtements</Link><Link to="/collections">Sacs</Link></div>
           <div><h4>Aide</h4><a href="#">Livraison</a><a href="#">Retours</a><a href="#">FAQ</a></div>
           <div><h4>Suivez-nous</h4><a href="#">Instagram</a><a href="#">TikTok</a></div>
         </div>
