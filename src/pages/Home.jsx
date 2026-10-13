@@ -9,7 +9,7 @@ const FALLBACK_PRODUCTS = [
   { id: 2, name: 'Sacoche Classic', price: 35000, category: 'sacs', image: 'Chaussures-22.jpeg', sizes: [{size:'Unique',stock:6}] },
 ];
 
-const catMap = { sneakers: 'Sneakers', casual: 'Casual', sport: 'Sport', vetements: 'Vêtements', sacs: 'Sacs' };
+const catMap = { sneakers: 'Sneakers', casual: 'Casual', sport: 'Sport', chaussures: 'Chaussures', vetements: 'Vêtements', sacs: 'Sacs' };
 
 export default function Home() {
   const [products, setProducts] = useState([]);
@@ -116,6 +116,7 @@ export default function Home() {
       <nav className="r2c-nav">
         <div className="r2c-nav__bar">
           <ul className="r2c-nav__links">
+            <li><a href="#cats">Chaussures</a></li>
             <li><a href="#cats">Vêtements</a></li>
             <li><a href="#cats">Sacs</a></li>
             <li><Link to="/collections">Collection</Link></li>
@@ -153,6 +154,14 @@ export default function Home() {
       {/* Categories */}
       <section id="cats" className="r2c-cats">
         <div className="r2c-cats__row">
+          <a href="#shop" className="r2c-cats__item rv">
+            <div className="r2c-cats__ph"><img src="/Chaussures-22.jpeg" alt="Chaussures" loading="lazy" /></div>
+            <div>
+              <h3>Chaussures</h3>
+              <p>Sneakers et chaussures, verifiees.</p>
+              <span className="r2c-cats__go">Voir chaussures <i>&rarr;</i></span>
+            </div>
+          </a>
           <a href="#shop" className="r2c-cats__item rv">
             <div className="r2c-cats__ph"><img src="/Chaussures-22.jpeg" alt="Vêtements" loading="lazy" /></div>
             <div>
@@ -204,9 +213,9 @@ export default function Home() {
             <h2 className="rv">Nos best-sellers</h2>
             <div className="r2c-shop__filters rv">
               <Link to="/collections" className="r2c-btn-line" style={{marginRight: 8}}>Voir tout</Link>
-              {['all', 'vetements', 'sacs'].map(cat => (
+              {['all', 'chaussures', 'vetements', 'sacs'].map(cat => (
                 <button key={cat} className={`r2c-filter ${filter === cat ? 'active' : ''}`} onClick={() => setFilter(cat)}>
-                  {cat === 'all' ? 'Tous' : cat === 'vetements' ? 'Vêtements' : 'Sacs'}
+                  {cat === 'all' ? 'Tous' : cat === 'vetements' ? 'Vêtements' : cat === 'chaussures' ? 'Chaussures' : 'Sacs'}
                 </button>
               ))}
             </div>
@@ -301,7 +310,7 @@ export default function Home() {
             <div className="r2c-footer__mk">READY2COP</div>
             <address>Sénégal<br/><br/><a href="https://wa.me/221769960000">WhatsApp: +221 76 996 00 00</a></address>
           </div>
-          <div><h4>Boutique</h4><a href="#cats">Vêtements</a><a href="#cats">Sacs</a><a href="#shop">Tout voir</a></div>
+          <div><h4>Boutique</h4><a href="#cats">Chaussures</a><a href="#cats">Vêtements</a><a href="#cats">Sacs</a><a href="#shop">Tout voir</a></div>
           <div><h4>Aide</h4><a href="#">Livraison</a><a href="#">Retours</a><a href="#">Tailles</a><a href="#">FAQ</a></div>
           <div><h4>Suivez-nous</h4><a href="#">Instagram</a><a href="#">TikTok</a><a href="#">Facebook</a></div>
         </div>

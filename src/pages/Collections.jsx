@@ -24,7 +24,7 @@ export default function Collections() {
       .catch(() => setProducts(FALLBACK_PRODUCTS));
   }, []);
 
-  const catMap = { sneakers: 'Sneakers', casual: 'Casual', sport: 'Sport', vetements: 'Vêtements', sacs: 'Sacs' };
+  const catMap = { sneakers: 'Sneakers', casual: 'Casual', sport: 'Sport', chaussures: 'Chaussures', vetements: 'Vêtements', sacs: 'Sacs' };
 
   const filtered = products.filter(p => {
     const matchSearch = !search || p.name.toLowerCase().includes(search.toLowerCase());
@@ -68,8 +68,8 @@ export default function Collections() {
       <section className="r2c-collections">
         <div className="r2c-collections__wrap">
           <div className="r2c-collections__hd">
-            <h1>Vêtements & Sacs</h1>
-            <p>T-shirts, ensembles, sacoches — verifiés et prêts.</p>
+            <h1>Chaussures, Vêtements & Sacs</h1>
+            <p>Choisis ce qui te plaît — verifié et livré en 24-48h.</p>
           </div>
 
           {/* Search + filters */}
@@ -80,7 +80,7 @@ export default function Collections() {
               {search && <button className="r2c-collections__search-clear" onClick={() => setSearch('')}><i className="fas fa-times"></i></button>}
             </div>
             <div className="r2c-collections__filters">
-              {[{k:'all',l:'Tous'},{k:'vetements',l:'Vêtements'},{k:'sacs',l:'Sacs'}].map(c => (
+              {[{k:'all',l:'Tous'},{k:'chaussures',l:'Chaussures'},{k:'vetements',l:'Vêtements'},{k:'sacs',l:'Sacs'}].map(c => (
                 <button key={c.k} className={`r2c-filter ${filter === c.k ? 'active' : ''}`} onClick={() => setFilter(c.k)}>{c.l}</button>
               ))}
             </div>
@@ -136,7 +136,7 @@ export default function Collections() {
             <div className="r2c-footer__mk">READY2COP</div>
             <address>Dakar, Sénégal<br/><br/><a href="https://wa.me/221769960000">WhatsApp: +221 76 996 00 00</a></address>
           </div>
-          <div><h4>Boutique</h4><Link to="/collections">Vêtements</Link><Link to="/collections">Sacs</Link></div>
+          <div><h4>Boutique</h4><Link to="/collections">Chaussures</Link><Link to="/collections">Vêtements</Link><Link to="/collections">Sacs</Link></div>
           <div><h4>Aide</h4><a href="#">Livraison</a><a href="#">Retours</a><a href="#">FAQ</a></div>
           <div><h4>Suivez-nous</h4><a href="#">Instagram</a><a href="#">TikTok</a></div>
         </div>

@@ -364,7 +364,7 @@ export default function Admin() {
 
 function ProductForm({ product, onSave, onCancel }) {
   const [form, setForm] = useState({
-    name: product?.name || '', price: product?.price || '', category: product?.category || 'vetements',
+    name: product?.name || '', price: product?.price || '', category: product?.category || 'chaussures',
     description: product?.description || '', featured: product?.featured || 0,
   });
   const [sizes, setSizes] = useState((product?.sizes || []).map(s => ({ size: String(s.size), stock: s.stock || 0 })));
@@ -375,9 +375,9 @@ function ProductForm({ product, onSave, onCancel }) {
 
   const SIZE_ORDER = ['XS','S','M','L','XL','XXL','Unique','36','37','38','39','40','41','42','43','44','45','46','47','48'];
   const SIZE_PRESETS = {
+    chaussures: ['36','37','38','39','40','41','42','43','44','45','46','47','48'],
     vetements: ['XS','S','M','L','XL','XXL'],
     sacs: ['Unique'],
-    sneakers: ['36','37','38','39','40','41','42','43','44','45','46','47','48'],
   };
   const presets = SIZE_PRESETS[form.category] || [...SIZE_PRESETS.vetements, ...SIZE_PRESETS.sacs];
   const sortSizes = (arr) => [...arr].sort((a, b) => {
@@ -432,7 +432,7 @@ function ProductForm({ product, onSave, onCancel }) {
           <div className="adm__field"><label>Prix (FCFA)</label><input type="number" value={form.price} onChange={e => setForm({...form, price: e.target.value})} required /></div>
           <div className="adm__field"><label>Categorie</label>
             <select value={form.category} onChange={e => { setForm({...form, category: e.target.value}); setNewSize(''); }}>
-              <option value="vetements">Vêtements</option><option value="sacs">Sacs</option>
+              <option value="chaussures">Chaussures</option><option value="vetements">Vêtements</option><option value="sacs">Sacs</option>
             </select>
           </div>
           <div className="adm__field"><label>Featured</label>

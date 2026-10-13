@@ -4,7 +4,7 @@ import { useCart } from '../CartContext';
 import { getImageUrl } from '../utils';
 import API from '../api';
 
-const catMap = { sneakers: 'Sneakers', casual: 'Casual', sport: 'Sport', vetements: 'Vêtements', sacs: 'Sacs' };
+const catMap = { sneakers: 'Sneakers', casual: 'Casual', sport: 'Sport', chaussures: 'Chaussures', vetements: 'Vêtements', sacs: 'Sacs' };
 
 const SIZE_ORDER = ['XS','S','M','L','XL','XXL','Unique','36','37','38','39','40','41','42','43','44','45','46','47','48'];
 const sortSizes = (arr) => [...(arr || [])].sort((a, b) => {
