@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import API from '../api';
-import { getImageUrl } from '../utils';
+import { getImageUrl, uploadToCloudinary } from '../utils';
 import Toast from '../components/Toast';
 
 export default function Admin() {
@@ -410,11 +410,15 @@ function ProductForm({ product, onSave, onCancel }) {
   const handleSubmit = async (e) => {
     e.preventDefault(); setLoading(true);
     try {
+      let imageUrl = product?.image || '';
+      if (imageFile) {
+        imageUrl = await uploadToCloudinary(imageFile);
+      }
       const fd = new FormData();
       Object.entries(form).forEach(([k, v]) => fd.append(k, v));
       fd.append('stock', totalStock);
       fd.append('sizes', JSON.stringify(sizes));
-      if (imageFile) fd.append('image', imageFile);
+      fd.append('image', imageUrl);
       const res = product
         ? await API.put(`/products/${product.id}`, fd, { headers: { 'Content-Type': 'multipart/form-data' } })
         : await API.post('/products', fd, { headers: { 'Content-Type': 'multipart/form-data' } });
